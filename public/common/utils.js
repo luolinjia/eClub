@@ -13,25 +13,24 @@ var checkvalidDate = function checkvalidDate(taskDay){
         return true;
     }
     return  moment(curDate).isBetween(taskDay, finishDate);
-}
+};
 
 var getDayDate = function getDayDate(){
     return moment(new Date()).format('MM-DD-YYYY');
-}
+};
 
 var getMinuteDate = function getMinuteDate(){
     return moment(new Date()).format('MM-DD-YYYY HH:mm');
-}
+};
 
 var getMSELDate = function getMSELDate(){
     return moment(new Date()).format('MM-DD-YYYY HH:mm:ss');
-}
+};
 
 
 var getObjectID = function getObjectID(id) {
-    var mid = mongodb.BSONPure.ObjectID(id);
-    return mid;
-}
+    return mongodb.BSONPure.ObjectID(id);
+};
 
 
 exports.checkvalidDate = checkvalidDate;
