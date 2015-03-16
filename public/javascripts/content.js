@@ -272,7 +272,7 @@ var reqContent = {
     showAllArticleList: function (options, callback) {
         $.ajax($.extend({
             type: 'POST',
-            url: '/article/showallarticle',
+            url: '/article/showall',
             dataType: 'JSON'
         }, options, true)).done(function(data){
             if (data && $.isFunction(callback)) {
@@ -283,7 +283,7 @@ var reqContent = {
     showUserArticleList: function (options, callback) {
         $.ajax($.extend({
             type: 'POST',
-            url: '/article/showuserarticle',
+            url: '/article/showself',
             dataType: 'JSON'
         }, options, true)).done(function(data){
             if (data && $.isFunction(callback)) {

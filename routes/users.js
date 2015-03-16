@@ -1,5 +1,6 @@
 var express = require('express');
-var mongodb = require('mongodb');
+var util = require('../public/common/utils.js');
+
 var router = express.Router();
 
 // add user
@@ -33,93 +34,77 @@ router.get('/getuser/:email', function (req, res, next) {
     });
 });
 
-//// check login user
-//router.post('/login', function (req, res, next) {
-//    var db = req.db, email = req.body.email, pwd = req.body.pwd;
-//    console.log('email:' + email);
-//    console.log('pwd:' + pwd);
-//    db.collection('user').find({email: email}).toArray(function (err, items) {
-//        if (items.length === 0) {
-//            console.log('User not found');
-//            res.send({code: 400, msg: 'User not found!'});
-//        } else {
-//            console.log(items);
-//            if (items[0].pwd === pwd) {
-//                console.log('login successfully!');
-//                req.session['userId'] = items[0]['_id'];
-//                req.session['email'] = email;
-//                req.session['pwd'] = pwd;
-//                req.session['time'] = items[0]['time'];
-//                res.json(items[0]);
-//                db.collection('user').update({email: email}, {'$set': {'time': req.session['time'] + 1}}, function(err){
-//                    if (err) {
-//                        res.send({code: 500, msg: err});
-//                    }
-//                });
-//            } else {
-//                console.log('invalid password');
-//                res.send({code: 500, msg: 'invalid password'});
-//            }
-//        }
-//    });
-//});
-
+// check login user// check login user
 router.post('/login', function (req, res, next) {
-    var db = req.db, email = req.body.email, pwd = req.body.pwd, resData = {};
+    var db = req.db, email = req.body.email, pwd = req.body.pwd;
+    var returnData = {};
     console.log('email:' + email);
     console.log('pwd:' + pwd);
     db.collection('user').find({email: email}).toArray(function (err, items) {
-        if (items.length === 0) {
-            console.log('User not found');
-            res.send({code: 400, msg: 'User not found'});
+        if (items === null || items.length == 0) {
+            console.log('user not found');
+            res.send({code: 510, msg: 'user not found'});
         } else {
-            console.log(items);
             if (items[0].pwd === pwd) {
                 console.log('login successfully!');
-                req.session['time'] = items[0]['time'];
-                req.session['username'] = items[0]['username'];
-                resData = items[0];
-                db.collection('user').update({email: email}, {'$set': {'time': req.session['time'] + 1}}, function(err){
+                req.session['email'] = email;
+                req.session['password'] = items[0]['password'];
+                req.session['userName'] = items[0]['userName'];
+                req.session['userType'] = items[0]['userType'];
+                req.session['userID'] = items[0]['_id'];
+                returnData = items[0];
+
+                /* check user if login before */
+                var loginDay = util.getDayDate();
+                var exsitDay = false;
+                if(items[0]['times']) {
+                    for (var i = 0; i < items[0]['times'].length; i++) {
+                        if (items[0]['times'][i] === loginDay) {
+                            exsitDay = true;
+                            break;
+                        }
+                    }
+                } else {
+                    items[0]['times'] = [];
+                }
+                if(!exsitDay) {
+                    items[0]['times'].push(loginDay);
+                }
+
+                db.collection('user').update({email: email}, {'$addToSet': {'times': loginDay}}, function(err){
                     if (err) {
                         res.send({code: 500, msg: err});
                     }
 
-                    var userId = mongodb.BSONPure.ObjectID(items[0]['_id']);
-                    req.session['userId'] = items[0]['_id'];
-                    req.session['email'] = email;
-                    console.log('user session: ' + req.session['userId']);
-
-                    db.collection('article').find({'visitors.userId': {$not:{$eq:userId}}}).toArray(function(err,records){
+                    var muesrid = util.getObjectID(items[0]['_id']);
+                    db.collection('article').find({'visitors.userID': {$not:{$eq:muesrid}},'taskDate':{'$exists':true}}).toArray(function(err,records){
                         if(err) {
-                            console.log("err=>" + err);
                             res.send({code: 500, msg: err});
                         }
-                        resData['newTask'] = records.length;
-                        console.log("times=>" + records.length);
-                        console.log("json=>" + resData);
-                        res.send({code: 200,data: resData});
-                    });
 
+                        returnData['tasknum'] = records.length;
+                        res.send({code:200,data:returnData});
+                    });
                 });
             } else {
                 console.log('invalid password');
-                res.send({code: 500, msg: 'invalid password'});
+                res.send({code: 511, msg: 'invalid password'});
             }
         }
     });
 });
 
 
-// change password
+// change password(need with MD5)
 router.post('/changepwd', function (req, res, next) {
     var db = req.db,
         email = req.session['email'],
-        password = req.session['pwd'],
+        password = req.session['password'],
         oldPass = req.body.oldPass,
         newPass = req.body.newPass;
 
     if (password !== oldPass) {
-        res.send({code: 400, msg: 'Old Password is not correct!'});
+        res.send({code: 312, msg: 'Old Password is not correct!'});
         return;
     }
 
@@ -133,39 +118,20 @@ router.post('/changepwd', function (req, res, next) {
     });
 });
 
-router.post('/logout', function (req, res, next) {
-    req.session.destroy(function(err) {
-        if(err) {
-            res.send({code: 500, msg: 'Session destroy failed!'})
-        }
-    });
-    console.log('session: ' + req.session);
-});
-
-// test add user
-router.post('/word', function (req, res, next) {
-    var db = req.db;
-    db.collection('word').insert(req.body, function(err, result) {
-        res.send(
-            (err === null) ? {
-                code: 200,
-                msg: 'Add successfully!'
-            } : {
-                code: 500,
-                msg: err}
-        );
-    });
-});
-
-// showArticleAll
-router.post('/showword', function(req, res, next){
-    var db = req.db;
-    db.collection('word').find({}).toArray(function(err,items){
-        if(err){
-            res.send({code: 500,msg: err});
-        }
-        res.send({code: 200,msg: 'ok',data: items});
-    })
+//layout and destroy session data
+router.post('/layout', function (req, res, next) {
+    if(req.session['userID']) {
+        console.log("destroy operation");
+        req.session.destroy(function(err){
+            if(err) {
+                res.send({code:520,msg:err});
+            }
+            delete req.session;
+            res.send({code:200,msg:'layout successfully'});
+        });
+    } else {
+        res.send({code:310,msg:'please login in'});
+    }
 });
 
 module.exports = router;
