@@ -142,7 +142,7 @@ router.post('/logout', function (req, res, next) {
     console.log('session: ' + req.session);
 });
 
-// add user
+// test add user
 router.post('/word', function (req, res, next) {
     var db = req.db;
     db.collection('word').insert(req.body, function(err, result) {
