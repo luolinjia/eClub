@@ -1,9 +1,34 @@
 var express = require('express');
+var util = require('../public/common/utils.js');
+
 var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', { title: 'eClub' });
+    /* */
+    if(req.session['userID']) {
+        console.log('session exsit!');
+        var db = req.db, json_data = {};
+        var muesrid = util.getObjectID(req.session['userID']);
+        db.collection('user').find({'_id': muesrid}).toArray(function(err,items){
+            if (items === null || items.length === 0) {
+                console.log('user not found');
+                res.send({code: 510, msg: 'user not found'});
+            } else {
+                json_data = items[0];
+                db.collection('article').find({'visitors.userID': {$not:{$eq:muesrid}},'taskDate':{'$exists':true}}).toArray(function(err,records){
+                    if(err) {
+                        res.send({code: 500, msg: err});
+                    }
+                    json_data['tasknum'] = records.length;
+                    res.render('index', {title: 'eClub', data:json_data});
+                });
+            }
+        });
+    } else {
+        console.log('no session exsit!');
+        res.render('index', {title: 'eClub'});
+    }
 });
 
 module.exports = router;
