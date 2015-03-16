@@ -223,7 +223,7 @@ router.post('/showdetail',function (req, res, next){
     var db = req.db;
     var returnData = [];
     if(req.body.articleID) {
-        var articleid = mongodb.BSONPure.ObjectID(req.body.articleID);
+        var articleid = util.getObjectID(req.body.articleID);
         db.collection('article').update({'_id':articleid},{$inc:{'pv':1}},function(err){
             if (err) {
                 res.send({code: 500, msg: err});
@@ -282,7 +282,7 @@ router.post('/showtask',function (req, res, next){
     var returnData = [];
     if(req.session['userID']) {
         console.log("userID"+req.session['userID']);
-        var muserid = mongodb.BSONPure.ObjectID(req.session['userID']);
+        var muserid = util.getObjectID(req.session['userID']);
 
         db.collection('article').find({'visitors.userID': {$not:{$eq:muserid}},'taskDate':{'$exists':true}}).toArray(function(err,items){
             if (err) {
