@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+
+<div id="sce_upsell_page">
+    <div class="header clear">
+        <h3 class="left">Services</h3>
+        <input type="button" id="upsell_add_to_config" value="Add to Config" class="button slim primary right">
+        <input type="button" id="upsell_no_thanks" value="No Thanks" class="button slim primary right">
+    </div>
+    <hr>
+    <ul class="header clear">
+        <li class="service">Service Type</li>
+        <li class="price">List Price</li>
+        <li class="qty">Qty</li>
+        <li class="number">Part Number</li>
+    </ul>
+    <ul class="detail">
+        <hr>
+        <li class="clear">
+            <div class="service">
+                <h6>HP Proactive Select Credit SVC</h6>
+                <p>Proactive Select Services are a set of proactive services, providing an account support manager
+                    (ASM), a pre-specified number of 'service credits' that can be redeemed for specific service
+                    activities, and delivery planning and review meeting between the ASM and the customer. Each 10
+                    service credit equates to 'one day's worth' of account support manager's time.</p>
+                <input type="button" value="Show me more..." class="button slim primary showmemore">
+            </div>
+            <input value="8,358.00" readonly="readonly" class="price">
+            <input type="text" value="0" id="upsell_quantity_HK696A3#2BS" class="qty">
+            <input value="HK696A3#2BS" readonly="readonly" class="number">
+        </li>
+        <hr>
+        <li class="clear">
+            <div class="service">
+                <h6>HP Proactive Select Credit SVC</h6>
+                <p>Proactive Select Services are a set of proactive services, providing an account support manager
+                    (ASM), a pre-specified number of 'service credits' that can be redeemed for specific service
+                    activities, and delivery planning and review meeting between the ASM and the customer. Each 10
+                    service credit equates to 'one day's worth' of account support manager's time.</p>
+                <input type="button" value="Show me more..." class="button slim primary showmemore">
+            </div>
+            <input value="2,300.00" readonly="readonly" class="price">
+            <input type="text" value="0" id="upsell_quantity_HK696A1#2BS" class="qty">
+            <input value="HK696A1#2BS" readonly="readonly" class="number">
+        </li>
+    </ul>
+</div>
+
+
+<input type="button" value="' + $.i18n.prop("upsell.showMeMore") + '" class="button slim primary showmemore" data-link="' + item['hyperlink'] + '">
+<a href="' + item['hyperlink'] + '" class="button slim primary showmemore" target="_blank">' + $.i18n.prop("upsell.showMeMore") + '</a>
+
+</body>
+</html>

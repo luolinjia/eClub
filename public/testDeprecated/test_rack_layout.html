@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+'
+<div id="' + prefix + 'rack_status" class="rack_status">
+    <div class="rack_status_message"></div>
+    <div class="rack_toolbar_status">
+        <div id="' + prefix + 'rack_status_warning" class="rack_status_div">
+            <i class="icon-alert rack_status_warning"></i>
+        </div>
+        <div class="rack_status_div">
+            <span class="status_name">' + l10n_rack_layout.id + ':
+                <span id="' + prefix + 'rack_status_id" class="rack_status_info"></span>
+            </span>
+            <span class="status_name">' + l10n_rack_layout.totWeight + ':
+                <span id="' + prefix + 'rack_status_weight" class="rack_status_info">0.0 lbs</span>
+            </span>
+            <span class="status_name">' + l10n_rack_layout.totPower + ':
+                <span id="' + prefix + 'rack_status_power" class="rack_status_info">0.0 KVA</span>
+            </span>
+        </div>
+        <div class="rack_status_div  rack_status_more">
+            <span id="' + prefix + 'rack_status_more" class="icon-ellipsis-h"></span>
+        </div>
+    </div>
+</div>
+'
+
+</body>
+</html>

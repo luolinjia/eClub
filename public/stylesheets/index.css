@@ -1,0 +1,439 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #f2f2f2;
+    color: #333;
+    font-family: "GothamBook", "Segoe UI", "Microsoft YaHei", sans-serif;
+}
+
+/******************************Header****************************/
+#header {
+    width: 100%;
+    height: 56px;
+    background-color: rgba(255,255,255,0.95);
+    border-bottom: 1px solid #333;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+}
+#header.in {
+    top: 0;
+    -ms-transition: all 0.6s ease;
+    -webkit-transition: all 0.6s ease;
+    -moz-transition: all 0.6s ease;
+    -o-transition: all 0.6s ease;
+    transition: all 0.6s ease;
+}
+#header.out {
+    top: -56px;
+    -ms-transition: all 0.6s ease;
+    -webkit-transition: all 0.6s ease;
+    -moz-transition: all 0.6s ease;
+    -o-transition: all 0.6s ease;
+    transition: all 0.6s ease;
+}
+#header section {
+    width: 100%;
+    margin: 0 auto;
+    max-width: 1140px;
+    display: block;
+}
+#header section .logo {
+    position: relative;
+    width: 35%;
+    float: left;
+    padding: 0 .9em;
+    text-align: center;
+    margin-right: 200px;
+    line-height: 56px;
+    font-weight: bold;
+    transition: color .2s ease-in, background-color .2s ease-in;
+}
+#header section .logo:hover {
+    color: #fff;
+    background-color: #ef4036;
+}
+#header section a {
+    color: #333;
+    text-decoration: none;
+    line-height: inherit;
+}
+#header section .header-items {
+    width: 100%;
+    height: 56px;
+}
+#header section .header-items .header-item {
+    width: 250px;
+    text-align: center;
+    position: relative;
+    float: left;
+    height: 56px;
+    line-height: 56px;
+    transition: color .2s ease-in, background-color .2s ease-in;
+    cursor: pointer;
+    z-index: 99;
+}
+#header section .header-items .header-item:hover {
+    color: #fff;
+    background-color: #ef4036;
+}
+
+/******************************section****************************/
+section {
+    width: 100%;
+    margin: 0 auto;
+    max-width: 1140px;
+}
+.main-holder {
+    position: relative;
+    padding-left: 0.9em;
+    padding-right: 0.9em;
+    width: 100%;
+    /*float: left;*/
+    margin-top: 100px;
+}
+.main-holder .view {
+    float: left;
+    width: 45%;
+    margin: 20px;
+    position: relative;
+    line-height: 0;
+}
+.main-holder .view img {
+    width: 100%;
+}
+.main-holder .view .info {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    color: #fff;
+    background-color: #ef4036;
+    opacity: .8;
+    display: none;
+    text-align: center;
+    cursor: pointer;
+    line-height: normal;
+}
+.main-holder .view .info .btn {
+    width: 210px;
+    height: 45px;
+    /*background-color: #999;*/
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    font-size: 25px;
+}
+.main-holder .view .info .btn span {
+    position: relative;
+    float: right;
+    margin-right: 35px;
+    transition: color .2s ease-in;
+}
+.main-holder .view .info .btn span:hover {
+    color: #FFFF00;
+}
+.main-holder .view .info .btn button {
+    font-family: GothamBook, Segoe UI, Microsoft YaHei, sans-serif;
+    font-weight: bold;
+    width: 90px;
+    height: 40px;
+    cursor: pointer;
+    margin-left: 10px;
+    background-color: #fff;
+    border: 2px solid #999;
+    transition: color .2s ease-in, background-color .2s ease-in, border-color .2s ease-in;
+}
+.main-holder .view .info .btn button:hover {
+    background-color: #cf190f;
+    color: #ffffff;
+    border-color: #cf190f;
+}
+.main-holder .view .info h5 {
+    text-align: center;
+    margin-top: 30%;
+}
+
+/******************************login & register box**********************************/
+.lr-box {
+    width: 250px;
+    /* height: 200px; */
+    border: 1px solid #999;
+    /* border-top: none; */
+    background-color: white;
+}
+.lr-box .lr-box-input {
+    border: none;
+    line-height: 40px;
+    padding-top: 20px;
+}
+.lr-box .lr-box-input input {
+    width: 175px;
+    height: 25px;
+    font-size: 18px;
+    font-family: GothamBook, Segoe UI, YaHei, sans-serif;
+    /* border: none; */
+    /* border-bottom: 1px solid #444; */
+    border: 2px solid #999;
+    outline: none;
+    padding: 5px;
+}
+.lr-box button {
+    /* border: none; */
+    font-family: GothamBook, Segoe UI, Microsoft YaHei, sans-serif;
+    font-weight: bold;
+    width: 80px;
+    height: 40px;
+    margin-left: 110px;
+    /* border-left: 5px solid #999; */
+    cursor: pointer;
+    background-color: #fff;
+    border: 2px solid #999;
+    /* color: red; */
+    margin-top: 20px;
+    margin-bottom: 20px;
+    transition: color .2s ease-in, background-color .2s ease-in, border-color .2s ease-in;
+}
+.lr-box button:hover {
+    background-color: #ef4036;
+    color: #ffffff;
+    border-color: #ef4036;
+}
+
+/***************************************has logon***********************************/
+.lr-box .user-info {
+    color: #333333;
+}
+.lr-box .user-time, .lr-box .user-task {
+    color: #ef4036;
+}
+#btnChange {
+    width: 200px;
+    margin-left: 0;
+}
+.lr-box .info-tip-green {
+    color: #0BDC46;
+    font-size: 14px;
+}
+.lr-box .info-tip-red {
+    color: #ef4036;
+    font-size: 14px;
+}
+
+/****************************************content*********************************************/
+#content {
+    margin: 0 auto;
+    margin-top: 56px;
+    width: 800px;
+}
+.p-list {
+    padding-top: 50px;
+
+}
+.p-list ul li {
+    list-style-type: none;
+    padding: 5px 30px;
+}
+.p-list .p-list-li {
+    width: 100%;
+    height: 60px;
+    background-color: #e3e3e3;
+    position: relative;
+    z-index: 90;
+    font-size: 16px;
+}
+.p-list .p-list-li .p-list-li-style {
+    float: left;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    transition: color .2s ease-in, background-color .2s ease-in
+}
+.p-list .p-list-li .p-list-li-style:hover {
+    background-color: #ef4036;
+    color: #ffffff;
+}
+.width25p {
+    width: 25%;
+}
+.width60p {
+    width: 60%;
+}
+.width15p {
+    width: 15%;
+}
+
+/*****************************************detail post*****************************************/
+.p-detail {
+    width: 100%;
+}
+.p-detail .p-category {
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 50px;
+}
+.p-detail .p-category a {
+    text-decoration: none;
+    color: #999;
+}
+.p-detail .p-category a:hover {
+    color: #666;
+}
+.p-detail .p-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+.p-detail .p-meta {
+    margin-bottom: 10px;
+}
+.p-detail .p-meta .dateblock {
+    color: #999;
+    margin-bottom: 10px;
+}
+.p-detail .p-meta .author .author-div1 {
+    float: left;
+}
+.p-detail .p-meta .author .author-div2 {
+    float: left;
+    margin-left: 35px;
+    margin-top: 5px;
+}
+.p-detail .p-meta a {
+    text-decoration: none;
+}
+.p-detail .p-meta .author-name {
+    height: 40px;
+    border: 1px solid #999;
+    color: #cf5c56;
+    line-height: 40px;
+    padding: 5px 15px;
+    transition: color .2s ease-in, background-color .2s ease-in;
+}
+.p-detail .p-meta .author-name:hover {
+    background-color: #ffc7c4;
+}
+.p-detail .p-text {
+    font-family: TelexRegular, serif;
+    font-size: 20px;
+    border-top: 1px solid #999;
+}
+.p-detail .p-text p{
+    word-wrap: break-word;
+    word-break: normal;
+    line-height: 30px;
+}
+.p-detail .p-text img {
+    max-width: 800px;
+    width: 100%;
+    margin: 4px auto;
+}
+.p-detail .p-tag {
+    margin-top: 30px;
+}
+.p-detail .p-tag a {
+    text-decoration: none;
+}
+.p-detail .p-tag ul li{
+    float: left;
+    list-style-type: none;
+}
+.p-detail .p-tag ul li a span{
+    padding: 5px 15px;
+    margin-left: 5px;
+    background-color: #ccc;
+    color: #777;
+    transition: color .2s ease-in, background-color .2s ease-in;
+}
+.p-detail .p-tag ul li a span:hover {
+    color: #333;
+}
+.p-back {
+    float: left;
+    margin-left: -80px;
+    margin-top: 50px;
+    font-size: 50px;
+    cursor: pointer;
+    transition: margin-left .2s ease-in;
+}
+.p-back:hover {
+    margin-left: -100px;
+    color: #cf5c56;
+}
+
+/*********************************Add a post***************************************/
+.p-add div {
+    /*height: 50px;*/
+}
+.p-add-title input, .p-add-category input, .p-add-tag input, .p-add-source input {
+    font-family: "GothamBook", "Segoe UI", "Microsoft YaHei", sans-serif;
+    border: 2px solid #999;
+    height: 25px;
+    outline: none;
+    padding: 5px;
+}
+.p-add-title, .p-add-category, .p-add-tag, .p-add-source {
+    height: 50px;
+}
+.p-add-category input, .p-add-tag input, .p-add-source input {
+    width: 350px;
+}
+.p-add-media {
+    margin-bottom: 10px;
+}
+.p-add-media .file {
+    height: 35px;
+    position: relative;
+    font-size: 16px;
+    border: 2px solid #999;
+    display: inline-block;
+    text-decoration: none;
+    line-height: 35px;
+    padding: 0 5px;
+    color: #999;
+    background-color: #fff;
+    transition: color .2s ease-in, background-color .2s ease-in, border-color .2s ease-in;
+}
+.p-add-media .file:hover {
+    background-color: #ef4036;
+    color: #ffffff;
+    border-color: #ef4036;
+}
+.p-add-media .file input {
+    position: absolute;
+    right: 0;
+    top: 0;
+    opacity: 0;
+}
+.p-add-tag {
+    margin-top: 10px;
+}
+.wysiwyg-editor {
+    border: 2px solid #999;
+}
+.p-add button {
+    font-family: GothamBook, Segoe UI, Microsoft YaHei, sans-serif;
+    font-weight: bold;
+    width: 100px;
+    height: 50px;
+    cursor: pointer;
+    background-color: #fff;
+    border: 2px solid #999;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    transition: color .2s ease-in, background-color .2s ease-in, border-color .2s ease-in;
+}
+.p-add button:hover {
+    background-color: #ef4036;
+    color: #ffffff;
+    border-color: #ef4036;
+}
+.p-add .key {
+    color: #ef4036;
+}

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="../javascripts/jquery-1.10.0.min.js"></script>
+    <script type="text/javascript" src="../javascripts/wysiwyg.js"></script>
+    <script type="text/javascript" src="../javascripts/wysiwyg-editor.js"></script>
+    <link rel="stylesheet" type="text/css" href="../stylesheets/wysiwyg-editor.css" />
+    <link rel="stylesheet" type="text/css" href="../iconfont/font.css" />
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+    <script type="text/javascript">
+        $(function() {
+            $('#editor').wysiwyg({
+                classes: 'some-more-classes',
+                toolbar: 'selection',
+                buttons: {
+//                    insertimage: {
+//                        title: 'Insert image',
+//                        image: '\uf030', // <img src="path/to/image.png" width="16" height="16" alt="" />
+//                        //showstatic: true,    // wanted on the toolbar
+//                        showselection: true    // wanted on selection
+//                    },
+                    removeformat: {
+                        title: 'Remove format',
+                        image: '\uf12d' // <img src="path/to/image.png" width="16" height="16" alt="" />
+                    },
+                    insertvideo: {
+                        title: 'Insert video',
+                        image: '\uf03d', // <img src="path/to/image.png" width="16" height="16" alt="" />
+                        //showstatic: true,    // wanted on the toolbar
+                        showselection: true    // wanted on selection
+                    },
+                    insertlink: {
+                        title: 'Insert link',
+                        image: '\uf08e' // <img src="path/to/image.png" width="16" height="16" alt="" />
+                    },
+                    bold: {
+                        title: 'Bold (Ctrl+B)',
+                        image: '\uf032', // <img src="path/to/image.png" width="16" height="16" alt="" />
+                        hotkey: 'b'
+                    },
+                    italic: {
+                        title: 'Italic (Ctrl+I)',
+                        image: '\uf033', // <img src="path/to/image.png" width="16" height="16" alt="" />
+                        hotkey: 'i'
+                    },
+                    underline: {
+                        title: 'Underline (Ctrl+U)',
+                        image: '\uf0cd', // <img src="path/to/image.png" width="16" height="16" alt="" />
+                        hotkey: 'u'
+                    },
+                    strikethrough: {
+                        title: 'Strikethrough (Ctrl+S)',
+                        image: '\uf0cc', // <img src="path/to/image.png" width="16" height="16" alt="" />
+                        hotkey: 's'
+                    },
+                    forecolor: {
+                        title: 'Text color',
+                        image: '\uf1fc' // <img src="path/to/image.png" width="16" height="16" alt="" />
+                    },
+                    highlight: {
+                        title: 'Background color',
+                        image: '\uf043' // <img src="path/to/image.png" width="16" height="16" alt="" />
+                    }
+                },
+                submit: {
+                    title: 'Submit',
+                    image: '\uf00c' // <img src="path/to/image.png" width="16" height="16" alt="" />
+                },
+                selectImage: 'Click or drop image',
+                placeholderUrl: 'www.example.com',
+                placeholderEmbed: '<embed/>',
+                maxImageSize: [800,600],
+//                onImageUpload: function( insert_image ) {
+//                    $(this).parents('form')
+//                        .attr('action','/path/to/file')
+//                        .attr('method','POST')
+//                        .attr('enctype','multipart/form-data')
+//                        .ajaxSubmit({
+//                           success: function(xhrdata,textStatus,jqXHR){
+//                             var image_url = xhrdata;
+//                             console.log( 'URL: ' + image_url );
+//                             insert_image( image_url );
+//                           }
+//                        });
+//                },
+                onKeyPress: function( code, character, shiftKey, altKey, ctrlKey, metaKey ) {
+                    // E.g.: submit form on enter-key:
+                    //if( (code == 10 || code == 13) && !shiftKey && !altKey && !ctrlKey && !metaKey ) {
+                    //    submit_form();
+                    //    return false; // swallow enter
+                    //}
+                }
+            });
+            // Demo-Buttons
+            $('#editor-bold').click(function(){
+                $('#editor').wysiwyg('shell').bold();
+                window['xx'] = $('#editor').wysiwyg('shell').getHTML().replace(/\'/g, "\\'");
+                console.log($('#editor').wysiwyg('shell').getHTML().replace(/\'/g, "\\'"));
+                return false;
+            });
+            $('#editor-inserthtml').click(function () {
+                $('#editor').wysiwyg('shell').insertHTML('');
+            });
+
+        });
+    </script>
+    <style>
+        body {
+            background-color: #f2f2f2;
+            color: #333;
+            font-family: "GothamBook", "Segoe UI", "Microsoft YaHei", sans-serif;
+        }
+        #content {
+            margin: 0 auto;
+            margin-top: 56px;
+            width: 800px;
+        }
+        .p-add div {
+            /*height: 50px;*/
+        }
+        .p-add-title input, .p-add-category input, .p-add-tag input, .p-add-source input {
+            font-family: "GothamBook", "Segoe UI", "Microsoft YaHei", sans-serif;
+            border: 2px solid #999;
+            height: 25px;
+            outline: none;
+            padding: 5px;
+        }
+        .p-add-title, .p-add-category, .p-add-tag, .p-add-source {
+            height: 50px;
+        }
+        .p-add-category input, .p-add-tag input, .p-add-source input {
+            width: 350px;
+        }
+        .p-add-media {
+            margin-bottom: 10px;
+        }
+        .p-add-media .file {
+            height: 35px;
+            position: relative;
+            font-size: 16px;
+            border: 2px solid #999;
+            display: inline-block;
+            text-decoration: none;
+            line-height: 35px;
+            padding: 0 5px;
+            color: #999;
+            background-color: #fff;
+            transition: color .2s ease-in, background-color .2s ease-in, border-color .2s ease-in;
+        }
+        .p-add-media .file:hover {
+            background-color: #ef4036;
+            color: #ffffff;
+            border-color: #ef4036;
+        }
+        .p-add-media .file input {
+            position: absolute;
+            right: 0;
+            top: 0;
+            opacity: 0;
+        }
+        .p-add-tag {
+            margin-top: 10px;
+        }
+        .wysiwyg-editor {
+            border: 2px solid #999;
+        }
+        .p-add button {
+            font-family: GothamBook, Segoe UI, Microsoft YaHei, sans-serif;
+            font-weight: bold;
+            width: 100px;
+            height: 50px;
+            cursor: pointer;
+            background-color: #fff;
+            border: 2px solid #999;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            transition: color .2s ease-in, background-color .2s ease-in, border-color .2s ease-in;
+        }
+        .p-add button:hover {
+            background-color: #ef4036;
+            color: #ffffff;
+            border-color: #ef4036;
+        }
+        .p-add .key {
+            color: #ef4036;
+        }
+    </style>
+</head>
+<body>
+
+<div id="content">
+    <div class="p-add">
+        <div class="p-add-fun"><h2>Push Article</h2></div>
+        <div class="p-add-title"><span><input type="text" placeholder="Add A Title"/></span></div>
+        <div class="p-add-category"><span><input type="text" placeholder="Add A Category Or Multiple Categories, Splitted by ,"/></span></div>
+        <div class="p-add-media">
+            <a href="javascript:;" class="file">Upload mp3
+                <input type="file" name="" id="" accept="audio/mpeg">
+            </a>
+        </div>
+
+        <textarea id="editor" name="editor" placeholder="Type your text here..."></textarea>
+
+        <div class="p-add-tag"><span><input type="text" placeholder="Add A Tag Or Multiple Tags, Splitted by ,"/></span></div>
+        <div class="p-add-source"><span><input type="text" placeholder="Source Website"/></span></div>
+        <button class="key">PUSH</button>
+        <button>CANCEL</button>
+    </div>
+</div>
+
+
+<div class="p-add"><div class="p-add-fun"><h2>Push Article</h2></div><div class="p-add-title"><span><input type="text" placeholder="Add A Title"/></span></div><div class="p-add-category"><span><input type="text" placeholder="Add A Category Or Multiple Categories, Splitted by ,"/></span></div><div class="p-add-media"><a href="javascript:;" class="file">Upload mp3<input type="file" name="" accept="audio/mpeg"></a></div><textarea id="editor" name="editor" placeholder="Type your text here..."></textarea><div class="p-add-tag"><span><input type="text" placeholder="Add A Tag Or Multiple Tags, Splitted by ,"/></span></div><div class="p-add-source"><span><input type="text" placeholder="Source Website"/></span></div><button class="key">PUSH</button><button>CANCEL</button></div>
+
+</body>
+</html>
