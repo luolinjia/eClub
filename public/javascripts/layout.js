@@ -143,6 +143,9 @@ var _layout = {
             $(self).data('isLogin', false).html('<span class="icon-user"></span>User');
             // empty session
             reqHeader.logout({}, '');
+            var content = $('#content');
+            content.empty();
+            _content.renderNavi(content);
         });
     },
     showLRBox: function (self, flag) {
@@ -165,10 +168,16 @@ var _layout = {
     },
     setLoginParams: function (res) {
         var htmlCode = '<span class="icon-user"></span>',
-            self = $('.icon-user').parent();
+            self = $('.icon-user').parent(), content = $('#content'),
+            commentObj = $('.p-comment'), mainHolder = $('.main-holder');
         self.data('isLogin', true).html(htmlCode + res.data['email']);
         self.data('loginTime', Number(res.data['times'].length));
         self.data('tasknum', Number(res.data['tasknum']));
+        commentObj.fadeIn('fast');
+        if (mainHolder.length === 1) {
+            content.empty().data('requestURL', 'showAllList');
+            _content.renderNavi(content);
+        }
     },
     handleSession: function () {
         reqHeader.getUserSession({}, function (res) {

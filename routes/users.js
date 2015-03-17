@@ -138,6 +138,7 @@ router.post('/logout', function (req, res, next) {
 
 //layout and destroy session data
 router.post('/getsession', function (req, res, next) {
+    console.log('getsession '+ req.session['userID']);
     if(req.session['userID']) {
         console.log('session exsit!');
         var db = req.db,
@@ -151,6 +152,7 @@ router.post('/getsession', function (req, res, next) {
                 res.send({code: 510, msg: 'user not found'});
             } else {
                 returnData = items[0];
+                console.log('returnData' + returnData);
                 db.collection('article').find({'visitors.userID': {$not:{$eq:muesrid}},'taskDate':{'$exists':true}}).toArray(function(err,records){
                     if(err) {
                         res.send({code: 500, msg: err});

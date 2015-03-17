@@ -55,10 +55,7 @@ router.post('/addaudio', function(req, res) {
                 console.log("upload successfully");
             } else {
                 res.send({ code:200, msg:'ok', data:{'url':''}});
-                return;
             }
-
-
         }
     });
 });
@@ -79,6 +76,7 @@ router.post('/showdylist', function(req, res, next){
         for(var index = 0; index< items.length; index++) {
             returnData.article[index] = {};
             returnData.article[index]['id'] = items[index]['_id'];
+            returnData.article[index]['creatorID'] = items[index]['creatorID'];
             returnData.article[index]['creatorName'] = items[index]['creatorName'];
             returnData.article[index]['editorName'] = items[index]['editorName'];
             returnData.article[index]['title'] = items[index]['title'];
@@ -99,6 +97,7 @@ router.post('/showdylist', function(req, res, next){
             for (var i = 0; i < records.length; i++) {
                 returnData.vocabulary[i] = {};
                 returnData.vocabulary[i]['spelling'] = records[i]['spelling'];
+                returnData.vocabulary[i]['symbol'] = records[i]['symbol'];
                 returnData.vocabulary[i]['creatorName'] = records[i]['creatorName'];
                 returnData.vocabulary[i]['editorName'] = records[i]['editorName'];
                 returnData.vocabulary[i]['updateDate'] = records[i]['updateDate'];
@@ -122,6 +121,7 @@ router.post('/showall', function(req, res, next){
         for(var index = 0; index< items.length; index++) {
             returnData[index] = {};
             returnData[index]['id'] = items[index]['_id'];
+            returnData[index]['creatorID'] = items[index]['creatorID'];
             returnData[index]['creatorName'] = items[index]['creatorName'];
             returnData[index]['editorName'] = items[index]['editorName'];
             returnData[index]['title'] = items[index]['title'];
@@ -155,6 +155,7 @@ router.post('/showself', function(req, res, next){
             for(var index = 0; index< items.length; index++) {
                 returnData[index] = {};
                 returnData[index]['id'] = items[index]['_id'];
+                returnData[index]['creatorID'] = items[index]['creatorID'];
                 returnData[index]['creatorName'] = items[index]['creatorName'];
                 returnData[index]['editorName'] = items[index]['editorName'];
                 returnData[index]['title'] = items[index]['title'];
@@ -188,6 +189,7 @@ router.post('/showbycategory',function (req, res, next){
             for(var index = 0; index< items.length; index++) {
                 returnData[index] = {};
                 returnData[index]['id'] = items[index]['_id'];
+                returnData[index]['creatorID'] = items[index]['creatorID'];
                 returnData[index]['creatorName'] = items[index]['creatorName'];
                 returnData[index]['editorName'] = items[index]['editorName'];
                 returnData[index]['title'] = items[index]['title'];
@@ -221,6 +223,7 @@ router.post('/showbytag',function (req, res, next){
             for(var index = 0; index< items.length; index++) {
                 returnData[index] = {};
                 returnData[index]['id'] = items[index]['_id'];
+                returnData[index]['creatorID'] = items[index]['creatorID'];
                 returnData[index]['creatorName'] = items[index]['creatorName'];
                 returnData[index]['editorName'] = items[index]['editorName'];
                 returnData[index]['title'] = items[index]['title'];
@@ -256,6 +259,7 @@ router.post('/showbycreator',function (req, res, next){
             for(var index = 0; index< items.length; index++) {
                 returnData[index] = {};
                 returnData[index]['id'] = items[index]['_id'];
+                returnData[index]['creatorID'] = items[index]['creatorID'];
                 returnData[index]['creatorName'] = items[index]['creatorName'];
                 returnData[index]['editorName'] = items[index]['editorName'];
                 returnData[index]['title'] = items[index]['title'];
@@ -411,7 +415,7 @@ router.post('/add',function (req, res, next){
 //add finish task's user
 router.post('/addvisitor', function(req, res, next){
     var db = req.db;
-    console.log(req.session['userID']);
+    console.log('addvisitor session ID: ' + req.session['userID'] + ', ' + req.body.articleID);
     if(req.session['userID']) {
         if(req.body.articleID) {
             var mongoid = util.getObjectID(req.body.articleID);
@@ -420,10 +424,10 @@ router.post('/addvisitor', function(req, res, next){
             // need to modify
             db.collection('article').find({ '_id': mongoid,'taskDate': {'$exists': true}}).toArray(function(err, items){
                 if(err){ res.send({code: 500, msg: err}); }
-
+                console.log(err + ',' + items.length);
                 if(items.length === 1) {
                     if(util.checkvalidDate(items[0]['taskDate'])) {
-//                        console.log("flag=>" + flag);
+                        console.log("flag=>" + items[0]);
                         db.collection('article').update({
                                 '_id': mongoid, 'taskDate': {'$exists': true}
                             },

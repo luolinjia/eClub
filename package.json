@@ -17,7 +17,6 @@
     "mongodb": "*",
     "mongoskin": "*",
     "moment": "*",
-    "ejs": "~0.8.5",
     "formidable" : "*"
   }
 }

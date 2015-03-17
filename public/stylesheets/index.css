@@ -81,6 +81,9 @@ body {
     color: #fff;
     background-color: #ef4036;
 }
+#header section .header-items .header-item span {
+    margin-right: 5px;
+}
 
 /******************************section****************************/
 section {
@@ -231,38 +234,88 @@ section {
     margin-top: 56px;
     width: 800px;
 }
+.p-layout-info {
+    font-weight: bold;
+}
 .p-list {
     padding-top: 50px;
-
 }
 .p-list ul li {
     list-style-type: none;
-    padding: 5px 30px;
+    padding: 30px 40px;
+}
+.p-list ul li:hover {
+    background-color: #e6e6e6;
 }
 .p-list .p-list-li {
     width: 100%;
     height: 60px;
-    background-color: #e3e3e3;
+    /*background-color: #e6e6e6;*/
     position: relative;
-    z-index: 90;
+    /*margin-bottom: 30px;*/
+}
+.p-list .p-list-li .p-list-li-content {
+    float: left;
+    transition: border-left .2s ease;
+}
+.p-list .p-list-li .p-list-li-content:hover {
+    /*border-left: 2px solid #ef4036;*/
+}
+.p-list .p-list-li .p-list-li-content .p-list-li-content-title .flag-color {
+    float: left;
+    border-left: 6px solid green;
+    margin-right: 10px;
+    height: 35px;
+}
+.p-list .p-list-li .p-list-li-content .p-list-li-content-title .title a {
+    font-size: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    color: #333;
+    transition: color .2s ease-in, border-bottom .2s ease-in;
+}
+.p-list .p-list-li .p-list-li-content .p-list-li-content-title .title a:hover {
+    color: #ef4036;
+    border-bottom: 3px solid #999;
+}
+.p-list .p-list-li .p-list-li-content .p-list-li-content-desc {
+    position: relative;
+    margin-top: 10px;
     font-size: 16px;
 }
-.p-list .p-list-li .p-list-li-style {
+.p-list .p-list-li .p-list-li-content .p-list-li-content-desc .time, .p-list .p-list-li .p-list-li-content .p-list-li-content-desc .author {
+    color: #333;
+    transition: color .2s ease-in, font-weight .2s ease-in;
+    margin-right: 15px;
+}
+.p-list .p-list-li .p-list-li-content .p-list-li-content-desc .author:hover {
+    color: #ef4036;
+    font-weight: bold;
+    cursor: pointer;
+}
+.p-list .p-list-li .p-list-li-link {
     float: left;
     height: 60px;
     line-height: 60px;
     text-align: center;
-    transition: color .2s ease-in, background-color .2s ease-in
+    transition: background-color .2s ease-in, color .2s ease-in, font-weight .2s ease-in;
 }
-.p-list .p-list-li .p-list-li-style:hover {
+.p-list .p-list-li .p-list-li-link:hover {
     background-color: #ef4036;
-    color: #ffffff;
+    color: #fff;
+    font-weight: bold;
 }
-.width25p {
-    width: 25%;
+.p-list .p-list-li .p-list-li-link span {
+    position: relative;
+    left: 0;
+    transition: left .2s ease-in;
 }
-.width60p {
-    width: 60%;
+.p-list .p-list-li .p-list-li-link span:hover {
+    left: 7px;
+    cursor: pointer;
+}
+.width85p {
+    width: 85%;
 }
 .width15p {
     width: 15%;
