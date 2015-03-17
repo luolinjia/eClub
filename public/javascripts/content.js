@@ -69,19 +69,19 @@ var _content = {
             placeholderUrl: 'www.example.com',
             placeholderEmbed: '<embed/>',
             maxImageSize: [800,600],
-//                onImageUpload: function( insert_image ) {
-//                    $(this).parents('form')
-//                        .attr('action','/path/to/file')
-//                        .attr('method','POST')
-//                        .attr('enctype','multipart/form-data')
-//                        .ajaxSubmit({
-//                           success: function(xhrdata,textStatus,jqXHR){
-//                             var image_url = xhrdata;
-//                             console.log( 'URL: ' + image_url );
-//                             insert_image( image_url );
-//                           }
-//                        });
-//                },
+                onImageUpload: function( insert_image ) {
+                    $(this).parents('form')
+                        .attr('action','/path/to/file')
+                        .attr('method','POST')
+                        .attr('enctype','multipart/form-data')
+                        .ajaxSubmit({
+                           success: function(xhrdata,textStatus,jqXHR){
+                             var image_url = xhrdata;
+                             console.log( 'URL: ' + image_url );
+                             insert_image( image_url );
+                           }
+                        });
+                },
             onKeyPress: function( code, character, shiftKey, altKey, ctrlKey, metaKey ) {
                 // E.g.: submit form on enter-key:
                 //if( (code == 10 || code == 13) && !shiftKey && !altKey && !ctrlKey && !metaKey ) {
@@ -162,7 +162,7 @@ var _content = {
         _content.bindCRUD();
     },
     renderPushPost: function (self) {
-        var dom = '<div class="p-add"><div class="p-add-fun"><h2>Push Article</h2></div><div class="p-add-title"><span><input type="text" placeholder="Add A Title"/></span></div><div class="p-add-category"><span><input type="text" placeholder="Add A Category Or Multiple Categories, Splitted by ,"/></span></div><div class="p-add-media"><a href="javascript:;" class="file">Upload mp3<input type="file" name="" accept="audio/mpeg"></a></div><textarea id="editor" name="editor" placeholder="Type your text here..."></textarea><div class="p-add-tag"><span><input type="text" placeholder="Add A Tag Or Multiple Tags, Splitted by ,"/></span></div><div class="p-add-source"><span><input type="text" placeholder="Source Website"/></span></div><button class="key">PUSH</button><button>CANCEL</button></div>';
+        var dom = '<div class="p-add"><div class="p-add-fun"><h2>Push Article</h2></div><div class="p-add-title"><span><input type="text" placeholder="Add A Title"/></span></div><div class="p-add-category"><span><input type="text" placeholder="Add A Category Or Multiple Categories, Splitted by ,"/></span></div><div class="p-add-media"><a href="javascript:;" class="file">Upload mp3<form id="uploadAudio" name="uploadAudio" method="post" enctype="multipart/form-data" onsubmit="javascript: return false;"><input type="file"id="fulAudio" name="fulAudio" accept="audio/mpeg" ></form></a></div><textarea id="editor" name="editor" placeholder="Type your text here..."></textarea><div class="p-add-tag"><span><input type="text" placeholder="Add A Tag Or Multiple Tags, Splitted by ,"/></span></div><div class="p-add-source"><span><input type="text" placeholder="Source Website"/></span></div><button class="key">PUSH</button><button>CANCEL</button></div>';
         self.append(dom);
         _content.initWysiwyg($('#editor', self));
         // TODO validate the form format!!!
@@ -227,15 +227,33 @@ var _content = {
     },
     submitPushPost: function (self) {
         $('.key', self).click(function () {
-            var tags = [], categories = [];
+            var tags = [], categories = [], url = undefined;
             tags = $('.p-add-tag', self).find('input').val().split(',');
             categories = $('.p-add-category', self).find('input').val().split(',');
+
+            var form = $('#uploadAudio');
+            self.append(form);
+
+            form.ajaxSubmit({
+                dataType: "json",
+                url: "/article/addaudio",
+                type: "POST",
+                success: function (data) {
+                    if (data['code'] === 200) {
+                        url = data['data']['url'];
+                    }
+                },error: function(){
+
+                }
+            });
+
             var articleObj = {
                 'title': $('.p-add-title', self).find('input').val(),
 //                'content': $('#editor').wysiwyg('shell').getHTML().replace(/\'/g, "\\'"),
                 'content': $('#editor').wysiwyg('shell').getHTML(),
                 'tags': tags,
-                'categories': categories
+                'categories': categories,
+                'url':url
             };
             reqContent.pushPost({data: articleObj}, function (data) {
                 if (data['code'] === 200) {
