@@ -11,6 +11,8 @@ router.get('/', function(req, res, next) {
             returnData = {};
         var muesrid = util.getObjectID(req.session['userID']);
         db.collection('user').find({'_id': muesrid}).toArray(function(err,items){
+            if(err){res.send({code:500, msg:err});}
+
             if (items.length === 0) {
                 console.log('user not found');
                 res.send({code: 510, msg: 'user not found'});

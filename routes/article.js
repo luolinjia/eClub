@@ -3,8 +3,66 @@
  */
 var express = require('express');
 var util = require('../public/common/utils.js');
+var formidable = require('formidable');
+var fs = require('fs');
+var AUDIO_UPLOAD_FOLDER = '/audio/';
 
 var router = express.Router();
+
+
+router.post('/addaudio', function(req, res) {
+
+    var errflag = false;
+    var form = new formidable.IncomingForm();   //创建上传表单
+    form.encoding = 'utf-8';		//设置编辑
+    form.uploadDir = 'public' + AUDIO_UPLOAD_FOLDER;	 //设置上传目录
+    form.keepExtensions = true;	 //保留后缀
+    form.maxFieldsSize = 512 * 1024 * 1024;   //文件大小
+
+    form.parse(req, function(err, fields, files) {
+
+        if (err) {
+            res.send({ code:500, msg:err});
+            errflag = true;
+            return;
+        }
+
+        if(!errflag) {
+            if(files.fulAudio) {
+                var extName = '';  //后缀名
+                switch (files.fulAudio.type) {
+                    case 'audio/wav':
+                        extName = 'wav';
+                        break;
+                    case 'audio/mp3':
+                        extName = 'mp3';
+                        break;
+                }
+
+                if(extName.length == 0){
+                    res.send({ code:200, msg:'ok', data:{'url':''}});
+                    return;
+                }
+
+                var tempPath = files.fulAudio.path;
+                var newPath =  files.fulAudio.path.substr(0,tempPath.length-4)+'_'+ util.getDayDate()+ '.' + extName;
+
+                fs.renameSync(tempPath, newPath);  //重命名
+
+                var delPublicPath = newPath.substring(7,newPath.length);
+
+                res.send({ code:200, msg:'ok', data:{'url':delPublicPath}});
+                console.log("upload successfully");
+            } else {
+                res.send({ code:200, msg:'ok', data:{'url':''}});
+                return;
+            }
+
+
+        }
+    });
+});
+
 
 // show dynamic index
 router.post('/showdylist', function(req, res, next){
@@ -56,7 +114,7 @@ router.post('/showall', function(req, res, next){
     var db = req.db;
     var returnData = [];
 
-    db.collection('article').find({}).toArray(function(err,items){
+    db.collection('article').find({}).sort({'updateDate':-1}).toArray(function(err,items){
         if(err){
             res.send({code:500,msg:err});
         }
@@ -89,7 +147,7 @@ router.post('/showself', function(req, res, next){
     if(req.session['userID']) {
         var muserid = util.getObjectID(req.session['userID']);
 
-        db.collection('article').find({"creatorID":muserid}).toArray(function (err, items) {
+        db.collection('article').find({"creatorID":muserid}).sort({'updateDate':-1}).toArray(function (err, items) {
             if (err) {
                 res.send({code: 500, msg: err});
             }
@@ -122,7 +180,7 @@ router.post('/showbycategory',function (req, res, next){
     var db = req.db;
     var returnData = [];
     if(req.body.category) {
-        db.collection('article').find({"categories":{$in:[ req.body.category ]}}).toArray(function (err, items) {
+        db.collection('article').find({"categories":{$in:[ req.body.category ]}}).sort({'updateDate':-1}).toArray(function (err, items) {
             if (err) {
                 res.send({code: 500, msg: err});
             }
@@ -155,7 +213,7 @@ router.post('/showbytag',function (req, res, next){
     var db = req.db;
     var returnData = [];
     if(req.body.tag) {
-        db.collection('article').find({"tags":{$in:[ req.body.tag ]}}).toArray(function (err, items) {
+        db.collection('article').find({"tags":{$in:[ req.body.tag ]}}).sort({'updateDate':-1}).toArray(function (err, items) {
             if (err) {
                 res.send({code: 500, msg: err});
             }
@@ -187,10 +245,10 @@ router.post('/showbytag',function (req, res, next){
 router.post('/showbycreator',function (req, res, next){
     var db = req.db;
     var returnData = [];
-    if(req.body.creatorId) {
-        var muserid = util.getObjectID(req.body.creatorId);
+    if(req.body.creatorID) {
+        var muserid = util.getObjectID(req.body.creatorID);
 
-        db.collection('article').find({"creatorID":muserid}).toArray(function (err, items) {
+        db.collection('article').find({"creatorID":muserid}).sort({'updateDate':-1}).toArray(function (err, items) {
             if (err) {
                 res.send({code: 500, msg: err});
             }
@@ -239,6 +297,11 @@ router.post('/showdetail',function (req, res, next){
                         returnData[0]['likeNum'] = items[0]['like'].length;
                     } else {
                         returnData[0]['likeNum'] = 0;
+                    }
+                    if(items[0]['comments']) {
+                        returnData[0]['commentNum'] = items[0]['comments'].length;
+                    } else {
+                        returnData[0]['commentNum'] = 0;
                     }
                     res.send({code: 200, msg: 'ok', data: returnData});
                 } else {
@@ -350,8 +413,8 @@ router.post('/addvisitor', function(req, res, next){
     var db = req.db;
     console.log(req.session['userID']);
     if(req.session['userID']) {
-        if(req.body.articleId) {
-            var mongoid = util.getObjectID(req.body.articleId);
+        if(req.body.articleID) {
+            var mongoid = util.getObjectID(req.body.articleID);
             var muesrid = util.getObjectID(req.session['userID']);
 
             // need to modify
@@ -359,7 +422,6 @@ router.post('/addvisitor', function(req, res, next){
                 if(err){ res.send({code: 500, msg: err}); }
 
                 if(items.length === 1) {
-                    //没有加时间的判断
                     if(util.checkvalidDate(items[0]['taskDate'])) {
 //                        console.log("flag=>" + flag);
                         db.collection('article').update({
@@ -420,19 +482,25 @@ router.post('/update',function(req, res, next){
 
 router.post('/addcomment', function(req, res, next){
     var db = req.db;
-    console.log(req.session['userID'] + ',' + req.body.articleId);
-    if(req.session['userID'] && req.body.articleId) {
+    console.log(req.session['userID'] + ',' + req.body.articleID);
+    if(req.session['userID'] && req.body.articleID) {
         var curMSELDate = util.getMSELDate();
         var muserid = util.getObjectID(req.session['userID']);
-        var articleid = util.getObjectID(req.body.articleId);
+        var articleid = util.getObjectID(req.body.articleID);
         console.log(',' + muserid + ',' + curMSELDate + ',' + articleid);
         db.collection('article').update({'_id':articleid},{$addToSet: {'comments':{
             'userID':muserid, 'userName':req.session['userName'], 'content': req.body.content,
             'createDate':curMSELDate}}}, function(err){
-            console.log(err);
-            res.send(err ? {code: 500, msg: err} : {
-                code: 200,
-                msg: 'add comment successfully'
+            if(err){res.send({code:500, msg:err});}
+
+            db.collection('article').find({'_id':articleid}).toArray(function(err,items){
+                if(err){res.send({code:500, msg:err});}
+
+                if(items != undefined && items.length === 1) {
+                    res.send({code: 200, msg: 'add comment successfully',data:items[0]['comments']});
+                } else {
+                    res.send({code:510, msg:"find no comments"}); //may cause issue
+                }
             });
         });
     } else {
