@@ -101,7 +101,7 @@ var _content = {
 
         var dom = '<div class="p-list">' + list.join('') + '</div>';
         self.append(dom);
-        _content.bindToPost($('.toPost'), data['article']);
+        _content.bindToPost($('.toPost'));
     },
     renderPostContent: function (self, data) {
         self.empty();
@@ -112,13 +112,13 @@ var _content = {
 
         var dom = '<div class="p-list"><div>' + flagInfo + '</div>' + list.join('') + '</div>';
         self.append(dom);
-        _content.bindToPost($('.toPost'), data);
+        _content.bindToPost($('.toPost'));
     },
     renderPostList: function (self, data, list) {
         var size = data.length, i = 0;
         for (; i < size; i++) {
             var item = data[i];
-            list.push('<li><div class="p-list-li"><div class="p-list-li-style width25p">' + item['editorName'] + '</div><div class="p-list-li-style width60p"><a href="#">' + item['title'] + '</a></div><div data-articleid="' + item['_id'] + '" class="p-list-li-style width15p toPost"><span class="icon-uniE616"></span></div></div></li>');
+            list.push('<li><div class="p-list-li"><div class="p-list-li-style width25p">' + item['editorName'] + '</div><div class="p-list-li-style width60p"><a href="#">' + item['title'] + '</a></div><div data-articleid="' + item['id'] + '" class="p-list-li-style width15p toPost"><span class="icon-uniE616"></span></div></div></li>');
         }
     },
     renderWordList: function (self, data, list) {
@@ -138,10 +138,22 @@ var _content = {
             var tItem = data['tags'][j];
             tags.push('<li><a href="#"><span>' + tItem + '</span></a></li>');
         }
-        var dom = '<div class="p-back"><span class="icon-arrow-left"></span></div><div class="p-detail"><div class="p-category"><p>' + categoriesList.join('') + '</p></div><div class="p-title"><h1>' + data['title'] + '</h1></div><div class="p-meta"><div class="dateblock"><span class="date">' + data['createDate'] + '</span></div><div class="author"><div class="author-div1"><a href="javascript:;"><span class="author-name">' + data['creatorName'] + '</span></a></div><div class="author-div2"><audio src="../audio/' + data['url'] + '" controls="" autoplay></audio></div><div style="clear: both;"></div></div></div><div class="p-text">' + data['content'] + '</div><div class="p-tag"><ul>' + tags.join('') + '</ul></div><div class="p-comment"></div></div>';
+        var dom = '<div class="p-back"><span class="icon-arrow-left"></span></div><div class="p-detail"><div class="p-category"><p>' + categoriesList.join('') + '</p></div><div class="p-title" data-articleid="' + data['_id'] + '"><h1>' + data['title'] + '</h1></div><div class="p-meta"><div class="dateblock"><span class="date">' + data['createDate'] + '</span></div><div class="author"><div class="author-div1"><a href="javascript:;"><span class="author-name">' + data['creatorName'] + '</span></a></div><div class="author-div2"><audio src="../audio/' + data['url'] + '" controls="" autoplay></audio></div><div style="clear: both;"></div></div></div><div class="p-text">' + data['content'] + '</div><div class="p-tag"><ul>' + tags.join('') + '</ul></div><div style="clear:both;"></div><div class="p-comment"><div class="p-comment-state"><span><span id="commentNo">0</span> comments</span></div><hr/><div class="p-comment-input"><textarea name="commentIn" id="commentIn" placeholder="Start a discussion..."></textarea><button id="btnComments">Submit</button></div><div class="p-comment-article"><ul></ul></div></div></div>';
 
         self.append(dom);
+        _content.renderCommentsList($('ul', $('.p-comment')), data['comments']);
+        _content.bindComments();
         _content.bindToBack($('.p-back'));
+    },
+    renderCommentsList: function (self, data) {
+        if (data !== undefined && data.length !== 0) {
+            var list = [], i = 0, size = data.length;
+            for (; i< size; i++) {
+                var item = data[i];
+                list.push('<li><div class="p-comment-article-detail"><div class="p-comment-article-detail-title"><span class="author" data-userid="' + item['userID'] + '">' + item['userName'] + '</span><span class="time">' + item['createDate'] + '</span></div><div class="p-comment-article-detail-content"><p>' + item['content'] + '</p></div><div></div></div></li><hr/>');
+            }
+            self.append(list.join(''));
+        }
     },
     renderNavi: function (self) {
         var dom = '<div class="main-holder"><div class="view"><img src="../images/Taopo_cover.png" alt="Vocabulary"/><div class="info"><h5>Vocabulary</h5>Vocabulary List<div class="btn"><span id="btnUserAddWord"class="icon-plus" title="Add A Vocabulary"></span><span id="btnUserListWord" class="icon-list" title="User Vocabulary List"></span></div></div></div><div class="view"><img src="../images/Ciudad_cover.png" alt="Reading"/><div class="info"><h5>Reading</h5>Reading post<div class="btn"><span id="btnUserAddPost" class="icon-plus" title="Add A Article"></span><span id="btnUserListPost" class="icon-list" title="User Article List"></span></div></div></div></div>';
@@ -156,20 +168,16 @@ var _content = {
         // TODO validate the form format!!!
         _content.submitPushPost(self);
     },
-    bindToPost: function (o, data) {
+    bindToPost: function (o) {
         o.click(function () {
-            var dataId = $(this).attr('data-articleid'), self = $('#content'), i = 0, size = data.length, articleData = {};
+            var dataId = $(this).attr('data-articleid'), self = $('#content');
             // empty content
             self.empty();
-            // get the article data from data param
-            for (; i < size; i++) {
-                var item = data[i];
-                if (item['_id'] === dataId) {
-                    articleData = item;
-                }
-            }
-            // render the post page
-            _content.renderDetailPost(self, articleData);
+            // get the article data from db
+            reqContent.toDetailPost({data: {'articleID': dataId}}, function (data) {
+                _content.renderDetailPost(self, data['data'][0]);
+                _content.addVisitor({data: {'articleID': dataId}}, '');
+            });
         });
     },
     bindToBack: function (o) {
@@ -254,6 +262,35 @@ var _content = {
         reqContent.showUserArticleList({}, function (data) {
             _content.renderPostContent(self, data['data']);
         });
+    },
+    bindComments: function () {
+        var textarea = $('#commentIn');
+        textarea.focus(function () {
+            var thiz = $(this);
+            thiz.css({'height': '80px'}).next().fadeIn('fast');
+        }).focusout(function () {
+            var thiz = $(this);
+            thiz.css({'height': '20px'}).next().fadeOut('fast');
+        });
+        $('#btnComments').click(function () {
+            var commentObj = {
+                'articleId': $('.p-title').attr('data-articleid'),
+                'content': $('#commentIn').val()
+            };
+            reqContent.pushComments({data: commentObj}, function (data) {
+                if (data['code'] === 200) {
+                    var self = $('ul', $('.p-comment'));
+                    // set the textarea is null
+                    textarea.val('');
+                    self.empty();
+                    // update the comments
+                    _content.renderCommentsList(self, data['comments']);
+                    // TODO update the total number
+                } else {
+                    alert('add failed!');
+                }
+            });
+        });
     }
 };
 
@@ -295,6 +332,39 @@ var reqContent = {
         $.ajax($.extend({
             type: 'POST',
             url: '/article/add',
+            dataType: 'JSON'
+        }, options, true)).done(function(data){
+            if (data && $.isFunction(callback)) {
+                callback(data);
+            }
+        });
+    },
+    toDetailPost: function (options, callback) {
+        $.ajax($.extend({
+            type: 'POST',
+            url: '/article/showdetail',
+            dataType: 'JSON'
+        }, options, true)).done(function(data){
+            if (data && $.isFunction(callback)) {
+                callback(data);
+            }
+        });
+    },
+    pushComments: function (options, callback) {
+        $.ajax($.extend({
+            type: 'POST',
+            url: '/article/addcomment',
+            dataType: 'JSON'
+        }, options, true)).done(function(data){
+            if (data && $.isFunction(callback)) {
+                callback(data);
+            }
+        });
+    },
+    addVisitor: function (options, callback) {
+        $.ajax($.extend({
+            type: 'POST',
+            url: '/article/addvisitor',
             dataType: 'JSON'
         }, options, true)).done(function(data){
             if (data && $.isFunction(callback)) {

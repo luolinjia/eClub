@@ -5,6 +5,7 @@
     <title></title>
     <link rel="stylesheet" href="../iconfont/iconfont.css"/>
     <link rel="stylesheet" href="../iconfont/font.css"/>
+    <script type="text/javascript" src="../javascripts/jquery-1.10.0.min.js"></script>
     <style>
         body{
             background-color: #f1f1f1;
@@ -96,10 +97,75 @@
             color: #333;
         }
 
+        .p-comment {
+            margin-top: 20px;
+        }
+        .p-comment .p-comment-input textarea {
+            border: 2px solid #999;
+            outline: none;
+            width: 80%;
+            height: 20px;
+            margin-right: 20px;
+            padding: 10px;
+            font-family: "TelexRegular", "Segoe UI", "Microsoft YaHei", sans-serif;
+            font-size: 16px;
+            transition: height .2s ease-in;
+        }
+        .p-comment .p-comment-input button {
+            display: none;
+            border: 2px solid #999;
+            width: 100px;
+            height: 35px;
+            position: relative;
+            top: -15px;
+            font-family: "GothamBook", "Segoe UI", "Microsoft YaHei", sans-serif;
+            font-weight: bold;
+            color: #333;
+            font-size: 18px;
+            transition: color .2s ease-in, background-color .2s ease-in, border-color .2s ease-in;
+            cursor: pointer;
+        }
+        .p-comment .p-comment-input button:hover {
+            background-color: #ef4036;
+            color: #ffffff;
+            border-color: #ef4036;
+        }
+        .p-comment .p-comment-article ul {
+            padding: 0;
+        }
+        .p-comment .p-comment-article ul li {
+            list-style-type: none;
+        }
+        .p-comment .p-comment-article ul li .p-comment-article-detail .p-comment-article-detail-title .author {
+            color: red;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .p-comment .p-comment-article ul li .p-comment-article-detail .p-comment-article-detail-title .time {
+            font-size: 16px;
+        }
+        .p-comment .p-comment-article ul li .p-comment-article-detail .p-comment-article-detail-content {
+            font-family: "TelexRegular", "Segoe UI", "Microsoft YaHei", sans-serif;
+            font-size: 16px;
+        }
+
+
+
 
 
 
     </style>
+    <script type="text/javascript">
+        $(function () {
+            $('#commentIn').focus(function () {
+                $(this).css({'height': '80px'});
+                $(this).next().fadeIn('fast');
+            }).focusout(function () {
+                $(this).css({'height': '40px'});
+                $(this).next().fadeOut('fast');
+            });
+        });
+    </script>
 </head>
 <body>
 
@@ -143,13 +209,41 @@
                 <li><a href="#"><span>Life</span></a></li>
             </ul>
         </div>
+        <div style="clear:both;"></div>
         <div class="p-comment">
-
+            <div class="p-comment-state">
+                <span><span id="commentNo">0</span> comments</span>
+            </div>
+            <hr/>
+            <div class="p-comment-input">
+                <textarea name="commentIn" id="commentIn" placeholder="Start a discussion..."></textarea>
+                <button>Submit</button>
+            </div>
+            <div class="p-comment-article">
+                <ul>
+                    <li>
+                        <div class="p-comment-article-detail">
+                            <div class="p-comment-article-detail-title">
+                                <span class="author">Cherry</span>
+                                <span class="time">2015-03-16 19:30</span>
+                            </div>
+                            <div class="p-comment-article-detail-content">
+                                <p>xxxxxxx</p>
+                            </div>
+                            <div></div>
+                        </div>
+                    </li>
+                    <hr/>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
 
+<div class="p-comment-article-detail"><div class="p-comment-article-detail-title"><span class="author">Cherry</span><span class="time">2015-03-16 19:30</span></div><div class="p-comment-article-detail-content"><p>xxxxxxx</p></div><div></div></div>
 
+
+<div class="p-comment-state"><span><span id="commentNo">0</span> comments</span></div><hr/><div class="p-comment-input"><textarea name="commentIn" id="commentIn" placeholder="Start a discussion..."></textarea><button>Submit</button></div>
 
 </body>
 </html>

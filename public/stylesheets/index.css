@@ -371,6 +371,9 @@ section {
 .p-add div {
     /*height: 50px;*/
 }
+.p-add-fun {
+    padding: 20px 0;
+}
 .p-add-title input, .p-add-category input, .p-add-tag input, .p-add-source input {
     font-family: "GothamBook", "Segoe UI", "Microsoft YaHei", sans-serif;
     border: 2px solid #999;
@@ -426,7 +429,7 @@ section {
     background-color: #fff;
     border: 2px solid #999;
     margin-top: 20px;
-    margin-bottom: 20px;
+    margin-right: 20px;
     transition: color .2s ease-in, background-color .2s ease-in, border-color .2s ease-in;
 }
 .p-add button:hover {
@@ -436,4 +439,70 @@ section {
 }
 .p-add .key {
     color: #ef4036;
+}
+
+/************************************************comments***********************************************/
+.p-comment {
+    margin-top: 20px;
+    margin-bottom: 100px;
+}
+.p-comment .p-comment-state {
+    margin-bottom: 10px;
+}
+.p-comment .p-comment-input {
+    margin-top: 20px;
+}
+.p-comment .p-comment-input textarea {
+    border: 2px solid #999;
+    outline: none;
+    width: 80%;
+    height: 20px;
+    margin-right: 20px;
+    padding: 10px;
+    font-family: "TelexRegular", "Segoe UI", "Microsoft YaHei", sans-serif;
+    font-size: 16px;
+    transition: height .2s ease-in;
+}
+.p-comment .p-comment-input button {
+    display: none;
+    border: 2px solid #999;
+    width: 100px;
+    height: 35px;
+    position: relative;
+    top: -15px;
+    font-family: "GothamBook", "Segoe UI", "Microsoft YaHei", sans-serif;
+    font-weight: bold;
+    color: #333;
+    font-size: 18px;
+    transition: color .2s ease-in, background-color .2s ease-in, border-color .2s ease-in;
+    cursor: pointer;
+}
+.p-comment .p-comment-input button:hover {
+    background-color: #ef4036;
+    color: #ffffff;
+    border-color: #ef4036;
+}
+.p-comment .p-comment-article ul {
+    padding: 0;
+}
+.p-comment .p-comment-article ul li {
+    list-style-type: none;
+}
+.p-comment .p-comment-article ul li .p-comment-article-detail .p-comment-article-detail-title {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.p-comment .p-comment-article ul li .p-comment-article-detail .p-comment-article-detail-title .author {
+    color: red;
+    font-weight: bold;
+    font-size: 18px;
+    margin-right: 15px;
+}
+.p-comment .p-comment-article ul li .p-comment-article-detail .p-comment-article-detail-title .time {
+    font-size: 16px;
+}
+.p-comment .p-comment-article ul li .p-comment-article-detail .p-comment-article-detail-content {
+    font-family: "TelexRegular", "Segoe UI", "Microsoft YaHei", sans-serif;
+    font-size: 16px;
+    margin-bottom: 10px;
 }

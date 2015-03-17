@@ -3,6 +3,7 @@
  */
 $(function() {
     var userIcon = $('.icon-user').parent();
+    _layout.handleSession();
     _layout.showLRBox(userIcon);
     _layout.bindeClub();
     // show index content
@@ -19,7 +20,7 @@ var _layout = {
         self.append(dom);
         var userTask = $('.user-task'), userTime = $('.user-time');
         userTime.text(self.data('loginTime'));
-        userTask.text(self.data('newTask'));
+        userTask.text(self.data('tasknum'));
         _layout.bindChange($('#btnChange'), self);
         _layout.bindLogout($('#btnLogout'), self);
         _layout.bindNewTask(userTask, self);
@@ -67,17 +68,14 @@ var _layout = {
                 data: loginUser
             }, function (res) {
                 console.log(res);
-                if (res['code'] === 400) {
+                if (res['code'] === 510) {
                     $(_layout.renderTips(false, res['msg'])).insertAfter(oEmail.parent());
                     oEmail.css({'border-color': '#ef4036'});
-                } else if (res['code'] === 500) {
+                } else if (res['code'] === 511) {
                     $(_layout.renderTips(false, res['msg'])).insertAfter(oPwd.parent());
                     oPwd.css({'border-color': '#ef4036'});
                 } else {
-                    var htmlCode = '<span class="icon-user"></span>';
-                    $(self).data('isLogin', true).html(htmlCode + res.data['email']);
-                    $(self).data('loginTime', Number(res.data['time']) + 1);
-                    $(self).data('newTask', Number(res.data['newTask']));
+                    _layout.setLoginParams(res);
                 }
             });
         });
@@ -99,10 +97,6 @@ var _layout = {
 
         var oldPass = $(inputs[0]), newPass = $(inputs[1]), confirmPass = $(inputs[2]);
         o.click(function () {
-//            oldPass.attr('disabled', 'disabled');
-//            newPass.attr('disabled', 'disabled');
-//            confirmPass.attr('disabled', 'disabled');
-
             if (newPass.val() !== confirmPass.val()) {
                 console.log('Confirm password is Not correct!');
                 $(_layout.renderTips(false, 'Not correct!')).insertAfter(confirmPass.parent());
@@ -151,7 +145,7 @@ var _layout = {
             reqHeader.logout({}, '');
         });
     },
-    showLRBox: function (self) {
+    showLRBox: function (self, flag) {
         self.on('mouseover', function() {
             if ($(self).data('isLogin')) {
                 if ($('.lr-box').length === 0) _layout.renderHasLogin(self);
@@ -167,6 +161,18 @@ var _layout = {
             var self = $('#content');
             self.empty().data('requestURL', 'showAllList');
             _content.renderNavi(self);
+        });
+    },
+    setLoginParams: function (res) {
+        var htmlCode = '<span class="icon-user"></span>',
+            self = $('.icon-user').parent();
+        self.data('isLogin', true).html(htmlCode + res.data['email']);
+        self.data('loginTime', Number(res.data['times'].length));
+        self.data('tasknum', Number(res.data['tasknum']));
+    },
+    handleSession: function () {
+        reqHeader.getUserSession({}, function (res) {
+            if (res) _layout.setLoginParams(res);
         });
     }
 };
@@ -205,10 +211,10 @@ var reqHeader = {
             }
         });
     },
-    getLatestNews: function (options, callback) {
+    getUserSession: function (options, callback) {
         $.ajax($.extend({
-            type: 'GET',
-            url: '/article/xxx',
+            type: 'POST',
+            url: '/users/getsession',
             dataType: 'JSON'
         }, options, true)).done(function(data){
             if (data && $.isFunction(callback)) {

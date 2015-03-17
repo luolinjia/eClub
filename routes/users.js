@@ -45,7 +45,7 @@ router.post('/login', function (req, res, next) {
             console.log('user not found');
             res.send({code: 510, msg: 'user not found'});
         } else {
-            if (items[0].pwd === pwd) {
+            if (items[0].password === pwd) {
                 console.log('login successfully!');
                 req.session['email'] = email;
                 req.session['password'] = items[0]['password'];
@@ -119,7 +119,7 @@ router.post('/changepwd', function (req, res, next) {
 });
 
 //layout and destroy session data
-router.post('/layout', function (req, res, next) {
+router.post('/logout', function (req, res, next) {
     if(req.session['userID']) {
         console.log("destroy operation");
         req.session.destroy(function(err){
@@ -127,10 +127,38 @@ router.post('/layout', function (req, res, next) {
                 res.send({code:520,msg:err});
             }
             delete req.session;
-            res.send({code:200,msg:'layout successfully'});
+            res.send({code:200,msg:'logout successfully'});
         });
     } else {
         res.send({code:310,msg:'please login in'});
+    }
+});
+
+//layout and destroy session data
+router.post('/getsession', function (req, res, next) {
+    if(req.session['userID']) {
+        console.log('session exsit!');
+        var db = req.db,
+            returnData = {};
+        var muesrid = util.getObjectID(req.session['userID']);
+        db.collection('user').find({'_id': muesrid}).toArray(function(err,items){
+            if (items.length === 0) {
+                console.log('user not found');
+                res.send({code: 510, msg: 'user not found'});
+            } else {
+                returnData = items[0];
+                db.collection('article').find({'visitors.userID': {$not:{$eq:muesrid}},'taskDate':{'$exists':true}}).toArray(function(err,records){
+                    if(err) {
+                        res.send({code: 500, msg: err});
+                    }
+                    returnData['tasknum'] = records.length;
+                    res.send({code: 200, data: returnData});
+                });
+            }
+        });
+    } else {
+        console.log('no session exsit!');
+        res.render('index', {title: 'eClub'});
     }
 });
 

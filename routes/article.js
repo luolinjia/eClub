@@ -332,7 +332,7 @@ router.post('/add',function (req, res, next){
             req.body.pv = 0;
 
             console.log('muserid' + muserid);
-            console.log('now' + curDate.format('MM-DD-YYYY HH:mm'));
+//            console.log('now' + curDate.format('MM-DD-YYYY HH:mm'));
 
             db.collection('article').insert(req.body, function (err, result) {
                 res.send(err? {code: 500, msg: err}: {code: 200, msg: 'Add article successfully!'});
@@ -348,10 +348,10 @@ router.post('/add',function (req, res, next){
 //add finish task's user
 router.post('/addvisitor', function(req, res, next){
     var db = req.db;
-
+    console.log(req.session['userID']);
     if(req.session['userID']) {
-        if(req.body.articleid) {
-            var mongoid = util.getObjectID(req.body.articleid);
+        if(req.body.articleId) {
+            var mongoid = util.getObjectID(req.body.articleId);
             var muesrid = util.getObjectID(req.session['userID']);
 
             // need to modify
@@ -361,7 +361,7 @@ router.post('/addvisitor', function(req, res, next){
                 if(items.length === 1) {
                     //没有加时间的判断
                     if(util.checkvalidDate(items[0]['taskDate'])) {
-                        console.log("flag=>" + flag);
+//                        console.log("flag=>" + flag);
                         db.collection('article').update({
                                 '_id': mongoid, 'taskDate': {'$exists': true}
                             },
@@ -420,14 +420,16 @@ router.post('/update',function(req, res, next){
 
 router.post('/addcomment', function(req, res, next){
     var db = req.db;
-    if(req.session['userID'] && req.body.articleid) {
+    console.log(req.session['userID'] + ',' + req.body.articleId);
+    if(req.session['userID'] && req.body.articleId) {
         var curMSELDate = util.getMSELDate();
         var muserid = util.getObjectID(req.session['userID']);
-        var articleid = util.getObjectID(req.body.articleid);
-
+        var articleid = util.getObjectID(req.body.articleId);
+        console.log(',' + muserid + ',' + curMSELDate + ',' + articleid);
         db.collection('article').update({'_id':articleid},{$addToSet: {'comments':{
             'userID':muserid, 'userName':req.session['userName'], 'content': req.body.content,
             'createDate':curMSELDate}}}, function(err){
+            console.log(err);
             res.send(err ? {code: 500, msg: err} : {
                 code: 200,
                 msg: 'add comment successfully'
