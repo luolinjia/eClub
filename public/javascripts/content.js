@@ -242,27 +242,27 @@ var _content = {
                     if (data['code'] === 200) {
                         url = data['data']['url'];
                     }
+
+                    var articleObj = {
+                        'title': $('.p-add-title', self).find('input').val(),
+//                'content': $('#editor').wysiwyg('shell').getHTML().replace(/\'/g, "\\'"),
+                        'content': $('#editor').wysiwyg('shell').getHTML(),
+                        'tags': tags,
+                        'categories': categories,
+                        'url':url
+                    };
+                    reqContent.pushPost({data: articleObj}, function (data) {
+                        if (data['code'] === 200) {
+                            console.log('add article success!');
+                            var self = $('#content');
+                            self.empty();
+                            reqContent.showUserArticleList({}, function (data) {
+                                _content.renderPostContent(self, data['data']);
+                            });
+                        }
+                    });
                 },error: function(){
 
-                }
-            });
-
-            var articleObj = {
-                'title': $('.p-add-title', self).find('input').val(),
-//                'content': $('#editor').wysiwyg('shell').getHTML().replace(/\'/g, "\\'"),
-                'content': $('#editor').wysiwyg('shell').getHTML(),
-                'tags': tags,
-                'categories': categories,
-                'url':url
-            };
-            reqContent.pushPost({data: articleObj}, function (data) {
-                if (data['code'] === 200) {
-                    console.log('add article success!');
-                    var self = $('#content');
-                    self.empty();
-                    reqContent.showUserArticleList({}, function (data) {
-                        _content.renderPostContent(self, data['data']);
-                    });
                 }
             });
         });
