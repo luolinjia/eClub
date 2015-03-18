@@ -236,6 +236,15 @@ section {
 }
 .p-layout-info {
     font-weight: bold;
+    margin-bottom: 20px;
+}
+.p-layout-info span {
+    transition: color .2s ease-in, border-bottom .2s ease-in;
+}
+.p-layout-info span:hover {
+    color: #ef4036;
+    border-bottom: 3px solid #999;
+    cursor: pointer;
 }
 .p-list {
     padding-top: 50px;
@@ -329,6 +338,10 @@ section {
     font-size: 16px;
     font-weight: bold;
     line-height: 50px;
+}
+.p-detail .p-category p {
+    float: left;
+    margin-right: 10px;
 }
 .p-detail .p-category a {
     text-decoration: none;
@@ -437,6 +450,9 @@ section {
 .p-add-title, .p-add-category, .p-add-tag, .p-add-source {
     height: 50px;
 }
+.p-add-title input {
+    width: 500px;
+}
 .p-add-category input, .p-add-tag input, .p-add-source input {
     width: 350px;
 }
@@ -462,6 +478,7 @@ section {
     border-color: #ef4036;
 }
 .p-add-media .file input {
+    height: 40px;
     position: absolute;
     right: 0;
     top: 0;

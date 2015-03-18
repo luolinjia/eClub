@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="../javascripts/jquery-1.10.0.min.js"></script>
+    <script type="text/javascript" src="../javascripts/jquery.tagcloud.js"></script>
+    <link rel="stylesheet" type="text/css" href="../iconfont/font.css" />
+    <script type="text/javascript">
+        $.fn.tagcloud.defaults = {
+            size: {start: 14, end: 42, unit: 'px'},
+            color: {start: '#ACE6E6', end: '#226666'}
+        };
+        $(function () {
+            var recentColor, recentSize;
+            $('#tag_cloud a')
+                    .tagcloud()
+                    .mouseover(function(){
+                        var thiz = $(this);
+                        recentColor = thiz.css('color');
+                        //recentSize = thiz.css('font-size');
+                        thiz.css({'color': '#226666'});
+                    })
+                    .mouseout(function(){
+                        $(this).css({'color': recentColor});
+                    });
+        });
+    </script>
+    <style>
+        body {
+            background-color: #f2f2f2;
+            color: #333;
+            font-family: "GothamBook", "Segoe UI", "Microsoft YaHei", sans-serif;
+        }
+        #content {
+            margin: 0 auto;
+            margin-top: 56px;
+            width: 800px;
+        }
+        a {
+            text-decoration: none;
+        }
+        a:hover {
+            border-bottom: 1px solid #ef4036;
+        }
+    </style>
+</head>
+<body>
+
+<div id="content">
+    <div id="tag_cloud">
+        <a href="#hello" title="hello" rel="23">hello</a>
+        <a href="#hello1" title="hello" rel="12">hello1</a>
+        <a href="#hello2" title="hello" rel="15">hello2</a>
+        <a href="#hello3" title="hello" rel="18">hello3</a>
+        <a href="#hello4" title="hello" rel="23">hello4</a>
+        <a href="#hello5" title="hello" rel="19">hello5</a>
+        <a href="#hello6" title="hello" rel="15">hello6</a>
+        <a href="#hello7" title="hello" rel="17">hello7</a>
+        <a href="#hello8" title="hello" rel="18">hello8</a>
+        <a href="#hello9" title="hello" rel="21">hello9</a>
+        <a href="#hello10" title="hello" rel="20">hello10</a>
+        <a href="#hello11" title="hello" rel="17">hello11</a>
+        <a href="#hello12" title="hello" rel="18">hello12</a>
+        <a href="#hello13" title="hello" rel="19">hello13</a>
+
+    </div>
+</div>
+
+
+</body>
+</html>

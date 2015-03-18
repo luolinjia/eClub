@@ -161,10 +161,13 @@ var _layout = {
     },
     bindeClub: function () {
         $('.logo').click(function () {
-            var self = $('#content');
-            self.empty().data('requestURL', 'showAllList');
-            _content.renderNavi(self);
+            _layout.bindToHome();
         });
+    },
+    bindToHome: function () {
+        var self = $('#content');
+        self.empty().data('requestURL', 'showAllList');
+        _content.renderNavi(self);
     },
     setLoginParams: function (res) {
         var htmlCode = '<span class="icon-user"></span>',

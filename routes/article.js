@@ -111,7 +111,7 @@ router.post('/showdylist', function(req, res, next){
 //show all articles
 router.post('/showall', function(req, res, next){
     var db = req.db;
-    var returnData = [];
+    var returnData = [], resData = {};
 
     db.collection('article').find({}).sort({'updateDate':-1}).toArray(function(err,items){
         if(err){
@@ -134,15 +134,15 @@ router.post('/showall', function(req, res, next){
                 returnData[index]['likeNum'] = 0;
             }
         }
-
-        res.send({code:200,msg:'ok',data:returnData});
+        resData['list'] = returnData;
+        res.send({code:200,msg:'ok',data:resData});
     })
 });
 
 //show creator all articles
 router.post('/showself', function(req, res, next){
     var db = req.db;
-    var returnData = [];
+    var returnData = [], resData = {};
 
     if(req.session['userID']) {
         var muserid = util.getObjectID(req.session['userID']);
@@ -168,8 +168,8 @@ router.post('/showself', function(req, res, next){
                     returnData[index]['likeNum'] = 0;
                 }
             }
-
-            res.send({code: 200, msg: 'ok', data: returnData});
+            resData['list'] = returnData;
+            res.send({code: 200, msg: 'ok', data: resData});
         })
     } else {
         res.send({code: 310, msg: 'Please login in'});
@@ -179,14 +179,14 @@ router.post('/showself', function(req, res, next){
 // show article by category
 router.post('/showbycategory',function (req, res, next){
     var db = req.db;
-    var returnData = [];
+    var returnData = [], resData = {};
     if(req.body.category) {
         db.collection('article').find({"categories":{$in:[ req.body.category ]}}).sort({'updateDate':-1}).toArray(function (err, items) {
             if (err) {
                 res.send({code: 500, msg: err});
             }
 
-            for(var index = 0; index< items.length; index++) {
+            for(var index = 0; index < items.length; index++) {
                 returnData[index] = {};
                 returnData[index]['id'] = items[index]['_id'];
                 returnData[index]['creatorID'] = items[index]['creatorID'];
@@ -202,8 +202,9 @@ router.post('/showbycategory',function (req, res, next){
                     returnData[index]['likeNum'] = 0;
                 }
             }
-
-            res.send({code: 200, msg: 'ok', data: returnData});
+            resData['list'] = returnData;
+            resData['selectCate'] = req.body.category;
+            res.send({code: 200, msg: 'ok', data: resData});
         });
     } else {
         res.send({code: 311, msg: 'please choose category'});
@@ -213,7 +214,7 @@ router.post('/showbycategory',function (req, res, next){
 // show articles by tag
 router.post('/showbytag',function (req, res, next){
     var db = req.db;
-    var returnData = [];
+    var returnData = [], resData = {};
     if(req.body.tag) {
         db.collection('article').find({"tags":{$in:[ req.body.tag ]}}).sort({'updateDate':-1}).toArray(function (err, items) {
             if (err) {
@@ -236,8 +237,9 @@ router.post('/showbytag',function (req, res, next){
                     returnData[index]['likeNum'] = 0;
                 }
             }
-
-            res.send({code: 200, msg: 'ok', data: returnData});
+            resData['list'] = returnData;
+            resData['selectTag'] = req.body.tag;
+            res.send({code: 200, msg: 'ok', data: resData});
         });
     } else {
         res.send({code: 311, msg: 'please choose tag'});
@@ -247,7 +249,7 @@ router.post('/showbytag',function (req, res, next){
 // show article by creator
 router.post('/showbycreator',function (req, res, next){
     var db = req.db;
-    var returnData = [];
+    var returnData = [], resData = {};
     if(req.body.creatorID) {
         var muserid = util.getObjectID(req.body.creatorID);
 
@@ -272,8 +274,8 @@ router.post('/showbycreator',function (req, res, next){
                     returnData[index]['likeNum'] = 0;
                 }
             }
-
-            res.send({code: 200, msg: 'ok', data: returnData});
+            resData['list'] = returnData;
+            res.send({code: 200, msg: 'ok', data: resData});
         });
     } else {
         res.send({code: 311, msg: 'please choose creator'});
@@ -497,7 +499,7 @@ router.post('/addcomment', function(req, res, next){
             'createDate':curMSELDate}}}, function(err){
             if(err){res.send({code:500, msg:err});}
 
-            db.collection('article').find({'_id':articleid}).toArray(function(err,items){
+            db.collection('article').find({'_id':articleid}).sort({'updateDate':-1}).toArray(function(err,items){
                 if(err){res.send({code:500, msg:err});}
 
                 if(items != undefined && items.length === 1) {
