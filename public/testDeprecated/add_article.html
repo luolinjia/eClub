@@ -128,10 +128,13 @@
             padding: 5px;
         }
         .p-add-title, .p-add-category, .p-add-tag, .p-add-source {
-            height: 50px;
+            height: 80px;
         }
         .p-add-category input, .p-add-tag input, .p-add-source input {
             width: 350px;
+        }
+        .p-add-title input {
+            width: 500px;
         }
         .p-add-media {
             margin-bottom: 10px;
@@ -159,6 +162,8 @@
             right: 0;
             top: 0;
             opacity: 0;
+            width: 110px;
+            height: 40px;
         }
         .p-add-tag {
             margin-top: 10px;
@@ -174,7 +179,7 @@
             cursor: pointer;
             background-color: #fff;
             border: 2px solid #999;
-            margin-top: 20px;
+            /*margin-top: 20px;*/
             margin-bottom: 20px;
             transition: color .2s ease-in, background-color .2s ease-in, border-color .2s ease-in;
         }
@@ -183,8 +188,17 @@
             color: #ffffff;
             border-color: #ef4036;
         }
+        .p-add-category button {
+            width: 120px;
+            height: 40px;
+            margin-right: 10px;
+            background-color: #e6e6e6;
+        }
         .p-add .key {
             color: #ef4036;
+        }
+        .p-add .mb5 {
+            margin-bottom: 5px;
         }
     </style>
 </head>
@@ -193,24 +207,24 @@
 <div id="content">
     <div class="p-add">
         <div class="p-add-fun"><h2>Push Article</h2></div>
-        <div class="p-add-title"><span><input type="text" placeholder="Add A Title"/></span></div>
-        <div class="p-add-category"><span><input type="text" placeholder="Add A Category Or Multiple Categories, Splitted by ,"/></span></div>
+        <div class="p-add-title"><span><div class="mb5">Title</div><input type="text" placeholder="Add A Title"/></span></div>
+        <div class="p-add-category"><span><div class="mb5">Category</div><button>Life</button><button>Economics</button><button>Science</button><button>Society</button><button>Technology</button><button>Uncategorized</button></span></div>
         <div class="p-add-media">
             <a href="javascript:;" class="file">Upload mp3
                 <input type="file" name="" id="" accept="audio/mpeg">
             </a>
         </div>
-
+        <div class="mb5">Main Content</div>
         <textarea id="editor" name="editor" placeholder="Type your text here..."></textarea>
 
-        <div class="p-add-tag"><span><input type="text" placeholder="Add A Tag Or Multiple Tags, Splitted by ,"/></span></div>
-        <div class="p-add-source"><span><input type="text" placeholder="Source Website"/></span></div>
+        <div class="p-add-tag"><span><div class="mb5">Tag</div><input type="text" placeholder="Add A Tag Or Multiple Tags, Splitted by ,"/></span></div>
+        <div class="p-add-source"><span><div class="mb5">Source URL</div><input type="text" placeholder="Source Website"/></span></div>
         <button class="key">PUSH</button>
         <button>CANCEL</button>
     </div>
 </div>
 
-
+<div class="p-add"><div class="p-add-fun"><h2>Push Article</h2></div><div class="p-add-title"><span><div class="mb5">Title</div><input type="text" placeholder="Add A Title"/></span></div><div class="p-add-category"><span><div class="mb5">Category</div><button>Life</button><button>Economics</button><button>Science</button><button>Society</button><button>Technology</button><button>Uncategorized</button></span></div><div class="p-add-media"><a href="javascript:;" class="file">Upload mp3<input type="file" name="" id="" accept="audio/mpeg"></a></div><div class="mb5">Main Content</div><textarea id="editor" name="editor" placeholder="Type your text here..."></textarea><div class="p-add-tag"><span><div class="mb5">Tag</div><input type="text" placeholder="Add A Tag Or Multiple Tags, Splitted by ,"/></span></div><div class="p-add-source"><span><div class="mb5">Source URL</div><input type="text" placeholder="Source Website"/></span></div><button class="key">PUSH</button><button>CANCEL</button></div>
 
 </body>
 </html>

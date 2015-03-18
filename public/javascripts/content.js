@@ -189,11 +189,22 @@ var _content = {
         _content.bindCRUD();
     },
     renderPushPost: function (self) {
-        var dom = '<div class="p-add"><div class="p-add-fun"><h2>Push Article</h2></div><div class="p-add-title"><span><input type="text" placeholder="Add A Title"/></span></div><div class="p-add-category"><span><input type="text" placeholder="Add A Category Or Multiple Categories, Splitted by ,"/></span></div><div class="p-add-media"><a href="javascript:;" class="file">Upload mp3<form id="uploadAudio" name="uploadAudio" method="post" enctype="multipart/form-data" onsubmit="javascript: return false;"><input type="file"id="fulAudio" name="fulAudio" accept="audio/*" ></form></a></div><textarea id="editor" name="editor" placeholder="Type your text here..."></textarea><div class="p-add-tag"><span><input type="text" placeholder="Add A Tag Or Multiple Tags, Splitted by ,"/></span></div><div class="p-add-source"><span><input type="text" placeholder="Source Website"/></span></div><button class="key">PUSH</button><button>CANCEL</button></div>';
+        var dom = '<div class="p-add"><div class="p-add-fun"><h2>Push Article</h2></div><div class="p-add-title"><span><div class="mb5">Title</div><input type="text" placeholder="Add A Title"/></span></div><div class="p-add-category"><span><div class="mb5">Category</div><button>Life</button><button>Economics</button><button>Science</button><button>Society</button><button>Technology</button><button>Uncategorized</button></span></div><div class="p-add-media"><a href="javascript:;" class="file">Upload mp3<form id="uploadAudio" name="uploadAudio" method="post" enctype="multipart/form-data" onsubmit="javascript: return false;"><input type="file"id="fulAudio" name="fulAudio" accept="audio/*" ></form></a></div><div class="mb5">Main Content</div><textarea id="editor" name="editor" placeholder="Type your text here..."></textarea><div class="p-add-tag"><span><div class="mb5">Tag</div><input type="text" placeholder="Add A Tag Or Multiple Tags, Splitted by ,"/></span></div><div class="p-add-source"><span><div class="mb5">Source URL</div><input type="text" placeholder="Source Website"/></span></div><button class="key">PUSH</button><button>CANCEL</button></div>';
         self.append(dom);
         _content.initWysiwyg($('#editor', self));
+        _content.bindCate($('.p-add-category').find('button'));
+        _content.checkPushPostForm();
         // TODO validate the form format!!!
         _content.submitPushPost(self);
+    },
+    bindCate: function (o) {
+        o.click(function () {
+            var thiz = $(this), cate = thiz.text();
+            if ($('.selectedCate') === 1) {
+                o.removeClass('selectedCate');
+            }
+            thiz.toggleClass('selectedCate');
+        });
     },
     bindToPost: function (o) {
         o.click(function () {
@@ -253,6 +264,14 @@ var _content = {
         hasLogin ? btnObj.show() : btnObj.hide();
     },
     bindCRUD: function () {
+        var btnWord = $('#btnUserListWord');
+        btnWord.parents('.view')
+            .click(function() {
+                var self = $('#content');
+                self.empty();
+                _vb.renderVbCloud(self, '');
+            });
+
         var btnPost = $('#btnUserListPost');
         btnPost.parents('.view')
             .click(function() { _content.toShowAllArticle(); });
@@ -269,6 +288,7 @@ var _content = {
     },
     submitPushPost: function (self) {
         $('.key', self).click(function () {
+            _content.checkArticleForm();
             var tags = [], categories = [], url = undefined;
             tags = $('.p-add-tag', self).find('input').val().split(',');
             categories = $('.p-add-category', self).find('input').val().split(',');
@@ -399,6 +419,64 @@ var _content = {
         article.click(function () {
             _content.toShowAllArticle();
         });
+    },
+    addCheckInfo: function (self) {
+        var dom = '<span style="color: #ef4036;margin-left: 10px;">Required!</span>';
+        $(dom).insertAfter(self);
+    },
+    checkPushPostForm: function () {
+        // check title
+        $('.p-add-title input').focusout(function () {
+            var thiz = $(this);
+            if (thiz.val() === '') {
+                thiz.css({'border-color': '#ef4036'});
+                if (thiz.next().length === 0) _content.addCheckInfo(thiz);
+            }
+        }).keyup(function () {
+            var thiz = $(this);
+            thiz.css({'border-color': '#999'});
+            thiz.next().remove();
+        });
+//        // check text content
+//        $('#editor').focusout(function () {
+//            var thiz = $(this), thizDiv = $('.wysiwyg-editor');
+//            if (thiz.val() === '') {
+//                thizDiv.css({'border-color': '#ef4036'});
+//                _content.addCheckInfo(thizDiv);
+//            }
+//        }).keyup(function () {
+//            var thiz = $(this), thizDiv = $('.wysiwyg-editor');
+//            thizDiv.css({'border-color': '#999'});
+////            thizDiv.next().remove();
+//        });
+        // check tag
+        $('.p-add-tag input').focusout(function () {
+            var thiz = $(this);
+            if (thiz.val() === '') {
+                thiz.css({'border-color': '#ef4036'});
+                if (thiz.next().length === 0) _content.addCheckInfo(thiz);
+            }
+        }).keyup(function () {
+            var thiz = $(this);
+            thiz.css({'border-color': '#999'});
+            thiz.next().remove();
+        });
+    },
+    checkArticleForm: function () {
+        var titleInput = $('.p-add-title input'), mainText = $('#editor'), tagInput = $('.p-add-tag input');
+        if (titleInput.val() === '') {
+            titleInput.css({'border-color': '#ef4036'});
+            if (titleInput.next().length === 0) _content.addCheckInfo(titleInput);
+            return;
+        }
+//        if (mainText.val() === '') {
+//            return;
+//        }
+        if (tagInput.val() === '') {
+            tagInput.css({'border-color': '#ef4036'});
+            if (tagInput.next().length === 0) _content.addCheckInfo(tagInput);
+            return;
+        }
     }
 };
 
