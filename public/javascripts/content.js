@@ -200,7 +200,7 @@ var _content = {
     bindCate: function (o) {
         o.click(function () {
             var thiz = $(this), cate = thiz.text();
-            if ($('.selectedCate') === 1) {
+            if ($('.selectedCate').length === 1) {
                 o.removeClass('selectedCate');
             }
             thiz.toggleClass('selectedCate');
@@ -291,7 +291,7 @@ var _content = {
             _content.checkArticleForm();
             var tags = [], categories = [], url = undefined;
             tags = $('.p-add-tag', self).find('input').val().split(',');
-            categories = $('.p-add-category', self).find('input').val().split(',');
+            categories[0] = $('.p-add-category', self).find('.selectedCate').text();
 
             var form = $('#uploadAudio');
 //            self.append(form);

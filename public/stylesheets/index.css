@@ -515,7 +515,7 @@ section {
     background-color: #e6e6e6;
 }
 .selectedCate {
-    background-color: #ef4036;
+    background-color: #ef4036!important;
     color: #ffffff;
     border-color: #ef4036;
 }
