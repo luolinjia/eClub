@@ -5,6 +5,7 @@ var express = require('express');
 var util = require('../public/common/utils.js');
 var formidable = require('formidable');
 var fs = require('fs');
+
 var AUDIO_UPLOAD_FOLDER = '/audio/';
 
 var router = express.Router();
@@ -388,6 +389,10 @@ router.post('/add',function (req, res, next){
 
     if (req.session['userID']) {
         if(req.body) {
+
+            req.body.content = util.storePicture(req.body.content);
+            console.log("new content=>"+req.body.content);
+
             var formatDate = util.getMinuteDate();
             var muserid = util.getObjectID(req.session['userID']);
 

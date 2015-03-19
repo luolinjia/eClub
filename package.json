@@ -17,6 +17,7 @@
     "mongodb": "*",
     "mongoskin": "*",
     "moment": "*",
-    "formidable" : "*"
+    "formidable" : "*",
+    "request" : "*"
   }
 }
