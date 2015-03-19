@@ -364,6 +364,21 @@ section {
     color: #999;
     margin-bottom: 10px;
 }
+.p-detail .p-meta .dateblock .date {
+    margin-right: 20px;
+}
+.p-detail .p-meta .dateblock .btn-like {
+    font-size: 16px;
+    margin-left: 20px;
+    transition: color .2s ease-in;
+    cursor: pointer;
+}
+.p-detail .p-meta .dateblock .btn-like:hover {
+    color: #ef4036;
+}
+.p-like {
+    color: #ef4036;
+}
 .p-detail .p-meta .author .author-div1 {
     float: left;
 }

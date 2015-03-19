@@ -145,6 +145,7 @@ var _layout = {
             reqHeader.logout({}, '');
             var content = $('#content');
             content.empty();
+            $('#header').data('userId', '');
             _content.renderNavi(content);
         });
     },
@@ -171,12 +172,17 @@ var _layout = {
     },
     setLoginParams: function (res) {
         var htmlCode = '<span class="icon-user"></span>',
-            self = $('.icon-user').parent(), content = $('#content'),
-            commentObj = $('.p-comment'), mainHolder = $('.main-holder');
+            self = $('.icon-user').parent(), content = $('#content'), header = $('#header'),
+            commentObj = $('.p-comment'), mainHolder = $('.main-holder'), btnLike = $('.btn-like');
         self.data('isLogin', true).html(htmlCode + res.data['email']);
         self.data('loginTime', Number(res.data['times'].length));
         self.data('tasknum', Number(res.data['tasknum']));
+        header.data('userId', res['data']['_id']);
         commentObj.fadeIn('fast');
+
+        _content.checkLikeBtn();
+        btnLike.fadeIn('fast');
+        btnLike.next().fadeIn('fast');
         if (mainHolder.length === 1) {
             content.empty().data('requestURL', 'showAllList');
             _content.renderNavi(content);

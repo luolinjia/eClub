@@ -155,7 +155,7 @@ var _content = {
     },
     renderDetailPost: function(self, data) {
         var categoriesList = [], tags = [], i = 0, j = 0, cSize = data['categories'].length, tSize = data['tags'].length,
-            url = data['url'] ? data['url'].replace(/\\/g,"/") : '';
+            url = data['url'] ? data['url'].replace(/\\/g,"/") : '', header = $('#header');
         for (; i < cSize; i++) {
             var cItem = data['categories'][i];
             categoriesList.push('<p><a href="#">' + cItem + '</a></p>');
@@ -164,12 +164,14 @@ var _content = {
             var tItem = data['tags'][j];
             tags.push('<li><a href="#"><span>' + tItem + '</span></a></li>');
         }
-        var dom = '<div class="p-back"><span class="icon-arrow-left"></span></div><div class="p-detail"><div class="p-category">' + categoriesList.join('') + '</div><div style="clear:both;margin-bottom:-50px;"></div><div class="p-title" data-articleid="' + data['_id'] + '"><h1>' + data['title'] + '</h1></div><div class="p-meta"><div class="dateblock"><span class="date">' + data['createDate'] + '</span></div><div class="author"><div data-userid="' + data['creatorID'] + '" class="author-div1"><a href="javascript:;"><span class="author-name">' + data['creatorName'] + '</span></a></div><div class="author-div2"><audio src="' + url + '" controls="" autoplay></audio></div><div style="clear:both;"></div></div></div><div class="p-text">' + data['content'] + '</div><div class="p-tag"><ul>' + tags.join('') + '</ul></div><div style="clear:both;"></div><div class="p-comment"><div class="p-comment-state"><span><span id="commentNo">' + data['commentNum'] + '</span> comments</span></div><hr/><div class="p-comment-input"><textarea name="commentIn" id="commentIn" placeholder="Start a discussion..."></textarea><button id="btnComments">Submit</button></div><div class="p-comment-article"><ul></ul></div></div></div>';
+        var dom = '<div class="p-back"><span class="icon-arrow-left"></span></div><div class="p-detail"><div class="p-category">' + categoriesList.join('') + '</div><div style="clear:both;margin-bottom:-50px;"></div><div class="p-title" data-articleid="' + data['_id'] + '"><h1>' + data['title'] + '</h1></div><div class="p-meta"><div class="dateblock"><span class="date">' + data['createDate'] + '</span><span>Views(' + data['pv'] + ')</span><span class="icon-heart btn-like"></span><span>(' + (data['likes'] !== undefined ? data['likes'].length : 0) + ')</span></div><div class="author"><div data-userid="' + data['creatorID'] + '" class="author-div1"><a href="javascript:;"><span class="author-name">' + data['creatorName'] + '</span></a></div><div class="author-div2"><audio src="' + url + '" controls="" autoplay></audio></div><div style="clear:both;"></div></div></div><div class="p-text">' + data['content'] + '</div><div class="p-tag"><ul>' + tags.join('') + '</ul></div><div style="clear:both;"></div><div class="p-comment"><div class="p-comment-state"><span><span id="commentNo">' + data['commentNum'] + '</span> comments</span></div><hr/><div class="p-comment-input"><textarea name="commentIn" id="commentIn" placeholder="Start a discussion..."></textarea><button id="btnComments">Submit</button></div><div class="p-comment-article"><ul></ul></div></div></div>';
 
         self.append(dom);
+        header.data('likes', data['likes'] !== undefined ? data['likes'] : '0');
         _content.renderCommentsList($('ul', $('.p-comment')), data['comments']);
         _content.bindPostClicks(self);
         _content.bindComments();
+        _content.bindLike();
         _content.bindToBack($('.p-back'));
     },
     renderCommentsList: function (self, data) {
@@ -367,7 +369,7 @@ var _content = {
         });
     },
     bindComments: function () {
-        var textarea = $('#commentIn'), hasLogin = $('.icon-user').parent().data('isLogin'), commentObj = $('.p-comment');
+        var textarea = $('#commentIn'), hasLogin = $('.icon-user').parent().data('isLogin'), commentObj = $('.p-comment'), pLike = $('.btn-like');
         textarea.focus(function () {
             var thiz = $(this);
             thiz.css({'height': '80px'}).next().fadeIn('fast');
@@ -376,6 +378,8 @@ var _content = {
             thiz.css({'height': '20px'}).next().fadeOut('fast');
         });
         hasLogin ? commentObj.show() : commentObj.hide();
+        hasLogin ? pLike.show() : pLike.hide();
+        hasLogin ? pLike.next().show() : pLike.next().hide();
         $('#btnComments').click(function () {
             var commentObj = {
                 'articleID': $('.p-title').attr('data-articleid'),
@@ -393,6 +397,20 @@ var _content = {
                 } else {
                     alert('add failed!');
                 }
+            });
+        });
+    },
+    bindLike: function () {
+        _content.checkLikeBtn();
+        // click the btn-like
+        $('.btn-like').click(function () {
+            var thiz = $(this);
+            thiz.addClass('p-like');
+            // call add like interface
+            reqContent.addLike({data: {articleID: $('.p-title').attr('data-articleid')}}, function (data) {
+                console.log(data);
+                // update the like number
+                thiz.next().text('(' + 1 + ')');
             });
         });
     },
@@ -477,6 +495,17 @@ var _content = {
             if (tagInput.next().length === 0) _content.addCheckInfo(tagInput);
             return;
         }
+    },
+    checkLikeBtn: function () {
+        // tell whether author like
+        var header = $('#header'), userId = header.data('userId'), btnLike = $('.btn-like'), likes = header.data('likes'), hasLiked = false;
+        if (likes !== '0') {
+            var i = 0, size = likes.length;
+            for (; i < size; i++) {
+                if (likes[i]['userID'] === userId)  hasLiked = true;
+            }
+        }
+        hasLiked ? btnLike.addClass('p-like') : '';
     }
 };
 
@@ -584,6 +613,17 @@ var reqContent = {
         $.ajax($.extend({
             type: 'POST',
             url: '/article/showbytag',
+            dataType: 'JSON'
+        }, options, true)).done(function(data){
+            if (data && $.isFunction(callback)) {
+                callback(data);
+            }
+        });
+    },
+    addLike: function (options, callback) {
+        $.ajax($.extend({
+            type: 'POST',
+            url: '/article/addlike',
             dataType: 'JSON'
         }, options, true)).done(function(data){
             if (data && $.isFunction(callback)) {
