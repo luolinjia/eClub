@@ -10,7 +10,7 @@ var _vb = {
 
         var tempData = [{
             'spelling': 'vocabulary',
-            'symbol':'və\'kæbjəlɛri',
+            'symbol':'[və\'kæbjəlɛri]',
             'descriptions': [{
                 'creatorID': '5506c75d007108bb75cd03c7',
                 'creatorName': 'llj',
@@ -22,6 +22,20 @@ var _vb = {
                     'english': 'xx',
                     'chinese': '叉叉',
                     'interpret': 'xxxxx'
+                }, {
+                    'createDate': '03-18-2015 12:30',
+                    'english': 'take off',
+                    'chinese': '起飞',
+                    'interpret': 'xxxxx'
+                }],
+                'sentences': [{
+                    'createDate': '03-18-2015 12:30',
+                    'english': 'waoo, that\'s good',
+                    'chinese': '那很好啊！'
+                }, {
+                    'createDate': '03-18-2015 12:30',
+                    'english': 'good luck',
+                    'chinese': '好运！'
                 }]
             }],
             'freq': 17,
@@ -134,7 +148,52 @@ var _vb = {
             .mouseout(function(){
                 $(this).css({'color': recentColor, 'font-size': recentSize});
             });
+        $('a', self).click(function () {
+            var thiz = $(this), id = thiz.text();
+            _vb.renderWordDetail(self, tempData[0]);
+        });
+    },
+    renderWordDetail: function (self, data) {
 
+        self.empty();
+
+        var descList = [], desc_size = data['descriptions'].length, desc_i = 0;
+
+        for (; desc_i < desc_size; desc_i++) {
+            var item = data['descriptions'][desc_i],
+                pList = [], pSize = item['phrases'].length, p_i = 0,
+                sList = [], sSize = item['sentences'].length, s_i = 0;
+
+            for (; p_i < pSize; p_i++) {
+                var p_item = item['phrases'][p_i];
+                pList.push('<li><div><span>' + p_item['english'] + '</span><span>' + p_item['chinese'] + '</span></div></li>');
+            }
+
+            for (; s_i < sSize; s_i++) {
+                var s_item = item['sentences'][s_i];
+                sList.push('<li><div><div class="english">' + s_item['english'] + '</div><div class="chinese">' + s_item['chinese'] + '</div></div></li>');
+            }
+            descList.push('<div class="w-detail-desc"><div class="w-detail-desc-pos"><div class="pos"><i>' + item['pos'] + '</i></div><div class="explanation"><div class="w-detail-desc-english">' + item['english'] + '</div><div class="w-detail-desc-chinese">' + item['chinese'] + '</div></div></div><div style="clear:both;"></div><div class="w-detail-desc-phrase"><h4>Phrases<span class="icon-plus" style="margin-left: 10px; font-size: 18px; display: none;"></span></h4><div class="phrase"><ul>' + pList.join('') + '</ul></div></div><div class="w-detail-desc-sentence"><h4>Sentences<span class="icon-plus" style=""></span></h4><div class="sentence"><ul>' + sList.join('') + '</ul></div></div></div>');
+        }
+        var dom = '<div class="w-detail"><div class="w-detail-spelling">' + data['spelling'] + '</div><div class="w-detail-symbol">' + data['symbol'] + '<span class="icon-volume-medium"></span></div>' + descList.join('') + '</div>';
+
+        self.append(dom);
+        _vb.bindAddToWord();
+    },
+    bindAddToWord: function () {
+        $('h4', $('.w-detail-desc')).mouseover(function () {
+            $(this).find('span').fadeIn('fast');
+        }).mouseleave(function () {
+            $(this).find('span').fadeOut('fast');
+        });
+        $('h4', $('.w-detail-desc-phrase')).find('span').click(function () {
+            var inputForm = '<li><div class="vb-temp-add"><span><input type="text" placeholder="Input Phrase"/></span><span><input type="text" placeholder="Chinese"/></span><span class="icon-checkmark"></span><span class="icon-close"></span></div></li>';
+            $('.phrase', $('.w-detail-desc-phrase')).find('ul').append(inputForm);
+        });
+        $('h4', $('.w-detail-desc-sentence')).find('span').click(function () {
+            var inputForm = '<li><div class="vb-temp-add"><div><input type="text" placeholder="English"/></div><div><input type="text" placeholder="Chinese"/><span class="icon-checkmark"></span><span class="icon-close"></span></div></div></li>';
+            $('.sentence', $('.w-detail-desc-sentence')).find('ul').append(inputForm);
+        });
     }
 };
 
