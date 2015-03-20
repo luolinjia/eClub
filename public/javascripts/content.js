@@ -176,7 +176,7 @@ var _content = {
         }
     },
     renderNavi: function (self) {
-        var dom = '<div class="main-holder"><div class="view"><img src="../images/Taopo_cover.png" alt="Vocabulary"/><div class="info"><h5>Vocabulary</h5>Vocabulary List<div class="btn"><span id="btnUserAddWord" class="icon-plus" title="Add A Vocabulary"></span><span id="btnUserListWord" class="icon-list" title="User Vocabulary List"></span></div></div></div><div class="view"><img src="../images/Ciudad_cover.png" alt="Reading"/><div class="info"><h5>Reading</h5>Reading post<div class="btn"><span id="btnUserAddPost" class="icon-plus" title="Add A Article"></span><span id="btnUserListPost" class="icon-list" title="User Article List"></span></div></div></div></div>';
+        var dom = '<div class="main-holder"><div class="view"><img src="../images/Taopo_cover.png" alt="Vocabulary"/><div class="info"><h5>Vocabulary</h5>Vocabulary List<div class="btn"><span id="btnUserAddWord" class="icon-plus" title="Add A Vocabulary"></span><span id="btnUserListWord" class="icon-list" title="User Vocabulary List"></span></div></div></div><div class="view"><img src="../images/Ciudad_cover.png" alt="Reading"/><div class="info"><h5>Reading</h5>Reading Article<div class="btn"><span id="btnUserAddPost" class="icon-plus" title="Add A Article"></span><span id="btnUserListPost" class="icon-list" title="User Article List"></span></div></div></div></div>';
         self.append(dom);
         _content.showView();
         _content.bindCRUD();
@@ -301,47 +301,45 @@ var _content = {
     },
     submitPushPost: function (self) {
         $('.key', self).click(function () {
-            _content.checkArticleForm();
-            var tags = [], categories = [], url = undefined;
-            tags = $('.p-add-tag', self).find('input').val().split(',');
-            categories[0] = $('.p-add-category', self).find('.selectedCate').text();
+            var flag = _content.checkArticleForm();
+            if (flag) {
+                var tags = [], categories = [], url = undefined;
 
-            var form = $('#uploadAudio');
-//            self.append(form);
+                tags = $('.p-add-tag', self).find('input').val().split(',');
+                categories[0] = $('.p-add-category', self).find('.selectedCate').text();
 
-            form.ajaxSubmit({
-                dataType: "json",
-                url: "/article/addaudio",
-                type: "POST",
-                success: function (data) {
-                    if (data['code'] === 200) {
-                        url = data['data']['url'];
-                    }
-                    var articleContent = $('#editor').wysiwyg('shell').getHTML();
-
-                    var articleObj = {
-                        'title': $('.p-add-title', self).find('input').val(),
-//                'content': $('#editor').wysiwyg('shell').getHTML().replace(/\'/g, "\\'"),
-                        'content': articleContent,
-                        'tags': tags,
-                        'categories': categories,
-                        'url':url
-                    };
-
-                    reqContent.pushPost({data: articleObj}, function (data) {
+                $('#uploadAudio').ajaxSubmit({
+                    dataType: "json",
+                    url: "/article/addaudio",
+                    type: "POST",
+                    success: function (data) {
                         if (data['code'] === 200) {
-                            console.log('add article success!');
-                            var self = $('#content');
-                            self.empty();
-                            reqContent.showUserArticleList({}, function (data) {
-                                _content.renderPostContent(self, data['data']);
-                            });
+                            url = data['data']['url'];
                         }
-                    });
-                },error: function(){
+                        var articleContent = $('#editor').wysiwyg('shell').getHTML();
+                        var articleObj = {
+                            'title': $('.p-add-title', self).find('input').val(),
+                            'content': articleContent,
+                            'tags': tags,
+                            'categories': categories,
+                            'url':url
+                        };
 
-                }
-            });
+                        reqContent.pushPost({data: articleObj}, function (data) {
+                            if (data['code'] === 200) {
+                                console.log('add article success!');
+                                var self = $('#content');
+                                self.empty();
+                                reqContent.showUserArticleList({}, function (data) {
+                                    _content.renderPostContent(self, data['data']);
+                                });
+                            }
+                        });
+                    },error: function(){
+
+                    }
+                });
+            }
         });
     },
     toShowAllArticle: function () {
@@ -496,7 +494,7 @@ var _content = {
         if (titleInput.val().trim() === '') {
             titleInput.css({'border-color': '#ef4036'});
             if (titleInput.next().length === 0) _content.addCheckInfo(titleInput);
-            return;
+            return false;
         }
 //        if (mainText.val() === '') {
 //            return;
@@ -504,8 +502,9 @@ var _content = {
         if (tagInput.val().trim() === '') {
             tagInput.css({'border-color': '#ef4036'});
             if (tagInput.next().length === 0) _content.addCheckInfo(tagInput);
-            return;
+            return false;
         }
+        return true;
     },
     checkLikeBtn: function () {
         // tell whether author like
