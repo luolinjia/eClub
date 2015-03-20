@@ -132,13 +132,9 @@ var _layout = {
     },
     bindNewTask: function (o, self) {
         o.click(function(){
-            var contentObj = $('#content');
-            // empty content
-            contentObj.empty();
-            contentObj.data('requestURL', 'taskPostList');
-            reqContent.showTaskArticleList({}, function (data) {
-                _content.renderPostContent(contentObj, data['data']);
-            });
+            var self = $('#content');
+            self.data('backInfo', $(this));
+            _content.toShowTaskArticle($(this));
         });
     },
     bindLogout: function(o, self) {
@@ -191,7 +187,7 @@ var _layout = {
         if(res['data']['userType'] === '1') {
             _content.bindSetTask($('.p-list'));
         }
-        _content.checkLikeBtn();
+        _article.checkLikeBtn();
         btnLike.fadeIn('fast');
         btnLike.next().fadeIn('fast');
         if (mainHolder.length === 1) {
