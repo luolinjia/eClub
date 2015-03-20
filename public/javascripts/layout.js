@@ -129,8 +129,9 @@ var _layout = {
             var contentObj = $('#content');
             // empty content
             contentObj.empty();
-            reqHeader.getLatestNews({}, function (data) {
-                _content.renderContent(contentObj, data);
+            contentObj.data('requestURL', 'taskPostList');
+            reqContent.showTaskArticleList({}, function (data) {
+                _content.renderPostContent(contentObj, data['data']);
             });
         });
     },
@@ -145,7 +146,7 @@ var _layout = {
             reqHeader.logout({}, '');
             var content = $('#content');
             content.empty();
-            $('#header').data('userId', '');
+            $('#header').data('userId', '').data('userRole', '');
             _content.renderNavi(content);
         });
     },

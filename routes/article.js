@@ -349,7 +349,7 @@ router.post('/settask',function (req, res, next){
 //show no finish task articles by creator
 router.post('/showtask',function (req, res, next){
     var db = req.db;
-    var returnData = [];
+    var returnData = [], resData = {};
     if(req.session['userID']) {
         console.log("userID"+req.session['userID']);
         var muserid = util.getObjectID(req.session['userID']);
@@ -362,11 +362,12 @@ router.post('/showtask',function (req, res, next){
             for(var index = 0; index< items.length; index++) {
                 returnData[index] = {};
                 returnData[index]['id'] = items[index]['_id'];
+                returnData[index]['creatorID'] = items[index]['creatorID'];
                 returnData[index]['creatorName'] = items[index]['creatorName'];
                 returnData[index]['editorName'] = items[index]['editorName'];
                 returnData[index]['title'] = items[index]['title'];
                 returnData[index]['updateDate'] = items[index]['updateDate'];
-                returnData[index]['type'] = items[index]['type'];
+                returnData[index]['taskDate'] = items[index]['taskDate'];
                 returnData[index]['pv'] = items[index]['pv'];
                 if(items[index]['like']) {
                     returnData[index]['likeNum'] = items[index]['like'].length;
@@ -374,8 +375,8 @@ router.post('/showtask',function (req, res, next){
                     returnData[index]['likeNum'] = 0;
                 }
             }
-
-            res.send({code:200,msg: 'ok', data:returnData});
+            resData['list'] = returnData;
+            res.send({code:200,msg: 'ok', data:resData});
         });
     } else {
         res.send({code: 310, msg: 'please login in'});

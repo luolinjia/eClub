@@ -12,15 +12,15 @@ var _content = {
             classes: 'some-more-classes',
             toolbar: 'selection',
             buttons: {
-                    insertimage: {
-                        title: 'Insert image',
-                        image: '\uf030', // <img src="path/to/image.png" width="16" height="16" alt="" />
-                        //showstatic: true,    // wanted on the toolbar
-                        showselection: true    // wanted on selection
-                    },
                 removeformat: {
                     title: 'Remove format',
                     image: '\uf12d' // <img src="path/to/image.png" width="16" height="16" alt="" />
+                },
+                insertimage: {
+                    title: 'Insert image',
+                    image: '\uf030', // <img src="path/to/image.png" width="16" height="16" alt="" />
+                    //showstatic: true,    // wanted on the toolbar
+                    showselection: true    // wanted on selection
                 },
                 insertvideo: {
                     title: 'Insert video',
@@ -69,19 +69,6 @@ var _content = {
             placeholderUrl: 'www.example.com',
             placeholderEmbed: '<embed/>',
             maxImageSize: [800,600],
-//            onImageUpload: function( insert_image ) {
-//                $(this).parents('form')
-//                    .attr('action','/path/to/file')
-//                    .attr('method','POST')
-//                    .attr('enctype','multipart/form-data')
-//                    .ajaxSubmit({
-//                       success: function(xhrdata,textStatus,jqXHR){
-//                         var image_url = xhrdata;
-//                         console.log( 'URL: ' + image_url );
-//                         insert_image( image_url );
-//                       }
-//                    });
-//            },
             onKeyPress: function( code, character, shiftKey, altKey, ctrlKey, metaKey ) {
                 // E.g.: submit form on enter-key:
                 //if( (code == 10 || code == 13) && !shiftKey && !altKey && !ctrlKey && !metaKey ) {
@@ -123,6 +110,9 @@ var _content = {
             case 'allPostByTag': {
                 flagInfo = '<span class="home">Home</span> > <span class="home-all-post">All Articles</span> > Tag: ' + data['selectTag'];
             } break;
+            case 'taskPostList': {
+                flagInfo = '<span class="home">Home</span> > <span class="home-all-post">All Articles</span> > Task Article';
+            } break;
             default: {
                 flagInfo = 'Other';
             }
@@ -144,7 +134,7 @@ var _content = {
         var size = data.length, i = 0;
         for (; i < size; i++) {
             var item = data[i];
-            list.push('<li><div class="p-list-li"><div class="p-list-li-content width85p"><div class="p-list-li-content-title"><div class="flag-color"><span class="icon-bookmark ' + (item['taskDate'] !== undefined ? 'p-task' : '') + '" title="Set Task"></span></div><div data-articleid="' + item['id'] + '" class="title toPost"><a href="javascript:;">' + item['title'] + '</a></div></div><div class="p-list-li-content-desc"><span class="time">' + item['updateDate'] + '</span><span data-userid="' + item['creatorID'] + '" class="author">' + item['editorName'] + '</span></div></div><div data-articleid="' + item['id'] + '" class="p-list-li-link width15p toPost"><span class="icon-uniE616"></span></div></div></li>');
+            list.push('<li><div class="p-list-li"><div class="p-list-li-content width85p"><div class="p-list-li-content-title"><div class="flag-color"><span class="icon-bookmark ' + (item['taskDate'] !== undefined ? 'p-task' : '') + '" title="Task"></span></div><div data-articleid="' + item['id'] + '" class="title toPost"><a href="javascript:;">' + item['title'] + '</a></div></div><div class="p-list-li-content-desc"><span class="time">' + item['updateDate'] + '</span><span data-userid="' + item['creatorID'] + '" class="author">' + item['editorName'] + '</span></div></div><div data-articleid="' + item['id'] + '" class="p-list-li-link width15p toPost"><span class="icon-uniE616"></span></div></div></li>');
         }
     },
     renderWordList: function (self, data, list) {
@@ -467,7 +457,7 @@ var _content = {
         // check title
         $('.p-add-title input').focusout(function () {
             var thiz = $(this);
-            if (thiz.val() === '') {
+            if (thiz.val().trim() === '') {
                 thiz.css({'border-color': '#ef4036'});
                 if (thiz.next().length === 0) _content.addCheckInfo(thiz);
             }
@@ -491,7 +481,7 @@ var _content = {
         // check tag
         $('.p-add-tag input').focusout(function () {
             var thiz = $(this);
-            if (thiz.val() === '') {
+            if (thiz.val().trim() === '') {
                 thiz.css({'border-color': '#ef4036'});
                 if (thiz.next().length === 0) _content.addCheckInfo(thiz);
             }
@@ -503,7 +493,7 @@ var _content = {
     },
     checkArticleForm: function () {
         var titleInput = $('.p-add-title input'), mainText = $('#editor'), tagInput = $('.p-add-tag input');
-        if (titleInput.val() === '') {
+        if (titleInput.val().trim() === '') {
             titleInput.css({'border-color': '#ef4036'});
             if (titleInput.next().length === 0) _content.addCheckInfo(titleInput);
             return;
@@ -511,7 +501,7 @@ var _content = {
 //        if (mainText.val() === '') {
 //            return;
 //        }
-        if (tagInput.val() === '') {
+        if (tagInput.val().trim() === '') {
             tagInput.css({'border-color': '#ef4036'});
             if (tagInput.next().length === 0) _content.addCheckInfo(tagInput);
             return;
@@ -557,6 +547,17 @@ var reqContent = {
         $.ajax($.extend({
             type: 'POST',
             url: '/article/showself',
+            dataType: 'JSON'
+        }, options, true)).done(function(data){
+            if (data && $.isFunction(callback)) {
+                callback(data);
+            }
+        });
+    },
+    showTaskArticleList: function (options, callback) {
+        $.ajax($.extend({
+            type: 'POST',
+            url: '/article/showtask',
             dataType: 'JSON'
         }, options, true)).done(function(data){
             if (data && $.isFunction(callback)) {
