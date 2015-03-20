@@ -125,7 +125,7 @@ var _content = {
         var dom = '<div class="p-list"><div class="p-layout-info">' + flagInfo + '</div>' + list.join('') + '</div>';
         self.append(dom);
         var pLayoutInfo = $('.p-layout-info');
-        if (header.data('userRole') === '1') { _content.bindSetTask(self);}
+        if (header.attr('data-userRole') === '1') { _content.bindSetTask(self);}
         _content.bindToPost($('.toPost'));
         _content.bindToUserArticle($('.author'));
         _content.bindBreadCrumb($('.home', pLayoutInfo), $('.home-all-post', pLayoutInfo));

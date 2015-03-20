@@ -18,9 +18,15 @@ var _layout = {
     renderHasLogin: function(self) {
         var dom = '<div class="lr-box"><div class="user-info"><span>Online Days : <span class="user-time">0</span></span></div><div class="user-info"><span>New Tasks : <span class="user-task">0</span></span></div><div><button id="btnChange">Change Password</button></div><button id="btnLogout">Logout</button></div>';
         self.append(dom);
-        var userTask = $('.user-task'), userTime = $('.user-time');
-        userTime.text(self.data('loginTime'));
-        userTask.text(self.data('tasknum'));
+        var userTask = $('.user-task'), userTime = $('.user-time'), userRelated = $('.icon-user').parent();
+        reqHeader.getUserSession({}, function (res) {
+            if (res) {
+                userRelated.data('loginTime', Number(res.data['times'].length));
+                userRelated.data('tasknum', Number(res.data['tasknum']));
+                userTime.text(Number(res.data['times'].length));
+                userTask.text(Number(res.data['tasknum']));
+            }
+        });
         _layout.bindChange($('#btnChange'), self);
         _layout.bindLogout($('#btnLogout'), self);
         _layout.bindNewTask(userTask, self);
@@ -146,7 +152,7 @@ var _layout = {
             reqHeader.logout({}, '');
             var content = $('#content');
             content.empty();
-            $('#header').data('userId', '').data('userRole', '');
+            $('#header').data('userId', '').data('userRole', '').attr('data-userRole', '0');
             _content.renderNavi(content);
         });
     },
@@ -180,6 +186,7 @@ var _layout = {
         self.data('tasknum', Number(res.data['tasknum']));
         header.data('userId', res['data']['_id']);
         header.data('userRole', res['data']['userType']);
+        header.attr('data-userRole', res['data']['userType']);
         commentObj.fadeIn('fast');
         if(res['data']['userType'] === '1') {
             _content.bindSetTask($('.p-list'));
