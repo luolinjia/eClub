@@ -6,14 +6,15 @@ var router = express.Router();
 // add user
 router.post('/adduser', function (req, res, next) {
     var db = req.db;
-    db.collection('user').insert(req.body, function(err, result) {
+    db.collection('user').insert(req.body, function (err, result) {
         res.send(
             (err === null) ? {
                 code: 200,
                 msg: 'Add successfully!'
             } : {
                 code: 500,
-                msg: err}
+                msg: err
+            }
         );
     });
 });
@@ -41,7 +42,9 @@ router.post('/login', function (req, res, next) {
     console.log('email:' + email);
     console.log('pwd:' + pwd);
     db.collection('user').find({email: email}).toArray(function (err, items) {
-        if(err){res.send({code:500, msg:err});}
+        if (err) {
+            res.send({code: 500, msg: err});
+        }
 
         if (items === null || items.length == 0) {
             console.log('user not found');
@@ -59,7 +62,7 @@ router.post('/login', function (req, res, next) {
                 /* check user if login before */
                 var loginDay = util.getDayDate();
                 var exsitDay = false;
-                if(items[0]['times']) {
+                if (items[0]['times']) {
                     for (var i = 0; i < items[0]['times'].length; i++) {
                         if (items[0]['times'][i] === loginDay) {
                             exsitDay = true;
@@ -69,23 +72,26 @@ router.post('/login', function (req, res, next) {
                 } else {
                     items[0]['times'] = [];
                 }
-                if(!exsitDay) {
+                if (!exsitDay) {
                     items[0]['times'].push(loginDay);
                 }
 
-                db.collection('user').update({email: email}, {'$addToSet': {'times': loginDay}}, function(err){
+                db.collection('user').update({email: email}, {'$addToSet': {'times': loginDay}}, function (err) {
                     if (err) {
                         res.send({code: 500, msg: err});
                     }
 
                     var muesrid = util.getObjectID(items[0]['_id']);
-                    db.collection('article').find({'visitors.userID': {$not:{$eq:muesrid}},'taskDate':{'$exists':true}}).toArray(function(err,records){
-                        if(err) {
+                    db.collection('article').find({
+                        'visitors.userID': {$not: {$eq: muesrid}},
+                        'taskDate': {'$exists': true}
+                    }).toArray(function (err, records) {
+                        if (err) {
                             res.send({code: 500, msg: err});
                         }
 
                         returnData['tasknum'] = records.length;
-                        res.send({code:200,data:returnData});
+                        res.send({code: 200, data: returnData});
                     });
                 });
             } else {
@@ -110,7 +116,7 @@ router.post('/changepwd', function (req, res, next) {
         return;
     }
 
-    db.collection('user').update({email: email}, {'$set': {'pwd': newPass}}, function(err){
+    db.collection('user').update({email: email}, {'$set': {'pwd': newPass}}, function (err) {
         if (err) {
             res.send({code: 500, msg: err});
         } else {
@@ -122,39 +128,39 @@ router.post('/changepwd', function (req, res, next) {
 
 //layout and destroy session data
 router.post('/logout', function (req, res, next) {
-    if(req.session['userID']) {
-        console.log("destroy operation");
-        req.session.destroy(function(err){
-            if(err) {
-                res.send({code:520,msg:err});
+    if (req.session['userID']) {
+        req.session.destroy(function (err) {
+            if (err) {
+                res.send({code: 520, msg: err});
             }
             delete req.session;
-            res.send({code:200,msg:'logout successfully'});
+            res.send({code: 200, msg: 'logout successfully'});
         });
     } else {
-        res.send({code:310,msg:'please login in'});
+        res.send({code: 310, msg: 'please login in'});
     }
 });
 
 //layout and destroy session data
 router.post('/getsession', function (req, res, next) {
-    console.log('getsession '+ req.session['userID']);
-    if(req.session['userID']) {
-        console.log('session exsit!');
+    if (req.session['userID']) {
         var db = req.db,
             returnData = {};
         var muesrid = util.getObjectID(req.session['userID']);
-        db.collection('user').find({'_id': muesrid}).toArray(function(err,items){
-            if(err){res.send({code:500, msg:err});}
+        db.collection('user').find({'_id': muesrid}).toArray(function (err, items) {
+            if (err) {
+                res.send({code: 500, msg: err});
+            }
 
             if (items.length === 0) {
-                console.log('user not found');
                 res.send({code: 510, msg: 'user not found'});
             } else {
                 returnData = items[0];
-                console.log('returnData' + returnData);
-                db.collection('article').find({'visitors.userID': {$not:{$eq:muesrid}},'taskDate':{'$exists':true}}).toArray(function(err,records){
-                    if(err) {
+                db.collection('article').find({
+                    'visitors.userID': {$not: {$eq: muesrid}},
+                    'taskDate': {'$exists': true}
+                }).toArray(function (err, records) {
+                    if (err) {
                         res.send({code: 500, msg: err});
                     }
                     returnData['tasknum'] = records.length;
@@ -163,7 +169,6 @@ router.post('/getsession', function (req, res, next) {
             }
         });
     } else {
-        console.log('no session exsit!');
         res.render('index', {title: 'eClub'});
     }
 });
