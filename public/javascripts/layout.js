@@ -134,7 +134,7 @@ var _layout = {
         o.click(function(){
             var self = $('#content');
             self.data('backInfo', $(this));
-            _content.toShowTaskArticle($(this));
+            _article.toShowTaskArticle($(this));
         });
     },
     bindLogout: function(o, self) {
