@@ -106,7 +106,7 @@ var _content = {
     },
     renderPostContent: function (self, data) {
         self.empty();
-        var list = [], flagInfo = '';
+        var list = [], flagInfo = '', header = $('#header');
         switch (self.data('requestURL')) {
             case 'allPostList': {
                 flagInfo = '<span class="home">Home</span> > <span class="home-all-post">All Articles</span>';
@@ -135,6 +135,7 @@ var _content = {
         var dom = '<div class="p-list"><div class="p-layout-info">' + flagInfo + '</div>' + list.join('') + '</div>';
         self.append(dom);
         var pLayoutInfo = $('.p-layout-info');
+        if (header.data('userRole') === '1') { _content.bindSetTask(self);}
         _content.bindToPost($('.toPost'));
         _content.bindToUserArticle($('.author'));
         _content.bindBreadCrumb($('.home', pLayoutInfo), $('.home-all-post', pLayoutInfo));
@@ -143,7 +144,7 @@ var _content = {
         var size = data.length, i = 0;
         for (; i < size; i++) {
             var item = data[i];
-            list.push('<li><div class="p-list-li"><div class="p-list-li-content width85p"><div class="p-list-li-content-title"><div class="flag-color"></div><div data-articleid="' + item['id'] + '" class="title toPost"><a href="javascript:;">' + item['title'] + '</a></div></div><div class="p-list-li-content-desc"><span class="time">' + item['updateDate'] + '</span><span data-userid="' + item['creatorID'] + '" class="author">' + item['editorName'] + '</span></div></div><div data-articleid="' + item['id'] + '" class="p-list-li-link width15p toPost"><span class="icon-uniE616"></span></div></div></li>');
+            list.push('<li><div class="p-list-li"><div class="p-list-li-content width85p"><div class="p-list-li-content-title"><div class="flag-color"><span class="icon-bookmark ' + (item['taskDate'] !== undefined ? 'p-task' : '') + '" title="Set Task"></span></div><div data-articleid="' + item['id'] + '" class="title toPost"><a href="javascript:;">' + item['title'] + '</a></div></div><div class="p-list-li-content-desc"><span class="time">' + item['updateDate'] + '</span><span data-userid="' + item['creatorID'] + '" class="author">' + item['editorName'] + '</span></div></div><div data-articleid="' + item['id'] + '" class="p-list-li-link width15p toPost"><span class="icon-uniE616"></span></div></div></li>');
         }
     },
     renderWordList: function (self, data, list) {
@@ -206,6 +207,26 @@ var _content = {
                 o.removeClass('selectedCate');
             }
             thiz.toggleClass('selectedCate');
+        });
+    },
+    bindSetTask: function (self) {
+        $('li', self).mouseover(function() {
+            var pList = $(this).find('.flag-color span'), hasTask = pList.hasClass('p-task');
+            if (!hasTask) pList.fadeIn('fast');
+        }).mouseleave(function () {
+            var pList = $(this).find('.flag-color span'), hasTask = pList.hasClass('p-task');
+            if (!hasTask) pList.fadeOut('fast');
+        });
+        $('.flag-color').find('span').click(function () {
+            var thiz = $(this), articleId = thiz.parent().next().attr('data-articleid'), isTask = thiz.hasClass('p-task');
+            if (!isTask) {
+                reqContent.setTask({data: {articleID: articleId}}, function (data) {
+                    if (data['code'] === 200) {
+                        thiz.addClass('p-task');
+                        thiz.parents('li').off();
+                    }
+                });
+            }
         });
     },
     bindToPost: function (o) {
@@ -499,7 +520,7 @@ var _content = {
     checkLikeBtn: function () {
         // tell whether author like
         var header = $('#header'), userId = header.data('userId'), btnLike = $('.btn-like'), likes = header.data('likes'), hasLiked = false;
-        if (likes !== '0') {
+        if (likes !== undefined && likes !== '0') {
             var i = 0, size = likes.length;
             for (; i < size; i++) {
                 if (likes[i]['userID'] === userId)  hasLiked = true;
@@ -624,6 +645,17 @@ var reqContent = {
         $.ajax($.extend({
             type: 'POST',
             url: '/article/addlike',
+            dataType: 'JSON'
+        }, options, true)).done(function(data){
+            if (data && $.isFunction(callback)) {
+                callback(data);
+            }
+        });
+    },
+    setTask: function (options, callback) {
+        $.ajax($.extend({
+            type: 'POST',
+            url: '/article/settask',
             dataType: 'JSON'
         }, options, true)).done(function(data){
             if (data && $.isFunction(callback)) {

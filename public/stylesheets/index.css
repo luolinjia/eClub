@@ -277,6 +277,23 @@ section {
     margin-right: 10px;
     height: 35px;
 }
+.p-list .p-list-li .p-list-li-content .p-list-li-content-title .flag-color span{
+    left: -38px;
+    position: absolute;
+    margin-top: 5px;
+    font-size: 20px;
+    display: none;
+    transition: color .2s ease-in;
+    cursor: pointer;
+    color: #999;
+}
+.p-list .p-list-li .p-list-li-content .p-list-li-content-title .flag-color span:hover{
+    color: #008000;
+}
+.p-task {
+    color: #008000!important;
+    display: inline!important;
+}
 .p-list .p-list-li .p-list-li-content .p-list-li-content-title .title a {
     font-size: 30px;
     text-decoration: none;
@@ -419,6 +436,7 @@ section {
 }
 .p-detail .p-tag {
     margin-top: 30px;
+    margin-bottom: 130px;
 }
 .p-detail .p-tag a {
     text-decoration: none;

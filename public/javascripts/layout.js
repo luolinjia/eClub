@@ -178,8 +178,11 @@ var _layout = {
         self.data('loginTime', Number(res.data['times'].length));
         self.data('tasknum', Number(res.data['tasknum']));
         header.data('userId', res['data']['_id']);
+        header.data('userRole', res['data']['userType']);
         commentObj.fadeIn('fast');
-
+        if(res['data']['userType'] === '1') {
+            _content.bindSetTask($('.p-list'));
+        }
         _content.checkLikeBtn();
         btnLike.fadeIn('fast');
         btnLike.next().fadeIn('fast');

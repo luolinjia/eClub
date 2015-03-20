@@ -10,116 +10,139 @@
 }
 
 [class^="icon-"], [class*=" icon-"] {
-	font-family: 'icomoon';
-	speak: none;
-	font-style: normal;
-	font-weight: normal;
-	font-variant: normal;
-	text-transform: none;
-	line-height: 1;
+    font-family: 'icomoon';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
 
-	/* Better Font Rendering =========== */
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .icon-home:before {
-	content: "\e600";
+    content: "\e600";
 }
 
 .icon-pencil:before {
-	content: "\e601";
+    content: "\e601";
 }
 
 .icon-tag:before {
-	content: "\e602";
+    content: "\e602";
 }
 
 .icon-tags:before {
-	content: "\e603";
+    content: "\e603";
+}
+
+.icon-notebook:before {
+    content: "\e619";
 }
 
 .icon-user:before {
-	content: "\e604";
+    content: "\e604";
+}
+
+.icon-list2:before {
+    content: "\e61a";
 }
 
 .icon-list:before {
-	content: "\e605";
+    content: "\e605";
 }
 
 .icon-heart:before {
-	content: "\e606";
+    content: "\e606";
 }
 
 .icon-heart2:before {
-	content: "\e607";
+    content: "\e607";
+}
+
+.icon-thumbs-up:before {
+    content: "\e61b";
 }
 
 .icon-close:before {
-	content: "\e608";
+    content: "\e608";
 }
 
 .icon-checkmark:before {
-	content: "\e609";
+    content: "\e609";
 }
 
 .icon-minus:before {
-	content: "\e60a";
+    content: "\e60a";
 }
 
 .icon-plus:before {
-	content: "\e60b";
+    content: "\e60b";
 }
 
 .icon-volume-high:before {
-	content: "\e60c";
+    content: "\e60c";
 }
 
 .icon-volume-medium:before {
-	content: "\e60d";
+    content: "\e60d";
 }
 
 .icon-volume-low:before {
-	content: "\e60e";
+    content: "\e60e";
 }
 
 .icon-checkbox-unchecked:before {
-	content: "\e60f";
+    content: "\e60f";
 }
 
 .icon-checkbox-partial:before {
-	content: "\e610";
+    content: "\e610";
+}
+
+.icon-newspaper:before {
+    content: "\e61c";
+}
+
+.icon-newspaper-alt:before {
+    content: "\e61d";
 }
 
 .icon-lock:before {
-	content: "\e611";
+    content: "\e611";
 }
 
 .icon-lock-open:before {
-	content: "\e612";
+    content: "\e612";
+}
+
+.icon-bookmark:before {
+    content: "\e61e";
 }
 
 .icon-arrow-left:before {
-	content: "\e613";
+    content: "\e613";
 }
 
 .icon-arrow-down:before {
-	content: "\e614";
+    content: "\e614";
 }
 
 .icon-arrow-up:before {
-	content: "\e615";
+    content: "\e615";
 }
 
 .icon-uniE616:before {
-	content: "\e616";
+    content: "\e616";
 }
 
 .icon-menu:before {
-	content: "\e617";
+    content: "\e617";
 }
 
 .icon-ellipsis:before {
-	content: "\e618";
+    content: "\e618";
 }
-

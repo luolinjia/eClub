@@ -325,8 +325,8 @@ router.post('/showdetail',function (req, res, next){
 //admin user set the task article
 router.post('/settask',function (req, res, next){
     var db = req.db;
-    console.log("usertype=>"+req.session['usertype']);
-    if(req.session['usertype'] === 1) {
+    console.log("userType=>"+req.session['userType']);
+    if(req.session['userType'] === '1') {
         if(req.body.articleID) {
             var marticleid = util.getObjectID(req.body.articleID);
             var taskDate = util.getDayDate();
