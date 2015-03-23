@@ -23,7 +23,7 @@ var storePicture = function storePicture(dataString) {
                 var regexLocal = /^data:.+\/(.+);base64,(.*)$/;
                 var matches = img[1].match(regexLocal);
                 //skip check directory
-                newName = 'public/picture/local_' + getTimeStamp() + '.' + matches[1];
+                newName = 'public/images/picture/local_' + getTimeStamp() + '.' + matches[1];
                 var buffer = new Buffer(matches[2], 'base64');
                 fs.writeFileSync(newName, buffer);
 
@@ -31,7 +31,7 @@ var storePicture = function storePicture(dataString) {
                 var splitItem = img[1].split('.');
                 var ext = splitItem[splitItem.length - 1];
                 //skip check directory
-                newName = 'public/picture/remote_' + getTimeStamp() + '.' + ext;
+                newName = 'public/images/picture/remote_' + getTimeStamp() + '.' + ext;
 
                 imgSrcURL = img[1];
                 var proxiedRequest = request.defaults({proxy: "http://web-proxy.corp.hp.com:8080"});
@@ -97,10 +97,13 @@ var getMinuteDate = function getMinuteDate() {
 };
 
 
-var getMSELDate = function getMSELDate() {
+var getSecondDate = function getSecondDate() {
     return moment(new Date()).format('MM-DD-YYYY HH:mm:ss');
 };
 
+var getMilliSecondDate = function getMilliSecondDate() {
+    return moment(new Date()).format('MM-DD-YYYY HH:mm:ss SSS');
+};
 
 var getObjectID = function getObjectID(id) {
     return mongodb.BSONPure.ObjectID(id);
@@ -112,5 +115,6 @@ exports.checkvalidDate = checkvalidDate;
 exports.getDayDate = getDayDate;
 exports.getTimeStamp = getTimeStamp;
 exports.getMinuteDate = getMinuteDate;
-exports.getMSELDate = getMSELDate;
+exports.getMilliSecondDate = getMilliSecondDate;
+exports.getSecondDate = getSecondDate;
 exports.getObjectID = getObjectID;

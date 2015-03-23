@@ -12,6 +12,8 @@ var db = mongo.db("mongodb://localhost:27017/eClub", {native_parser: true});
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var article = require('./routes/article');
+var vocabulary = require('./routes/vocabulary');
+var dy = require('./routes/dy');
 
 var app = express();
 
@@ -43,6 +45,8 @@ app.use(function (req, res, next) {
 app.use('/', routes);
 app.use('/users', users);
 app.use('/article', article);
+app.use('/vocabulary', vocabulary);
+app.use('/dy', dy);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

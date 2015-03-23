@@ -2,7 +2,7 @@
  * Created by wangsen on 3/5/2015.
  */
 var express = require('express');
-var util = require('../public/common/utils.js');
+var util = require('../public/javascripts/common/utils.js');
 var formidable = require('formidable');
 var fs = require('fs');
 
@@ -61,59 +61,6 @@ router.post('/addaudio', function (req, res) {
 });
 
 
-// show dynamic index
-router.post('/showdylist', function (req, res, next) {
-    var db = req.db;
-    var returnData = {'article': [], 'vocabulary': []};
-    /* bad hard code */
-    var articleTotal = 3;
-    var vocabularyTotal = 7;
-
-    db.collection('article').find({}).sort({'updateDate': -1}).limit(articleTotal).toArray(function (err, items) {
-        if (err) {
-            res.send({code: 500, msg: err});
-        }
-        for (var index = 0; index < items.length; index++) {
-            returnData.article[index] = {};
-            returnData.article[index]['id'] = items[index]['_id'];
-            returnData.article[index]['creatorID'] = items[index]['creatorID'];
-            returnData.article[index]['creatorName'] = items[index]['creatorName'];
-            returnData.article[index]['editorName'] = items[index]['editorName'];
-            returnData.article[index]['title'] = items[index]['title'];
-            returnData.article[index]['updateDate'] = items[index]['updateDate'];
-            returnData.article[index]['taskDate'] = items[index]['taskDate'];
-            returnData.article[index]['pv'] = items[index]['pv'];
-            if (items[index]['likes']) {
-                returnData.article[index]['likeNum'] = items[index]['likes'].length;
-                returnData.article[index]['likes'] = items[index]['likes'];
-            } else {
-                returnData.article[index]['likeNum'] = 0;
-                returnData.article[index]['likes'] = [];
-            }
-            if (items[index]['comments']) {
-                items[index]['comments'].sort(function (a, b) {
-                    a.createDate < b.createDate ? 1 : -1;
-                });
-            }
-        }
-
-        db.collection('vocabulary').find({}).sort({'updateDate': -1}).limit(vocabularyTotal).toArray(function (err, records) {
-            if (err) {
-                res.send({code: 500, msg: err});
-            }
-            for (var i = 0; i < records.length; i++) {
-                returnData.vocabulary[i] = {};
-                returnData.vocabulary[i]['spelling'] = records[i]['spelling'];
-                returnData.vocabulary[i]['symbol'] = records[i]['symbol'];
-                returnData.vocabulary[i]['creatorName'] = records[i]['creatorName'];
-                returnData.vocabulary[i]['editorName'] = records[i]['editorName'];
-                returnData.vocabulary[i]['updateDate'] = records[i]['updateDate'];
-            }
-            res.send({code: 200, msg: 'ok', data: returnData});
-        });
-    });
-});
-
 //show all articles
 router.post('/showall', function (req, res, next) {
     var db = req.db;
@@ -143,7 +90,7 @@ router.post('/showall', function (req, res, next) {
             }
             if (items[index]['comments']) {
                 items[index]['comments'].sort(function (a, b) {
-                    a.createDate < b.createDate ? 1 : -1;
+                    return a.createDate < b.createDate ? 1 : -1;
                 });
             }
         }
@@ -184,7 +131,7 @@ router.post('/showself', function (req, res, next) {
                 }
                 if (items[index]['comments']) {
                     items[index]['comments'].sort(function (a, b) {
-                        a.createDate < b.createDate ? 1 : -1;
+                        return a.createDate < b.createDate ? 1 : -1;
                     });
                 }
             }
@@ -225,7 +172,7 @@ router.post('/showbycategory', function (req, res, next) {
                 }
                 if (items[index]['comments']) {
                     items[index]['comments'].sort(function (a, b) {
-                        a.createDate < b.createDate ? 1 : -1;
+                        return a.createDate < b.createDate ? 1 : -1;
                     });
                 }
             }
@@ -267,7 +214,7 @@ router.post('/showbytag', function (req, res, next) {
                 }
                 if (items[index]['comments']) {
                     items[index]['comments'].sort(function (a, b) {
-                        a.createDate < b.createDate ? 1 : -1;
+                        return a.createDate < b.createDate ? 1 : -1;
                     });
                 }
             }
@@ -311,7 +258,7 @@ router.post('/showbycreator', function (req, res, next) {
                 }
                 if (items[index]['comments']) {
                     items[index]['comments'].sort(function (a, b) {
-                        a.createDate < b.createDate ? 1 : -1;
+                        return a.createDate < b.createDate ? 1 : -1;
                     });
                 }
             }
@@ -350,7 +297,7 @@ router.post('/showdetail', function (req, res, next) {
                     if (items[0]['comments']) {
                         returnData[0]['commentNum'] = items[0]['comments'].length;
                         items[0]['comments'].sort(function (a, b) {
-                            a.createDate < b.createDate ? 1 : -1;
+                            return a.createDate < b.createDate ? 1 : -1;
                         });
                     } else {
                         returnData[0]['commentNum'] = 0;
@@ -422,7 +369,7 @@ router.post('/showtask', function (req, res, next) {
                 }
                 if (items[index]['comments']) {
                     items[index]['comments'].sort(function (a, b) {
-                        a.createDate < b.createDate ? 1 : -1;
+                        return a.createDate < b.createDate ? 1 : -1;
                     });
                 }
             }
@@ -546,7 +493,7 @@ router.post('/update', function (req, res, next) {
 router.post('/addcomment', function (req, res, next) {
     var db = req.db;
     if (req.session['userID'] && req.body.articleID) {
-        var curMSELDate = util.getMSELDate();
+        var curMSELDate = util.getSecondDate();
         var muserid = util.getObjectID(req.session['userID']);
         var articleid = util.getObjectID(req.body.articleID);
         db.collection('article').update({'_id': articleid}, {
@@ -568,8 +515,8 @@ router.post('/addcomment', function (req, res, next) {
 
                 if (items != undefined && items.length === 1) {
                     if (items[0]['comments']) {
-                        items[0]['comments'].sort(function (a, b) {
-                            a.createDate < b.createDate ? 1 : -1;
+                        items[0]['comments'] = items[0]['comments'].sort(function (a, b) {
+                            return a.createDate < b.createDate ? 1 : -1;
                         })
                     }
                     res.send({code: 200, msg: 'add comment successfully', data: items[0]['comments']});
