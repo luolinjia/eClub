@@ -18,6 +18,7 @@
     "mongoskin": "*",
     "moment": "*",
     "formidable" : "*",
-    "request" : "*"
+    "request" : "*",
+    "markdown-parse" : "*"
   }
 }

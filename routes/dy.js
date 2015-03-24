@@ -3,8 +3,8 @@
  */
 
 var express = require('express');
-var util = require('../public/javascripts/common/utils.js');
 var fs = require('fs');
+var util = require('../public/javascripts/common/utils.js');
 
 var router = express.Router();
 
@@ -52,13 +52,25 @@ router.post('/showdylist', function (req, res, next) {
                 returnData.vocabulary[i] = {};
                 returnData.vocabulary[i]['spelling'] = records[i]['spelling'];
                 returnData.vocabulary[i]['symbol'] = records[i]['symbol'];
-                returnData.vocabulary[i]['creatorName'] = records[i]['creatorName'];
-                returnData.vocabulary[i]['editorName'] = records[i]['editorName'];
+                //returnData.vocabulary[i]['creatorName'] = records[i]['creatorName'];
+                //returnData.vocabulary[i]['editorName'] = records[i]['editorName'];
+                returnData.vocabulary[i]['freq'] = records[i]['freq'] + records[i]['pv'];
                 returnData.vocabulary[i]['updateDate'] = records[i]['updateDate'];
             }
+
+            //get daily content
+            var saying = util.getSaying('03-25-2015'); //util.getDayDate();
+            if(saying === undefined) {
+                saying = {};
+            }
+            returnData.saying = saying;
+
             res.send({code: 200, msg: 'ok', data: returnData});
         });
     });
 });
+
+
+
 
 module.exports = router;

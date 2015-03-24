@@ -117,45 +117,48 @@ router.post('/showdetail', function (req, res, next) {
 // add vocabulary
 router.post('/add', function (req, res, next) {
     var db = req.db;
-    console.log("url add=>"+req.url);
+    console.log("url add=>" + req.url);
 
     if (req.session['userID']) {
-        console.log("spelling=>"+req.body.spelling);
+        console.log("spelling=>" + req.body.spelling);
         if (req.body.spelling) { //need to check body struct
             var formatDate = util.getMinuteDate();
             var tag = util.getTimeStamp();
             var muserid = util.getObjectID(req.session['userID']);
 
-            db.collection('vocabulry').find({'spelling':req.body.spelling}).toArray(function(err, items){
-                if(err) {  res.send({code: 500, msg: err}); }
+            db.collection('vocabulary').find({'spelling': req.body.spelling}).toArray(function (err, items) {
+                if (err) {
+                    res.send({code: 500, msg: err});
+                }
 
-                if(items && items.length === 0) {
+                if (items && req.body.descriptions && items.length === 0) {
                     //first insert vocabulary, no exist
                     req.body.updateDate = formatDate;
                     req.body.freq = 1; //
+                    req.body.pv = 1;
                     var creator = [];
                     var creatorInfo = {};
-                    creatorInfo.createID = muserid;
+                    creatorInfo.creatorID = muserid;
                     creatorInfo.creatorName = req.session['userName'];
                     creatorInfo.tag = tag;
                     creator[0] = creatorInfo
                     req.body.creators = creator;
-                    for(var index = 0; req.body.descriptions.length > index; index++) {
-                        for(var windex = 0; req.body.descriptions[index].words.length > windex; windex++) {
+                    for (var index = 0; req.body.descriptions.length > index; index++) {
+                        for (var windex = 0; req.body.descriptions[index].words.length > windex; windex++) {
                             var tempData = {};
                             tempData.english = [];
-                            for(var eindex = 0; req.body.descriptions[index].words[windex].english.length > eindex; eindex++){
+                            for (var eindex = 0; req.body.descriptions[index].words[windex].english.length > eindex; eindex++) {
                                 tempData.english.push(req.body.descriptions[index].words[windex].english[eindex]);
                             }
                             tempData.chinese = [];
-                            for(var cindex = 0; req.body.descriptions[index].words[windex].chinese.length > cindex; cindex++){
+                            for (var cindex = 0; req.body.descriptions[index].words[windex].chinese.length > cindex; cindex++) {
                                 tempData.chinese.push(req.body.descriptions[index].words[windex].chinese[cindex])
                             }
                             tempData.createDate = formatDate;
                             tempData.tag = tag;
                             req.body.descriptions[index].words[windex] = tempData;
                         }
-                        for(var pindex = 0; req.body.descriptions[index].phrases.length > pindex; pindex++) {
+                        for (var pindex = 0; req.body.descriptions[index].phrases.length > pindex; pindex++) {
                             var tempData = {};
                             tempData.english = req.body.descriptions[index].phrases[pindex].english;
                             tempData.chinese = req.body.descriptions[index].phrases[pindex].chinese;
@@ -163,7 +166,7 @@ router.post('/add', function (req, res, next) {
                             tempData.tag = tag;
                             req.body.descriptions[index].phrases[pindex] = tempData;
                         }
-                        for(var sindex = 0; req.body.descriptions[index].sentences.length > sindex; sindex++) {
+                        for (var sindex = 0; req.body.descriptions[index].sentences.length > sindex; sindex++) {
                             var tempData = {};
                             tempData.english = req.body.descriptions[index].sentences[sindex].english;
                             tempData.chinese = req.body.descriptions[index].sentences[sindex].chinese;
@@ -175,9 +178,35 @@ router.post('/add', function (req, res, next) {
                     db.collection('vocabulary').insert(req.body, function (err, result) {
                         res.send(err ? {code: 500, msg: err} : {code: 200, msg: 'Add vocabulary successfully!'});
                     });
-                } else if(items && items.length === 1) {
+                } else if (items && items.length === 1) {
                     // exist this vocabulary, then update arrays
+                    if (items[0].symbol !== req.body.symbol) {
+                        res.send({code: 515, msg: 'vocabulary data error[symbol different in exist]'});
+                    }
+                    //for(var i = 0; i < items[0].creators.length; i++){
+                    //    console.log("obejctID=>"+items[0].creators[i].creatorID);
+                    //    items[0].creators.indexOf()
+                    //}
 
+                    //$inc: {'pv': 1}, 'updateDate':formatDate
+                    db.collection('vocabulary').update({
+                        'spelling': req.body.spelling,
+                        'creators.creatorID': {$not: {$eq: muserid}}
+                    }, {
+                        $addToSet: {
+                            'creators': {
+                                'creatorID': muserid,
+                                'creatorName': req.session['userName'],
+                                'tag':tag
+                            }
+                        }
+                    }, function (err) {
+                        if (err) {
+                            res.send({code: 500, msg: err});
+                        }
+
+                        res.send({code: 200, msg:'ok'});
+                    });
 
                 } else {
                     res.send({code: 513, msg: 'vocabulary data error'});
@@ -264,9 +293,9 @@ router.post('/addphrase', function (req, res, next) {
 });
 
 
-router.post(['/addhel{2}o','/addworld'], function (req, res, next) {
-    console.log("url=>"+req.url);
-    res.send({code:200});
+router.post(['/addhel{2}o', '/addworld'], function (req, res, next) {
+    console.log("url=>" + req.url);
+    res.send({code: 200});
 });
 
 module.exports = router;
