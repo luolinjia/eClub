@@ -5,7 +5,85 @@
 var mongodb = require('mongodb');
 var moment = require('moment');
 var request = require('request');
+var parser = require('markdown-parse');
 var fs = require('fs');
+
+var mdDir = 'public/daily/md/';
+var mdSuffix = 'md';
+var picDir = 'public/daily/pic/';
+var picSuffix = 'jpg';
+var validDayRange = 5; //for daily range;
+
+var getSaying = function getSaying(date) {
+    var saying = getDailySentence(date,1);
+    if(saying === undefined) {
+        return undefined;
+    } else {
+        var pictureURL = getDailyPicture(date,1);
+        if(pictureURL !== undefined) {
+            saying.url = pictureURL;
+        }
+        return saying;
+    }
+};
+
+var getValidDate = function getValidDate(index,date,lastflag) {
+    var checkDate = date;
+    if(lastflag === 1) { //get last day
+        checkDate = moment(checkDate, 'MM-DD-YYYY').subtract(1, 'days').format('MM-DD-YYYY');
+    }else {
+        checkDate = moment(checkDate, 'MM-DD-YYYY').add(1, 'days').format('MM-DD-YYYY');
+    }
+    if(index === validDayRange) {
+        return undefined;
+    }
+    return checkDate;
+};
+
+var getDailyPicture = function getDailyPicture(date,lastflag) {
+    var checkDate = date;
+    var index = 0;
+    /* get pic url */
+    while(!isExistFile(checkDate, picDir, picSuffix)){
+        //get last one day date
+        checkDate = getValidDate(++index,checkDate,lastflag);
+        if(checkDate === undefined) {
+            return undefined;
+        }
+    }
+    var picPath = picDir.substr(7,picDir.length)+checkDate+'.'+picSuffix;
+
+    return picPath;
+};
+
+var getDailySentence = function getDailySentence(date,lastflag) {
+    var checkDate = date;
+    var index = 0;
+    while(!isExistFile(checkDate, mdDir, mdSuffix)){
+        //get last one day date
+        checkDate = getValidDate(++index,checkDate,lastflag);
+        if(checkDate === undefined) {
+            return undefined;
+        }
+    }
+    var saying = {}
+    var path = mdDir+checkDate+".md";
+    var content = fs.readFileSync(path, 'utf8');
+    parser(content, function(err, result){
+        if(err) { res.send({code:514, msg:err});}
+        saying.english = result.attributes['e'];
+        saying.chinese = result.attributes['c'];
+        saying.author = result.attributes['a'];
+    });
+
+    return saying;
+};
+
+
+var isExistFile = function isExistFile(date,dir,suffx) {
+    //check file exist
+    return fs.existsSync(dir+date+'.'+suffx);
+};
 
 
 var storePicture = function storePicture(dataString) {
@@ -74,7 +152,7 @@ var removeContent = function (dataString, regex, index, replacement) {
 
 var checkvalidDate = function checkvalidDate(taskDay) {
     var curDate = getDayDate();
-    var finishDate = moment(taskDay).add('days', 3).format('MM-DD-YYYY');
+    var finishDate = moment(taskDay,'MM-DD-YYYY').add(3,'days').format('MM-DD-YYYY');
     if (moment(curDate).isSame(taskDay) || moment(curDate).isSame(finishDate)) {
         return true;
     }
@@ -110,6 +188,13 @@ var getObjectID = function getObjectID(id) {
 };
 
 
+
+
+exports.getSaying = getSaying;
+exports.getValidDate = getValidDate;
+exports.getDailyPicture = getDailyPicture;
+exports.getDailySentence = getDailySentence;
+exports.isExistFile = isExistFile;
 exports.storePicture = storePicture;
 exports.checkvalidDate = checkvalidDate;
 exports.getDayDate = getDayDate;
