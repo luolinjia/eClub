@@ -6,7 +6,8 @@ $(function() {
     _layout.handleSession();
     _layout.showLRBox(userIcon);
     _layout.bindeClub();
-    // show index content
+    // show footer detail
+		_layout.showFooter();
 });
 
 var _layout = {
@@ -199,7 +200,15 @@ var _layout = {
         reqHeader.getUserSession({}, function (res) {
             if (res) _layout.setLoginParams(res);
         });
-    }
+    },
+		showFooter: function () {
+				// bind click
+				$('#footer').click(function () {
+						$('.footer-detail').slideToggle('fast');
+				}).mouseleave(function () {
+						$('.footer-detail').slideUp('fast');
+				});
+		}
 };
 
 var reqHeader = {

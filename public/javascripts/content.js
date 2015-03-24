@@ -48,13 +48,6 @@ var _content = {
             list.push('<li><div class="p-list-li"><div class="p-list-li-content width85p"><div class="p-list-li-content-title"><div class="flag-color"><span class="icon-bookmark ' + (item['taskDate'] !== undefined ? 'p-task' : '') + '" title="Task"></span></div><div data-articleid="' + item['id'] + '" class="title toPost"><a href="javascript:;">' + item['title'] + '</a></div></div><div class="p-list-li-content-desc"><span class="time">' + item['updateDate'] + '</span><span data-userid="' + item['creatorID'] + '" class="author">' + item['editorName'] + '</span></div></div><div data-articleid="' + item['id'] + '" class="p-list-li-link width15p toPost"><span class="icon-uniE616"></span></div></div></li>');
         }
     },
-    renderWordList: function (self, data, list) {
-        var size = data.length, i = 0;
-        for (; i < size; i++) {
-            var item = data[i];
-            list.push('<li><div class="p-list-li"><div class="p-list-li-content width85p"><div class="p-list-li-content-title"><div class="flag-color"></div><div data-articleid="' + item['spelling'] + '" class="title toWord"><a href="javascript:;">' + (item['spelling'] + ' ' + item['symbol']) + '</a></div></div><div class="p-list-li-content-desc"><span class="time">' + item['updateDate'] + '</span><span class="author">' + item['editorName'] + '</span></div></div><div data-articleid="' + item['spelling'] + '" class="p-list-li-link width15p toWord"><span class="icon-uniE616"></span></div></div></li>');
-        }
-    },
     renderCommentsList: function (self, data) {
         if (data !== undefined && data.length !== 0) {
             var list = [], i = 0, size = data.length;
@@ -99,7 +92,6 @@ var _content = {
             // get the article data from db
             reqContent.toDetailPost({data: {'articleID': dataId}}, function (data) {
                 _article.renderDetailPost(self, data['data'][0]);
-//                reqContent.addVisitor({data: {'articleID': dataId}}, '');
             });
         });
     },

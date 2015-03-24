@@ -8,17 +8,17 @@ $(function () {
 var _dy = {
     renderContent: function(self, data){
         self.empty();
-        var list = [];
-        list.push('<ul>');
-        _content.renderPostList(self, data['article'], list);
-        _content.renderWordList(self, data['vocabulary'], list);
-        list.push('</ul>');
+//        var list = [];
+//        list.push('<ul>');
+//        _content.renderPostList(self, data['article'], list);
+//        _content.renderWordList(self, data['vocabulary'], list);
+//        list.push('</ul>');
 
-        var dom = '<div class="d-pic"><div class="d-pic-title">Daily Picture</div><div class="d-pic-img"><a class="left"><span class="icon-arrow-left"></span></a><img src="' + data['saying']['url'] + '"><a class="right"><span class="icon-uniE616"></span></a></div></div><div class="d-saying"><div class="d-saying-title">Daily Saying</div><div class="d-saying-detail"><p>' + data['saying']['english'] + '</p><p>' + data['saying']['chinese'] + '</p><p class="d-saying-detail-author">--' + data['saying']['author'] + '</p></div></div><div class="p-list"><div class="p-layout-info">Latest Trends</div>' + list.join('') + '</div>';
+        var dom = '<div class="d-pic"><div class="d-pic-title">Daily Picture</div><div class="d-pic-img"><a class="left"><span class="icon-arrow-left"></span></a><img src="' + data['saying']['url'] + '"><a class="right"><span class="icon-uniE616"></span></a></div></div><div class="d-saying"><div class="d-saying-title">Daily Saying</div><div class="d-saying-detail"><p>' + data['saying']['english'] + '</p><p>' + data['saying']['chinese'] + '</p><p class="d-saying-detail-author">--' + data['saying']['author'] + '</p></div></div><div class="d-latest"><div class="d-word"><div class="d-word-title">Latest Word</div><div class="d-word-spelling">Vocabulary</div></div><div class="d-post"><div class="d-post-title">Latest Post</div><div class="d-post-content">' + data['article'][0]['title'] + '</div></div></div>';
         self.append(dom);
         _dy.bindSwitch();
-        _content.bindToPost($('.toPost'));
-        _article.bindToUserArticle($('.author'));
+//        _content.bindToPost($('.toPost'));
+//        _article.bindToUserArticle($('.author'));
     },
     renderDyContent: function () {
         reqDy.showDyList({}, function(data){

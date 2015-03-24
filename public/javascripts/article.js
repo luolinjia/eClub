@@ -84,7 +84,7 @@ var _article = {
             var tItem = data['tags'][j];
             tags.push('<li><a href="#"><span>' + tItem + '</span></a></li>');
         }
-        var dom = '<div class="p-back"><span class="icon-arrow-left"></span></div><div class="p-detail"><div class="p-category">' + categoriesList.join('') + '</div><div style="clear:both;margin-bottom:-50px;"></div><div class="p-title" data-articleid="' + data['_id'] + '" data-articletask="' + data['taskDate'] + '"><h1>' + data['title'] + '</h1></div><div class="p-meta"><div class="dateblock"><span class="date">' + data['createDate'] + '</span><span>Views(' + data['pv'] + ')</span><span class="icon-heart btn-like"></span><span>(' + (data['likes'] !== undefined ? data['likes'].length : 0) + ')</span></div><div class="author"><div data-userid="' + data['creatorID'] + '" class="author-div1"><a href="javascript:;"><span class="author-name">' + data['creatorName'] + '</span></a></div><div class="author-div2"><audio src="' + url + '" controls="" autoplay></audio></div><div style="clear:both;"></div></div></div><div class="p-text">' + data['content'] + '</div><div class="p-tag"><ul>' + tags.join('') + '</ul></div><div style="clear:both;"></div><div class="p-comment"><div class="p-comment-state"><span><span id="commentNo">' + data['commentNum'] + '</span> comments</span></div><hr/><div class="p-comment-input"><textarea name="commentIn" id="commentIn" placeholder="Start a discussion..."></textarea><button id="btnComments">Submit</button></div><div class="p-comment-article"><ul></ul></div></div></div>';
+        var dom = '<div class="p-back"><span class="icon-arrow-left"></span></div><div class="p-detail"><div class="p-category">' + categoriesList.join('') + '</div><div style="clear:both;margin-bottom:-50px;"></div><div class="p-title" data-articleid="' + data['_id'] + '" data-articletask="' + data['taskDate'] + '"><h1>' + data['title'] + '</h1></div><div class="p-meta"><div class="dateblock"><span class="date">' + data['createDate'] + '</span><span>Views(' + data['pv'] + ')</span><span class="icon-heart btn-like"></span><span>(' + (data['likes'] !== undefined ? data['likes'].length : 0) + ')</span></div><div class="author"><div data-userid="' + data['creatorID'] + '" class="author-div1"><a href="javascript:;"><span class="author-name">' + data['creatorName'] + '</span></a></div><div class="author-div2"><audio src="' + url + '" controls="" autoplay></audio></div><div class="cb"></div></div></div><div class="p-text">' + data['content'] + '</div><div class="p-tag"><ul>' + tags.join('') + '</ul></div><div class="cb"></div><div class="p-comment"><div class="p-comment-state"><span><span id="commentNo">' + data['commentNum'] + '</span> comments</span></div><hr/><div class="p-comment-input"><textarea name="commentIn" id="commentIn" placeholder="Start a discussion..."></textarea><button id="btnComments">Submit</button></div><div class="p-comment-article"><ul></ul></div></div></div>';
 
         self.append(dom);
         header.data('likes', data['likes'] !== undefined ? data['likes'] : '0');
@@ -190,7 +190,7 @@ var _article = {
     },
     bindCate: function (o) {
         o.click(function () {
-            var thiz = $(this), cate = thiz.text();
+            var thiz = $(this);
             if ($('.selectedCate').length === 1) {
                 o.removeClass('selectedCate');
             }

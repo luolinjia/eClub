@@ -9,6 +9,11 @@ body {
     font-family: "GothamBook", "Segoe UI", "Microsoft YaHei", sans-serif;
 }
 
+/*******************************public***************************/
+.cb {
+    clear: both;
+}
+
 /******************************Header****************************/
 #header {
     width: 100%;
@@ -777,4 +782,108 @@ section {
 }
 .d-saying .d-saying-detail .d-saying-detail-author {
     text-align: right;
+}
+.d-latest {
+    /*padding: 0 50px;*/
+    height:200px;
+}
+.d-latest .d-word, .d-latest .d-post {
+    width: 45%;
+    height: 200px;
+    float: left;
+    padding: 20px;
+}
+.d-latest .d-word:hover, .d-latest .d-post:hover {
+    -webkit-box-shadow: -1px -1px 40px #127F78;
+    -moz-box-shadow: -1px -1px 40px #127F78;
+    box-shadow: -1px -1px 40px #127F78;
+}
+.d-latest .d-word .d-word-title, .d-latest .d-post .d-post-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.d-word-spelling, .d-post-content {
+    font-size: 50px;
+    color: #bbb;
+    cursor: pointer;
+    transition: color .2s ease-in;
+}
+.d-word-spelling:hover, .d-post-content:hover {
+    color: #ef4036;
+}
+
+/**********************footer**************************************/
+#footer {
+    width: 100%;
+    text-align: center;
+    background-color: #ef4036;
+    padding: 25px 0;
+    margin-top: 20px;
+    position: relative;
+    color: #fff;
+    /*cursor: pointer;*/
+    font-size: 20px;
+    transition: text-shadow .2s ease-in, background-color .2s ease-in, color .2s ease-in;
+}
+#footer:hover {
+    background-color: #000;
+    text-shadow: -1px -1px 40px #127F78;
+    color: #fff;
+}
+.footer-detail {
+    width: 100%;
+    height: 300px;
+    position: absolute;
+    bottom: 75px;
+    background-color: #1a1a1a;
+    display: none;
+    font-size: 16px;
+}
+.footer-detail h5 {
+    font-size: 20px;
+    font-weight: bold;
+}
+.footer-detail-all {
+    margin: 0 auto;
+    padding: 50px;
+    text-align: left;
+}
+.footer-detail-all hr {
+    border: solid #ddd;
+    border-width: 1px 0 0;
+    clear: both;
+    margin: 1.25em 0 1.1875em;
+    height: 0;
+}
+.footer-detail-all ul li {
+    list-style-type: none;
+    color: #bbb;
+    transition: color .2s ease-in;
+    cursor: pointer;
+}
+.footer-detail-all ul li:hover {
+    color: #ef4036;
+}
+.footer-detail-all ul li a {
+    text-decoration: none;
+    color: #bbb;
+    transition: color .2s ease-in;
+    cursor: pointer;
+}
+.footer-detail-all ul li a:hover {
+    color: #ef4036;
+}
+.footer-one {
+    position: relative;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 25%;
+    float: left;
+}
+.footer-two {
+    position: relative;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 35%;
+    float: left;
 }
