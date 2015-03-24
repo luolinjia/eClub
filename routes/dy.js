@@ -59,7 +59,7 @@ router.post('/showdylist', function (req, res, next) {
             }
 
             //get daily content
-            var saying = util.getSaying('03-25-2015'); //util.getDayDate();
+            var saying = util.getSaying(util.getDayDate()); //util.getDayDate();
             if(saying === undefined) {
                 saying = {};
             }

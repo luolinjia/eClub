@@ -1,25 +1,7 @@
 /**
  * Created by luolinj on 3/12/2015.
  */
-$(function () {
-
-    _content.renderDyContent();
-});
-
 var _content = {
-    renderContent: function(self, data){
-        self.empty();
-        var list = [];
-        list.push('<ul>');
-        _content.renderPostList(self, data['article'], list);
-        _content.renderWordList(self, data['vocabulary'], list);
-        list.push('</ul>');
-
-        var dom = '<div class="p-list"><div class="p-layout-info">Latest Trends</div>' + list.join('') + '</div>';
-        self.append(dom);
-        _content.bindToPost($('.toPost'));
-        _article.bindToUserArticle($('.author'));
-    },
     renderPostContent: function (self, data) {
         self.empty();
         var list = [], flagInfo = '', header = $('#header');
@@ -121,13 +103,6 @@ var _content = {
             });
         });
     },
-    renderDyContent: function () {
-        reqContent.showDyList({}, function(data){
-            var self = $('#content');
-            self.data('requestURL', 'showDyList');
-            _content.renderContent(self, data['data']);
-        });
-    },
     showView: function() {
         $('.view').on('mouseover', function() {
             $(this).find('.info').fadeIn('fast');
@@ -171,17 +146,6 @@ var _content = {
 };
 
 var reqContent = {
-    showDyList: function (options, callback) {
-        $.ajax($.extend({
-            type: 'POST',
-            url: '/article/showdylist',
-            dataType: 'JSON'
-        }, options, true)).done(function(data){
-            if (data && $.isFunction(callback)) {
-                callback(data);
-            }
-        });
-    },
     showAllArticleList: function (options, callback) {
         $.ajax($.extend({
             type: 'POST',
