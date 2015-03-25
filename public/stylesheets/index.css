@@ -765,7 +765,7 @@ section {
 }
 .d-pic .d-pic-img .left {
     position: absolute;
-    left: -50px;
+    left: -20px;
     top: 50%;
     font-size: 50px;
     color: #127F78;
@@ -779,7 +779,7 @@ section {
 }
 .d-pic .d-pic-img .right {
     position: absolute;
-    right: -50px;
+    right: -20px;
     top: 50%;
     font-size: 50px;
     color: #127F78;
@@ -792,7 +792,7 @@ section {
     text-shadow: -1px -1px 10px #127F78;
 }
 .d-pic .d-pic-img img {
-    max-width: 800px;
+    max-width: 600px;
     width: 100%;
 }
 .d-saying {
