@@ -108,7 +108,7 @@ var _article = {
         }
     },
     renderPushPost: function (self) {
-        var dom = '<div class="p-add"><div class="p-add-fun"><h2>Push Article</h2></div><div class="p-add-title"><span><div class="mb5">Title</div><input type="text" placeholder="Add A Title"/></span></div><div class="p-add-category"><span><div class="mb5">Category</div><button class="selectedCate">Life</button><button>Economics</button><button>Science</button><button>Society</button><button>Technology</button><button>Uncategorized</button></span></div><div class="p-add-media"><a href="javascript:;" class="file">Upload mp3<form id="uploadAudio" name="uploadAudio" method="post" enctype="multipart/form-data" onsubmit="javascript: return false;"><input type="file" id="fulAudio" name="fulAudio" accept="audio/*" ></form></a></div><div class="mb5">Main Content</div><textarea id="editor" name="editor" placeholder="Type your text here..."></textarea><div class="p-add-tag"><span><div class="mb5">Tag</div><input type="text" placeholder="Add A Tag Or Multiple Tags, Splitted by ,"/></span></div><div class="p-add-source"><span><div class="mb5">Source URL</div><input id="sourceURL" type="text" placeholder="Source Website"/></span></div><button class="key">PUSH</button><button>CANCEL</button></div>';
+        var dom = '<div class="p-add"><div class="p-add-fun"><h2>Push Article</h2></div><div class="p-add-title"><span><div class="mb5">Title</div><input type="text" placeholder="Add A Title"/></span></div><div class="p-add-category"><span><div class="mb5">Category</div><button class="selectedCate">Life</button><button>Economics</button><button>Science</button><button>Society</button><button>Technology</button><button>Uncategorized</button></span></div><div class="p-add-media"><a href="javascript:;" class="file">Upload mp3<form id="uploadAudio" name="uploadAudio" method="post" enctype="multipart/form-data" onsubmit="javascript: return false;"><input type="file" id="fulAudio" name="fulAudio" accept="audio/*" ></form></a></div><div class="mb5">Main Content</div><textarea id="editor" name="editor" placeholder="Type your text here..."></textarea><div class="p-add-tag"><span><div class="mb5">Tag</div><input type="text" placeholder="Add A Tag Or Multiple Tags, Splitted by ,"/></span></div><div class="p-add-source"><span><div class="mb5">Source URL</div><input id="sourceURL" type="text" placeholder="Source Website"/></span></div><button class="key">PUSH</button><button id="cancelPost">CANCEL</button></div>';
         self.append(dom);
         _article.initWysiwyg($('#editor', self));
         _article.bindCate($('.p-add-category').find('button'));
@@ -292,6 +292,9 @@ var _article = {
                     }
                 });
             }
+        });
+        $('#cancelPost').click(function () {
+            _layout.bindToHome();
         });
     },
     toShowAllArticle: function () {
