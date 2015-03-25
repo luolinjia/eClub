@@ -765,7 +765,7 @@ section {
 }
 .d-pic .d-pic-img .left {
     position: absolute;
-    left: 0;
+    left: -50px;
     top: 50%;
     font-size: 50px;
     color: #127F78;
@@ -779,7 +779,7 @@ section {
 }
 .d-pic .d-pic-img .right {
     position: absolute;
-    right: 0;
+    right: -50px;
     top: 50%;
     font-size: 50px;
     color: #127F78;
@@ -793,6 +793,7 @@ section {
 }
 .d-pic .d-pic-img img {
     max-width: 800px;
+    width: 100%;
 }
 .d-saying {
     padding: 50px;
@@ -824,6 +825,7 @@ section {
     height: 200px;
     float: left;
     padding: 20px;
+    transition: box-shadow .2s ease-in, -webkit-box-shadow .2s ease-in, -moz-box-shadow .2s ease-in;
 }
 .d-latest .d-word:hover, .d-latest .d-post:hover {
     -webkit-box-shadow: -1px -1px 40px #127F78;
