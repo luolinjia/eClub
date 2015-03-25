@@ -13,12 +13,12 @@ $(function() {
 
 var _layout = {
     renderLogin: function(self) {
-        var dom = '<div class="lr-box"><div class="lr-box-input"><input type="text" placeholder="Email"></div><div class="lr-box-input"><input type="password" placeholder="Password"></div><button id="btnLogin">Login</button></div>';
+        var dom = '<div class="lr-box"><div class="lr-box-input"><input type="text" placeholder="Email"></div><div class="lr-box-input"><input type="password" placeholder="Password"></div><button id="btnLogin">' + l10n.layout.login + '</button></div>';
         self.append(dom);
         _layout.bindLogin($('.lr-box').find('input'), self);
     },
     renderHasLogin: function(self) {
-        var dom = '<div class="lr-box"><div class="user-info"><span>Online Days : <span class="user-time">0</span></span></div><div class="user-info"><span>New Tasks : <span class="user-task">0</span></span></div><div><button id="btnChange">Change Password</button></div><button id="btnLogout">Logout</button></div>';
+        var dom = '<div class="lr-box"><div class="user-info"><span>' + l10n.layout.od + '<span class="user-time">0</span></span></div><div class="user-info"><span>' + l10n.layout.nt + '<span class="user-task">0</span></span></div><div><button id="btnChange">' + l10n.layout.cp + '</button></div><button id="btnLogout">' + l10n.layout.logout + '</button></div>';
         self.append(dom);
         var userTask = $('.user-task'), userTime = $('.user-time'), userRelated = $('.icon-user').parent();
         reqHeader.getUserSession({}, function (res) {
@@ -34,7 +34,7 @@ var _layout = {
         _layout.bindNewTask(userTask, self);
     },
     renderChangePwd: function(self) {
-        var dom = '<div class="lr-box-input"><input type="password" placeholder="Old Password"></div><div class="lr-box-input"><input type="password" placeholder="New Password"></div><div class="lr-box-input"><input type="password" placeholder="Confirm Password"></div><button id="btnChanged">Change</button>';
+        var dom = '<div class="lr-box-input"><input type="password" placeholder="Old Password"></div><div class="lr-box-input"><input type="password" placeholder="New Password"></div><div class="lr-box-input"><input type="password" placeholder="Confirm Password"></div><button id="btnChanged">' + l10n.layout.change + '</button>';
         self.append(dom);
         _layout.bindChanged($('#btnChanged'), $('.lr-box').find('input'));
     },

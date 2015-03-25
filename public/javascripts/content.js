@@ -7,25 +7,25 @@ var _content = {
         var list = [], flagInfo = '', header = $('#header');
         switch (self.data('requestURL')) {
             case 'allPostList': {
-                flagInfo = '<span class="home">Home</span> > <span class="home-all-post">All Articles</span>';
+                flagInfo = '<span class="home">' + l10n.content.home + '</span> > <span class="home-all-post">' + l10n.content.aa + '</span>';
             } break;
             case 'userPostList': {
-                flagInfo = '<span class="home">Home</span> > <span class="home-all-post">All Articles</span> > ' + (data['list'][0]['creatorName'] + '\'s Articles');
+                flagInfo = '<span class="home">' + l10n.content.home + '</span> > <span class="home-all-post">' + l10n.content.aa + '</span> > ' + (data['list'][0]['creatorName'] + l10n.content.sa);
             } break;
             case 'userPostListById': {
-                flagInfo = '<span class="home">Home</span> > <span class="home-all-post">All Articles</span> > ' + (data['list'][0]['creatorName'] + '\'s Articles');
+                flagInfo = '<span class="home">' + l10n.content.home + '</span> > <span class="home-all-post">' + l10n.content.aa + '</span> > ' + (data['list'][0]['creatorName'] + l10n.content.sa);
             } break;
             case 'allPostByCategory': {
-                flagInfo = '<span class="home">Home</span> > <span class="home-all-post">All Articles</span> > Category: ' + data['selectCate'];
+                flagInfo = '<span class="home">' + l10n.content.home + '</span> > <span class="home-all-post">' + l10n.content.aa + '</span> > ' + l10n.content.category + data['selectCate'];
             } break;
             case 'allPostByTag': {
-                flagInfo = '<span class="home">Home</span> > <span class="home-all-post">All Articles</span> > Tag: ' + data['selectTag'];
+                flagInfo = '<span class="home">' + l10n.content.home + '</span> > <span class="home-all-post">' + l10n.content.aa + '</span> > ' + l10n.content.tag + data['selectTag'];
             } break;
             case 'taskPostList': {
-                flagInfo = '<span class="home">Home</span> > <span class="home-all-post">All Articles</span> > Task Article';
+                flagInfo = '<span class="home">' + l10n.content.home + '</span> > <span class="home-all-post">' + l10n.content.aa + '</span> > ' + l10n.content.ta;
             } break;
             default: {
-                flagInfo = 'Other';
+                flagInfo = l10n.content.other;
             }
         }
 
@@ -59,7 +59,7 @@ var _content = {
         }
     },
     renderNavi: function (self) {
-        var dom = '<div class="main-holder"><div class="view"><img src="../images/Taopo_cover.png" alt="Vocabulary"/><div class="info"><h5>Vocabulary</h5>Vocabulary List<div class="btn"><span id="btnUserAddWord" class="icon-plus" title="Add A Vocabulary"></span><span id="btnUserListWord" class="icon-list" title="User Vocabulary List"></span></div></div></div><div class="view"><img src="../images/Ciudad_cover.png" alt="Reading"/><div class="info"><h5>Reading</h5>Reading Article<div class="btn"><span id="btnUserAddPost" class="icon-plus" title="Add A Article"></span><span id="btnUserListPost" class="icon-list" title="User Article List"></span></div></div></div></div>';
+        var dom = '<div class="main-holder"><div class="view"><img src="../images/Taopo_cover.png" alt="Vocabulary"/><div class="info"><h5>' + l10n.content.vb + '</h5>' + l10n.content.vl + '<div class="btn"><span id="btnUserAddWord" class="icon-plus" title="Add A Vocabulary"></span><span id="btnUserListWord" class="icon-list" title="User Vocabulary List"></span></div></div></div><div class="view"><img src="../images/Ciudad_cover.png" alt="Reading"/><div class="info"><h5>' + l10n.content.reading + '</h5>' + l10n.content.ra + '<div class="btn"><span id="btnUserAddPost" class="icon-plus" title="Add A Article"></span><span id="btnUserListPost" class="icon-list" title="User Article List"></span></div></div></div></div>';
         self.append(dom);
         _content.showView();
         _content.bindCRUD();
