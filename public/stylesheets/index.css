@@ -13,6 +13,12 @@ body {
 .cb {
     clear: both;
 }
+.dn {
+    display: none;
+}
+.cp {
+    cursor: pointer;
+}
 
 /******************************Header****************************/
 #header {
@@ -693,7 +699,7 @@ section {
 }
 .w-detail-desc-pos .explanation {
     float: left;
-    margin-left: 50px;
+    /*margin-left: 50px;*/
 }
 .w-detail-desc .vb-temp-add input {
     width: 175px;
@@ -709,6 +715,32 @@ section {
     font-size: 18px;
     margin-right: 10px;
     color: green;
+}
+.w-detail-menu {
+    margin-top: 20px;
+}
+.w-detail-menu ul {
+    /*margin-left: -38px;*/
+}
+.w-detail-menu ul li {
+    list-style-type: none;
+    float: left;
+    margin-right: 60px;
+    background-color: #ccc;
+    width: 60px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: "TelexRegular", "Segoe UI", "Microsoft YaHei", sans-serif;
+    transition: color .2s ease-in, background-color .2s ease-in;
+}
+.w-detail-menu ul li:hover {
+    background-color: green;
+    color: #fff;
+}
+.menu-default {
+    background-color: green!important;
+    color: #fff!important;
 }
 
 /******************************************dynamic page*************************************************/

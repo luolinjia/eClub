@@ -8,7 +8,7 @@ $(function() {
     _layout.showLRBox(userIcon);
     _layout.bindeClub();
     // show footer detail
-		_layout.showFooter();
+    _layout.showFooter();
 });
 
 var _layout = {
@@ -202,25 +202,24 @@ var _layout = {
             if (res) _layout.setLoginParams(res);
         });
     },
-		showFooter: function () {
-				// bind click
-				var footer = $('#footer');
-				$('#content').resize(function () {
-						var bodyH = $('body').height(), windowH = $(window).height();
-						if (bodyH < windowH) {
-								footer.css({'position': 'fixed', 'bottom': '0'});
-						} else {
-								footer.css({'position': 'relative', 'bottom': ''});
-						}
-				});
+    showFooter: function () {
+        // bind click
+        var footer = $('#footer');
+        $('#content').resize(function () {
+            var bodyH = $('body').height(), windowH = $(window).height();
+            if (bodyH < windowH) {
+                    footer.css({'position': 'fixed', 'bottom': '0'});
+            } else {
+                    footer.css({'position': 'relative', 'bottom': ''});
+            }
+        });
 
-
-				footer.click(function () {
-						$('.footer-detail').slideToggle('fast');
-				}).mouseleave(function () {
-						$('.footer-detail').slideUp('fast');
-				});
-		}
+        footer.click(function () {
+            $('.footer-detail').slideToggle('fast');
+        }).mouseleave(function () {
+            $('.footer-detail').slideUp('fast');
+        });
+    }
 };
 
 var reqHeader = {

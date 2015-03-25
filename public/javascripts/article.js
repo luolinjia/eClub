@@ -84,10 +84,13 @@ var _article = {
             var tItem = data['tags'][j];
             tags.push('<li><a href="#"><span>' + tItem + '</span></a></li>');
         }
-        var dom = '<div class="p-back"><span class="icon-arrow-left"></span></div><div class="p-detail"><div class="p-category">' + categoriesList.join('') + '</div><div style="clear:both;margin-bottom:-50px;"></div><div class="p-title" data-articleid="' + data['_id'] + '" data-articletask="' + data['taskDate'] + '"><h1>' + data['title'] + '</h1></div><div class="p-meta"><div class="dateblock"><span class="date">' + data['createDate'] + '</span><span>Views(' + data['pv'] + ')</span><span class="icon-heart btn-like"></span><span>(' + (data['likes'] !== undefined ? data['likes'].length : 0) + ')</span></div><div class="author"><div data-userid="' + data['creatorID'] + '" class="author-div1"><a href="javascript:;"><span class="author-name">' + data['creatorName'] + '</span></a></div><div class="author-div2"><audio src="' + url + '" controls="" autoplay></audio></div><div class="cb"></div></div></div><div class="p-text">' + data['content'] + '</div><div class="p-tag"><ul>' + tags.join('') + '</ul></div><div class="cb"></div><div class="p-comment"><div class="p-comment-state"><span><span id="commentNo">' + data['commentNum'] + '</span> comments</span></div><hr/><div class="p-comment-input"><textarea name="commentIn" id="commentIn" placeholder="Start a discussion..."></textarea><button id="btnComments">Submit</button></div><div class="p-comment-article"><ul></ul></div></div></div>';
+        var dom = '<div class="p-back"><span class="icon-arrow-left"></span></div><div class="p-detail"><div class="p-category">' + categoriesList.join('') + '</div><div style="clear:both;margin-bottom:-50px;"></div><div class="p-title" data-articleid="' + data['_id'] + '" data-articletask="' + data['taskDate'] + '"><h1>' + data['title'] + '</h1></div><div class="p-meta"><div class="dateblock"><span class="date">' + data['createDate'] + '</span><span>Views(' + data['pv'] + ')</span><span class="icon-heart btn-like"></span><span>(' + (data['likes'] !== undefined ? data['likes'].length : 0) + ')</span></div><div class="author"><div data-userid="' + data['creatorID'] + '" class="author-div1"><a href="javascript:;"><span class="author-name">' + data['creatorName'] + '</span></a></div><div class="author-div2"><audio src="' + url + '" controls="" autoplay></audio></div><div class="cb"></div></div></div><div class="p-text">' + data['content'] + '</div><div class="p-tag"><ul>' + tags.join('') + '</ul></<div></div><div class="cb"></div><div class="p-comment"><div class="p-comment-state"><span><span id="commentNo">' + data['commentNum'] + '</span> comments</span></div><hr/><div class="p-comment-input"><textarea name="commentIn" id="commentIn" placeholder="Start a discussion..."></textarea><button id="btnComments">Submit</button></div><div class="p-comment-article"><ul></ul></div></div></div>';
+
+        var sourceDom = '<div class="p-sourceUrl"><span>Source Website: </span><span><a href="' + data['sourceUrl'] + '" target="_blank">' + data['sourceUrl'] + '</a></span></div>';
 
         self.append(dom);
         header.data('likes', data['likes'] !== undefined ? data['likes'] : '0');
+        if (data['sourceUrl'] !== undefined) {_article.isShowSourceUrl(self, sourceDom);}
         _article.renderCommentsList($('ul', $('.p-comment')), data['comments']);
         _article.bindPostClicks(self);
         _article.bindComments();
@@ -105,12 +108,16 @@ var _article = {
         }
     },
     renderPushPost: function (self) {
-        var dom = '<div class="p-add"><div class="p-add-fun"><h2>Push Article</h2></div><div class="p-add-title"><span><div class="mb5">Title</div><input type="text" placeholder="Add A Title"/></span></div><div class="p-add-category"><span><div class="mb5">Category</div><button class="selectedCate">Life</button><button>Economics</button><button>Science</button><button>Society</button><button>Technology</button><button>Uncategorized</button></span></div><div class="p-add-media"><a href="javascript:;" class="file">Upload mp3<form id="uploadAudio" name="uploadAudio" method="post" enctype="multipart/form-data" onsubmit="javascript: return false;"><input type="file"id="fulAudio" name="fulAudio" accept="audio/*" ></form></a></div><div class="mb5">Main Content</div><textarea id="editor" name="editor" placeholder="Type your text here..."></textarea><div class="p-add-tag"><span><div class="mb5">Tag</div><input type="text" placeholder="Add A Tag Or Multiple Tags, Splitted by ,"/></span></div><div class="p-add-source"><span><div class="mb5">Source URL</div><input type="text" placeholder="Source Website"/></span></div><button class="key">PUSH</button><button>CANCEL</button></div>';
+        var dom = '<div class="p-add"><div class="p-add-fun"><h2>Push Article</h2></div><div class="p-add-title"><span><div class="mb5">Title</div><input type="text" placeholder="Add A Title"/></span></div><div class="p-add-category"><span><div class="mb5">Category</div><button class="selectedCate">Life</button><button>Economics</button><button>Science</button><button>Society</button><button>Technology</button><button>Uncategorized</button></span></div><div class="p-add-media"><a href="javascript:;" class="file">Upload mp3<form id="uploadAudio" name="uploadAudio" method="post" enctype="multipart/form-data" onsubmit="javascript: return false;"><input type="file" id="fulAudio" name="fulAudio" accept="audio/*" ></form></a></div><div class="mb5">Main Content</div><textarea id="editor" name="editor" placeholder="Type your text here..."></textarea><div class="p-add-tag"><span><div class="mb5">Tag</div><input type="text" placeholder="Add A Tag Or Multiple Tags, Splitted by ,"/></span></div><div class="p-add-source"><span><div class="mb5">Source URL</div><input id="sourceURL" type="text" placeholder="Source Website"/></span></div><button class="key">PUSH</button><button>CANCEL</button></div>';
         self.append(dom);
         _article.initWysiwyg($('#editor', self));
         _article.bindCate($('.p-add-category').find('button'));
         _article.checkPushPostForm();
         _article.submitPushPost(self);
+    },
+    isShowSourceUrl: function (self, dom) {
+        self.append(dom);
+        $('.p-sourceUrl').insertAfter('.p-tag');
     },
     bindPostClicks: function (self) {
 
@@ -156,7 +163,7 @@ var _article = {
                     $('#commentNo').text(data['data'].length);
                     // record the visitor if it's task post
                     if (isTask !== undefined) {
-                        reqArticle.addVisitor({data: {'articleID': articleId}}, '');
+                        reqArticle.addVisitor({data: {'articleID': articleId}}, function(data) {console.log(data);});
                     }
                 } else {
                     alert('add failed!');
@@ -265,7 +272,8 @@ var _article = {
                             'content': articleContent,
                             'tags': tags,
                             'categories': categories,
-                            'url':url
+                            'url':url,
+                            'sourceUrl': $('#sourceURL').val()
                         };
 
                         reqArticle.pushPost({data: articleObj}, function (data) {

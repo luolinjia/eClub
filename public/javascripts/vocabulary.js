@@ -9,42 +9,84 @@ var _vb = {
     renderVbCloud: function (self, data) {
 
         var tempData = [{
+            '_id': '343241413123dsfe3243243',
             'spelling': 'vocabulary',
             'symbol':'[və\'kæbjəlɛri]',
-            'descriptions': [{
+            'creators': [{
                 'creatorID': '5506c75d007108bb75cd03c7',
-                'creatorName': 'llj',
+                'creatorName': 'llj'
+            }],
+            'descriptions': [{
+                'rank': '1',
                 'pos': 'n',
-                'chinese': '词汇，词汇量',
-                'english': 'word',
+                'words': [{
+                    'chinese': '词汇，词汇量',
+                    'english': 'word',
+                    'createDate': '03-18-2015 12:30',
+                    'tag': 'llj'
+                }, {
+                    'chinese': '语言量',
+                    'english': 'come on',
+                    'createDate': '03-18-2015 12:30',
+                    'tag': 'llj'
+                }],
                 'phrases': [{
                     'createDate': '03-18-2015 12:30',
                     'english': 'xx',
                     'chinese': '叉叉',
-                    'interpret': 'xxxxx'
+                    'tag': 'xxxxx'
                 }, {
                     'createDate': '03-18-2015 12:30',
                     'english': 'take off',
                     'chinese': '起飞',
-                    'interpret': 'xxxxx'
+                    'tag': 'xxxxx'
                 }],
                 'sentences': [{
                     'createDate': '03-18-2015 12:30',
                     'english': 'waoo, that\'s good',
-                    'chinese': '那很好啊！'
+                    'chinese': '那很好啊！',
+                    'tag': 'llj'
                 }, {
                     'createDate': '03-18-2015 12:30',
                     'english': 'good luck',
-                    'chinese': '好运！'
+                    'chinese': '好运！',
+                    'tag': 'llj'
+                }]
+            }, {
+                'rank': '2',
+                'pos': 'adj',
+                'words': [{
+                    'chinese': '啥',
+                    'english': 'oh yes',
+                    'createDate': '03-18-2015 12:30',
+                    'tag': 'llj'
+                }],
+                'phrases': [{
+                    'createDate': '03-18-2015 12:30',
+                    'english': 'wwww',
+                    'chinese': '呜呜呜',
+                    'tag': 'xxxxx'
+                }, {
+                    'createDate': '03-18-2015 12:30',
+                    'english': 'go home',
+                    'chinese': '回家',
+                    'tag': 'xxxxx'
+                }],
+                'sentences': [{
+                    'createDate': '03-18-2015 12:30',
+                    'english': 'waoo, that\'s goodsssssssssssssss',
+                    'chinese': '那很好啊！',
+                    'tag': 'llj'
+                }, {
+                    'createDate': '03-18-2015 12:30',
+                    'english': 'good luck',
+                    'chinese': '好运！',
+                    'tag': 'llj'
                 }]
             }],
             'freq': 17,
-            'creatorID': '5506c75d007108bb75cd03c7',
-            'creatorName': 'llj',
-            'editorID': '5506c75d007108bb75cd03c7',
-            'editorName': 'llj',
-            'createDate': '03-18-2015 12:30',
-            'updateDate': '03-18-2015 12:30'
+            'pv': 2,
+            'url': ''
         },{
             'spelling': 'interpret',
             'symbol':'ɪn\'tɝprɪt',
@@ -157,12 +199,13 @@ var _vb = {
 
         self.empty();
 
-        var descList = [], desc_size = data['descriptions'].length, desc_i = 0;
+        var descList = [], desc_size = data['descriptions'].length, desc_i = 0, mList = [];
 
         for (; desc_i < desc_size; desc_i++) {
             var item = data['descriptions'][desc_i],
                 pList = [], pSize = item['phrases'].length, p_i = 0,
-                sList = [], sSize = item['sentences'].length, s_i = 0;
+                sList = [], sSize = item['sentences'].length, s_i = 0,
+                wList = [], wSize = item['words'].length, w_i = 0;
 
             for (; p_i < pSize; p_i++) {
                 var p_item = item['phrases'][p_i];
@@ -173,27 +216,101 @@ var _vb = {
                 var s_item = item['sentences'][s_i];
                 sList.push('<li><div><div class="english">' + s_item['english'] + '</div><div class="chinese">' + s_item['chinese'] + '</div></div></li>');
             }
-            descList.push('<div class="w-detail-desc"><div class="w-detail-desc-pos"><div class="pos"><i>' + item['pos'] + '</i></div><div class="explanation"><div class="w-detail-desc-english">' + item['english'] + '</div><div class="w-detail-desc-chinese">' + item['chinese'] + '</div></div></div><div style="clear:both;"></div><div class="w-detail-desc-phrase"><h4>Phrases<span class="icon-plus" style="margin-left: 10px; font-size: 18px; display: none;"></span></h4><div class="phrase"><ul>' + pList.join('') + '</ul></div></div><div class="w-detail-desc-sentence"><h4>Sentences<span class="icon-plus" style=""></span></h4><div class="sentence"><ul>' + sList.join('') + '</ul></div></div></div>');
+
+            for (; w_i < wSize; w_i++) {
+                var w_item = item['words'][w_i];
+                wList.push('<div class="w-detail-desc-english">' + w_item['english'] + '</div><div class="w-detail-desc-chinese">' + w_item['chinese'] + '</div>')
+            }
+
+            mList.push('<li class="' + (desc_i === 0 ? 'menu-default': '') + '"><i>' + item['pos'] + '</i></li>');
+
+            descList.push('<div class="w-detail-desc ' + (desc_i === 0 ? '' : 'dn') + '" data-pos="' + item['pos'] + '"><div class="w-detail-desc-pos"><div class="explanation">' + wList.join('') + '</div></div><div class="cb"></div><div class="w-detail-desc-phrase"><h4>Phrases<span class="icon-plus" style="margin-left: 10px; font-size: 18px; display: none;"></span></h4><div class="phrase"><ul>' + pList.join('') + '</ul></div></div><div class="w-detail-desc-sentence"><h4>Sentences<span class="icon-plus" style=""></span></h4><div class="sentence"><ul>' + sList.join('') + '</ul></div></div></div>');
         }
-        var dom = '<div class="w-detail"><div class="w-detail-spelling">' + data['spelling'] + '</div><div class="w-detail-symbol">' + data['symbol'] + '<span class="icon-volume-medium"></span></div>' + descList.join('') + '</div>';
+        var dom = '<div class="w-detail" data-vbid="' + data['_id'] + '"><div class="w-detail-spelling">' + data['spelling'] + '</div><div class="w-detail-symbol">' + data['symbol'] + '<span class="icon-volume-medium"></span></div><div class="w-detail-menu"><ul>' + mList.join('') + '</ul></div><div class="cb"></div>' + descList.join('') + '</div>';
 
         self.append(dom);
-        _vb.bindAddToWord();
+        _vb.selectPos();
+        _vb.bindIconHover();
+        _vb.bindShowAddIcon(data['descriptions']);
     },
-    bindAddToWord: function () {
+    selectPos: function () {
+        $('li', $('.w-detail-menu')).click(function () {
+            var thiz = $(this), desc = $('.w-detail-desc'), pos = thiz.text(), i = 0, size = desc.length;
+            desc.addClass('dn');
+            for (; i < size; i++) {
+                if (pos === $(desc[i]).attr('data-pos')) {
+                    $(desc[i]).removeClass('dn');
+                    thiz.siblings('.menu-default').removeClass('menu-default');
+                    thiz.addClass('menu-default');
+                    _vb.removeTempAdd();
+                }
+            }
+        });
+    },
+    bindIconHover: function () {
         $('h4', $('.w-detail-desc')).mouseover(function () {
             $(this).find('span').fadeIn('fast');
         }).mouseleave(function () {
             $(this).find('span').fadeOut('fast');
         });
-        $('h4', $('.w-detail-desc-phrase')).find('span').click(function () {
-            var inputForm = '<li><div class="vb-temp-add"><span><input type="text" placeholder="Input Phrase"/></span><span><input type="text" placeholder="Chinese"/></span><span class="icon-checkmark"></span><span class="icon-close"></span></div></li>';
-            $('.phrase', $('.w-detail-desc-phrase')).find('ul').append(inputForm);
-        });
-        $('h4', $('.w-detail-desc-sentence')).find('span').click(function () {
-            var inputForm = '<li><div class="vb-temp-add"><div><input type="text" placeholder="English"/></div><div><input type="text" placeholder="Chinese"/><span class="icon-checkmark"></span><span class="icon-close"></span></div></div></li>';
-            $('.sentence', $('.w-detail-desc-sentence')).find('ul').append(inputForm);
-        });
+    },
+    bindShowAddIcon: function (data) {
+
+        var i = 0, size = data.length,
+            inputPhrase = '<li><div class="vb-temp-add"><span><input id="eVbPhrase" type="text" placeholder="Input Phrase"/></span><span><input id="cVbPhrase" type="text" placeholder="Chinese"/></span><span class="icon-checkmark"></span><span class="icon-close"></span></div></li>',
+            inputSentence = '<li><div class="vb-temp-add"><div><input id="eVbSentence" type="text" placeholder="English"/></div><div><input id="cVbSentence" type="text" placeholder="Chinese"/><span class="icon-checkmark"></span><span class="icon-close"></span></div></div></li>';
+
+        for (; i < size; i++) {
+            var item = data[i], desc = $('div[data-pos="' + item['pos'] + '"]');
+
+            $('h4', $('.w-detail-desc-phrase', desc)).find('span').click(function () {
+                var phraseDiv = $('.phrase', $('.w-detail-desc-phrase', $('div[data-pos="' + ($('.menu-default').text()) + '"]')));
+                _vb.removeTempAdd();
+                phraseDiv.find('ul').append(inputPhrase);
+                // bind the close icon
+                $('.icon-close').addClass('cp').attr('title', 'Cancel').click(function () {
+                    _vb.removeTempAdd();
+                });
+                // bind the add icon
+                $('.icon-checkmark', phraseDiv).addClass('cp').attr('title', 'Add').click(function () {
+                    var phraseObj = {
+                        'vocabularyID': $('.w-detail').attr('data-vbid'),
+                        'english': $('#eVbPhrase').val(),
+                        'chinese': $('#cVbPhrase').val()
+                    };
+//                    reqVocabulary.addPhrase({data: phraseObj}, function (data) {
+//                        _vb.removeTempAdd();
+//                         console.log('success!' + data);
+//                    });
+                    _vb.removeTempAdd();
+                    phraseDiv.find('ul').append('<li><div><span>' + phraseObj['english'] + '</span><span>' + phraseObj['chinese'] + '</span></div></li>');
+                });
+            });
+            $('h4', $('.w-detail-desc-sentence', desc)).find('span').click(function () {
+                var sentenceDiv = $('.sentence', $('.w-detail-desc-sentence', $('div[data-pos="' + ($('.menu-default').text()) + '"]')))
+                _vb.removeTempAdd();
+                sentenceDiv.find('ul').append(inputSentence);
+                $('.icon-close').addClass('cp').attr('title', 'Cancel').click(function () {
+                    _vb.removeTempAdd();
+                });
+                $('.icon-checkmark', sentenceDiv).addClass('cp').attr('title', 'Add').click(function () {
+                    var sentenceObj = {
+                        'vocabularyID': $('.w-detail').attr('data-vbid'),
+                        'english': $('#eVbSentence').val(),
+                        'chinese': $('#cVbSentence').val()
+                    };
+//                    reqVocabulary.addSentence({data: sentenceObj}, function (data) {
+//                        _vb.removeTempAdd();
+//                        console.log('success!' + data);
+//                    });
+                    _vb.removeTempAdd();
+                    sentenceDiv.find('ul').append('<li><div><div class="english">' + sentenceObj['english'] + '</div><div class="chinese">' + sentenceObj['chinese'] + '</div></div></li>');
+                });
+            });
+        }
+    },
+    removeTempAdd: function () {
+        $('.vb-temp-add').parent().remove();
     }
 };
 
@@ -202,6 +319,28 @@ var reqVocabulary = {
         $.ajax($.extend({
             type: 'POST',
             url: '/vocabulary/all',
+            dataType: 'JSON'
+        }, options, true)).done(function(data){
+            if (data && $.isFunction(callback)) {
+                callback(data);
+            }
+        });
+    },
+    addPhrase: function (options, callback) {
+        $.ajax($.extend({
+            type: 'POST',
+            url: '/vocabulary/addphrase',
+            dataType: 'JSON'
+        }, options, true)).done(function(data){
+            if (data && $.isFunction(callback)) {
+                callback(data);
+            }
+        });
+    },
+    addSentence: function (options, callback) {
+        $.ajax($.extend({
+            type: 'POST',
+            url: '/vocabulary/addsentence',
             dataType: 'JSON'
         }, options, true)).done(function(data){
             if (data && $.isFunction(callback)) {
