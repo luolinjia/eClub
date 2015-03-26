@@ -110,8 +110,17 @@ var _content = {
             .click(function() {
                 var self = $('#content');
                 self.empty();
-                _vb.renderVbCloud(self, '');
+				reqVocabulary.getAll({}, function (data) {
+					_vb.renderVbCloud(self, data['data']['list']);
+				});
             });
+		$('#btnUserAddWord').click(function (e) {
+			e.stopPropagation();
+			var self = $('#content');
+			self.empty();
+			_vb.renderAddWord(self);
+		});
+
 
         var btnPost = $('#btnUserListPost');
         btnPost.parents('.view')

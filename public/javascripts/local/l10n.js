@@ -30,7 +30,23 @@ var l10n = {
         'ra': 'Reading Article'
     },
     'vb': {
-
+		'pv': 'Push Vocabulary',
+		'spelling': 'Spelling',
+		'ps': 'Phonetic Symbol',
+		'pos': 'Part Of Speech',
+		'n': 'n.',
+		'a': 'a.',
+		'ad': 'ad.',
+		'v': 'v.',
+		'pron': 'pron.',
+		'conj': 'conj.',
+		'prep': 'prep.',
+		'art': 'art.',
+		'num': 'num.',
+		'interj': 'interj.',
+		'meaning': 'Meaning',
+		'phrase': 'Phrase',
+		'sentence': 'Sentence'
     },
     'article': {
         'comment': ' comments',

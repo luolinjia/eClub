@@ -87,7 +87,8 @@ var _vb = {
             'freq': 17,
             'pv': 2,
             'url': ''
-        },{
+        },
+			{
             'spelling': 'interpret',
             'symbol':'ɪn\'tɝprɪt',
             'descriptions': [{
@@ -112,7 +113,8 @@ var _vb = {
             'editorName': 'llj',
             'createDate': '03-18-2015 12:30',
             'updateDate': '03-18-2015 12:30'
-        }, {
+        },
+			{
             'spelling': 'something',
             'symbol':'\'sʌmθɪŋ',
             'descriptions': [{
@@ -137,7 +139,8 @@ var _vb = {
             'editorName': 'llj',
             'createDate': '03-18-2015 12:30',
             'updateDate': '03-18-2015 12:30'
-        }, {
+        },
+			{
             'spelling': 'matter',
             'symbol':'\'mætɚ',
             'descriptions': [{
@@ -164,11 +167,12 @@ var _vb = {
             'updateDate': '03-18-2015 12:30'
         }];
 
-        var list = [], i = 0, size = tempData.length;
+
+        var list = [], i = 0, size = data.length;
 
         for (; i < size; i++) {
-            var item = tempData[i];
-            list.push('<a href="javascript:;" title="' + item['spelling'] + '" rel="' + item['freq'] + '">' + item['spelling'] + '</a>');
+            var item = data[i];
+            list.push('<a href="javascript:;" data-vbid="' + item['id'] + '" title="' + item['spelling'] + '" rel="' + item['freq'] + '">' + item['spelling'] + '</a>');
         }
 
         var dom = '<div id="tag_cloud">' + list.join('') + '</div>';
@@ -191,8 +195,10 @@ var _vb = {
                 $(this).css({'color': recentColor, 'font-size': recentSize});
             });
         $('a', self).click(function () {
-            var thiz = $(this), id = thiz.text();
-            _vb.renderWordDetail(self, tempData[0]);
+            var thiz = $(this), id = thiz.attr('data-vbid');
+			reqVocabulary.getVb({data: {'vocabularyID': id}}, function(data) {
+				_vb.renderWordDetail(self, data['data']);
+			});
         });
     },
     renderWordDetail: function (self, data) {
@@ -233,6 +239,12 @@ var _vb = {
         _vb.bindIconHover();
         _vb.bindShowAddIcon(data['descriptions']);
     },
+	renderAddWord: function (self) {
+		var dom = '<div class="v-add"><div class="v-add-title"><h2>' + l10n.vb.pv + '</h2></div><div class="v-add-spelling"><div class="mb10">' + l10n.vb.spelling + '</div><input type="text" placeholder="Vocabulary Spelling"/></div><div class="v-add-symbol"><div class="mb10">' + l10n.vb.ps + '</div><input type="text" placeholder="Phonetic Symbol"/></div><div class="v-add-desc"><div class="v-add-pos"><div class="mb10">' + l10n.vb.pos + '</div><div class="v-add-pos-list"><ul><li class="selectedPos">' + l10n.vb.n + '</li><li>' + l10n.vb.a + '</li><li>' + l10n.vb.ad + '</li><li>' + l10n.vb.v + '</li><li>' + l10n.vb.pron + '</li><li>' + l10n.vb.conj + '</li><li>' + l10n.vb.prep + '</li><li>' + l10n.vb.art + '</li><li>' + l10n.vb.num + '</li><li>' + l10n.vb.interj + '</li></ul></div></div><div class="cb"></div><div class="v-add-word"><div class="mb10">' + l10n.vb.meaning + '</div><div><input type="text" class="mr10" placeholder="English"/><input type="text" placeholder="Chinese"/></div></div><div class="v-add-phrase"><div class="mb10">' + l10n.vb.phrase + '</div><div><input type="text" class="mr10" placeholder="English"/><input type="text" placeholder="Chinese"/></div></div><div class="v-add-sentence"><div class="mb10">' + l10n.vb.sentence + '</div><div><input type="text" class="v-add-sentence-e" placeholder="English"/><input type="text" class="v-add-sentence-c" placeholder="Chinese"/></div></div></div><div class="v-add-post"><button class="key">' + l10n.article.push + '</button><button id="cancelWord">' + l10n.article.cancel + '</button></div></div>';
+		self.append(dom);
+		_vb.bindSelectedPos($('li', $('.v-add-pos-list')));
+		_vb.submitPushWord(self);
+	},
     selectPos: function () {
         $('li', $('.w-detail-menu')).click(function () {
             var thiz = $(this), desc = $('.w-detail-desc'), pos = thiz.text(), i = 0, size = desc.length;
@@ -311,14 +323,66 @@ var _vb = {
     },
     removeTempAdd: function () {
         $('.vb-temp-add').parent().remove();
-    }
+    },
+	bindSelectedPos: function (o) {
+		o.click(function () {
+			var thiz = $(this);
+			if ($('.selectedPos').length === 1) {
+				o.removeClass('selectedPos');
+			}
+			thiz.toggleClass('selectedPos');
+		});
+	},
+	submitPushWord: function(self) {
+		$('.key', self).click(function () {
+			var flag = true;
+			if (flag) {
+				var vAddWord = $('.v-add-word'), vAddPhrase = $('.v-add-phrase'), vAddSentence = $('.v-add-sentence');
+				var wordArr = [{
+					'chinese': $($('input', vAddWord)[1]).val(),
+					'english': $($('input', vAddWord)[0]).val()
+				}];
+				var phrasesArr = [{
+					'chinese': $($('input', vAddPhrase)[1]).val(),
+					'english': $($('input', vAddPhrase)[0]).val()
+				}];
+				var sentencesArr = [{
+					'chinese': $($('input', vAddSentence)[1]).val(),
+					'english': $($('input', vAddSentence)[0]).val()
+				}];
+				var vbObj = {
+					'spelling': $('input', $('.v-add-spelling')).val(),
+					'symbol': $('input', $('.v-add-symbol')).val(),
+					'descriptions': [{
+						'pos': $('.v-add-pos-list', self).find('.selectedPos').text(),
+						'words': wordArr,
+						'phrases': phrasesArr,
+						'sentences': sentencesArr
+					}]
+				};
+				reqVocabulary.addVb({data: vbObj}, function (data) {
+					if (data['code'] === 200) {
+						console.log('add word successfully!');
+						var self = $('#content');
+						self.empty();
+						reqVocabulary.getAll({}, function (data) {
+							_vb.renderVbCloud(self, data['data']['list']);
+						});
+					}
+				});
+			}
+		});
+		$('#cancelWord').click(function () {
+			_layout.bindToHome();
+		});
+	}
 };
 
 var reqVocabulary = {
     getAll: function (options, callback) {
         $.ajax($.extend({
             type: 'POST',
-            url: '/vocabulary/all',
+            url: '/vocabulary/showall',
             dataType: 'JSON'
         }, options, true)).done(function(data){
             if (data && $.isFunction(callback)) {
@@ -326,6 +390,28 @@ var reqVocabulary = {
             }
         });
     },
+	getVb: function (options, callback) {
+		$.ajax($.extend({
+			type: 'POST',
+			url: '/vocabulary/showdetail',
+			dataType: 'JSON'
+		}, options, true)).done(function(data){
+			if (data && $.isFunction(callback)) {
+				callback(data);
+			}
+		});
+	},
+	addVb: function (options, callback) {
+		$.ajax($.extend({
+			type: 'POST',
+			url: '/vocabulary/add',
+			dataType: 'JSON'
+		}, options, true)).done(function(data){
+			if (data && $.isFunction(callback)) {
+				callback(data);
+			}
+		});
+	},
     addPhrase: function (options, callback) {
         $.ajax($.extend({
             type: 'POST',

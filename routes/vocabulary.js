@@ -141,7 +141,7 @@ router.post('/add', function (req, res, next) {
                     creatorInfo.creatorID = muserid;
                     creatorInfo.creatorName = req.session['userName'];
                     creatorInfo.tag = tag;
-                    creator[0] = creatorInfo
+                    creator[0] = creatorInfo;
                     req.body.creators = creator;
                     for (var index = 0; req.body.descriptions.length > index; index++) {
                         for (var windex = 0; req.body.descriptions[index].words.length > windex; windex++) {
