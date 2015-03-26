@@ -846,6 +846,82 @@ section {
     color: #ef4036;
 }
 
+/**********************add word************************************/
+.v-add {
+    margin-top: 80px;
+}
+.v-add-title {
+    margin: 20px 0;
+}
+.v-add input {
+    font-family: "TelexRegular", "Segoe UI", "Microsoft YaHei", sans-serif;
+    border: 2px solid #999;
+    height: 25px;
+    outline: none;
+    padding: 5px;
+    width: 200px;
+}
+.mb10 {
+    margin-bottom: 10px;
+}
+.mr10 {
+    margin-right: 10px;
+}
+.v-add-spelling, .v-add-symbol, .v-add-pos, .v-add-word, .v-add-phrase, .v-add-sentence {
+    margin-bottom: 20px;
+}
+.v-add-pos-list {
+    margin-bottom: 70px;
+}
+.v-add-pos-list ul {
+    /*margin-left: -40px;*/
+}
+.v-add-pos-list ul li {
+    list-style-type: none;
+    width: 60px;
+    background-color: #888;
+    border-bottom: 1px solid #999;
+    padding: 5px;
+    float: left;
+    color: #bbb;
+    cursor: pointer;
+    transition: color .2s ease-in, background-color .2s ease-in;
+}
+.v-add-pos-list ul li:hover {
+    background-color: #127F78;
+    color: #f2f2f2;
+}
+.selectedPos {
+    background-color: #127F78!important;
+    color: #fff!important;
+}
+.v-add button {
+    font-family: TelexRegular, Segoe UI, Microsoft YaHei, sans-serif;
+    font-weight: bold;
+    width: 100px;
+    height: 50px;
+    cursor: pointer;
+    background-color: #fff;
+    border: 2px solid #999;
+    margin-bottom: 20px;
+    transition: color .2s ease-in, background-color .2s ease-in, border-color .2s ease-in;
+}
+.v-add button:hover {
+    background-color: #ef4036;
+    color: #ffffff;
+    border-color: #ef4036;
+}
+.v-add .key {
+    color: #ef4036;
+    margin-right: 10px;
+}
+.v-add-sentence-e, .v-add-sentence-c {
+    display: block;
+    margin-bottom: 10px!important;
+    width: 450px!important;
+}
+
+
 /**********************footer**************************************/
 #footer {
     width: 100%;
