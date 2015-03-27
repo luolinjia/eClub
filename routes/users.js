@@ -91,7 +91,7 @@ router.post('/login', function (req, res, next) {
                         }
 
                         returnData['tasknum'] = records.length;
-                        res.send({code: 200, data: returnData});
+                        res.send({code: 200, msg: 'Login successfully!', data: returnData});
                     });
                 });
             } else {

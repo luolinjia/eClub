@@ -163,10 +163,10 @@ var _article = {
                     $('#commentNo').text(data['data'].length);
                     // record the visitor if it's task post
                     if (isTask !== undefined) {
-                        reqArticle.addVisitor({data: {'articleID': articleId}}, function(data) {console.log(data);});
+                        reqArticle.addVisitor({data: {'articleID': articleId}}, function(data) {_layout.messenger(data['code'], data['msg']);});
                     }
                 } else {
-                    alert('add failed!');
+                    _layout.messenger(data['code'], data['msg']);
                 }
             });
         });
@@ -265,6 +265,8 @@ var _article = {
                     success: function (data) {
                         if (data['code'] === 200) {
                             url = data['data']['url'];
+                        } else {
+                            _layout.messenger(data['code'], data['msg']);
                         }
                         var articleContent = $('#editor').wysiwyg('shell').getHTML();
                         var articleObj = {
@@ -286,9 +288,10 @@ var _article = {
                                     _content.renderPostContent(self, data['data']);
                                 });
                             }
+                            _layout.messenger(data['code'], data['msg']);
                         });
-                    },error: function(){
-
+                    },error: function(data){
+                        _layout.messenger(data['code'], data['msg']);
                     }
                 });
             }
@@ -341,15 +344,14 @@ var _article = {
     },
     bindLike: function () {
         _article.checkLikeBtn();
-        // click the btn-like
         $('.btn-like').click(function () {
             var thiz = $(this);
             thiz.addClass('p-like');
-            // call add like interface
             reqArticle.addLike({data: {articleID: $('.p-title').attr('data-articleid')}}, function (data) {
-                console.log(data);
-                // update the like number
-                thiz.next().text('(' + data['data'].length + ')');
+                if (data['code'] === 200) {
+                    thiz.next().text('(' + data['data'].length + ')');
+                }
+                _layout.messenger(data['code'], data['msg']);
             });
         });
     },

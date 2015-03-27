@@ -360,6 +360,11 @@ var _vb = {
 						'sentences': sentencesArr
 					}]
 				};
+
+                if (wordArr[0]['chinese'] === '' && wordArr[0]['english'] === '') delete vbObj.descriptions[0]['words'];
+                if (phrasesArr[0]['chinese'] === '' && phrasesArr[0]['english'] === '') delete vbObj.descriptions[0]['phrases'];
+                if (sentencesArr[0]['chinese'] === '' && sentencesArr[0]['english'] === '') delete vbObj.descriptions[0]['sentences'];
+
 				reqVocabulary.addVb({data: vbObj}, function (data) {
 					if (data['code'] === 200) {
 						console.log('add word successfully!');
@@ -369,6 +374,7 @@ var _vb = {
 							_vb.renderVbCloud(self, data['data']['list']);
 						});
 					}
+                    _layout.messenger(data['code'], data['msg']);
 				});
 			}
 		});

@@ -22,9 +22,13 @@ var _dy = {
     },
     renderDyContent: function () {
         reqDy.showDyList({}, function(data){
-            var self = $('#content');
-            self.data('requestURL', 'showDyList');
-            _dy.renderContent(self, data['data']);
+            if (data['code'] === 200) {
+                var self = $('#content');
+                self.data('requestURL', 'showDyList');
+                _dy.renderContent(self, data['data']);
+            } else {
+                _layout.messenger(data['code'], data['msg']);
+            }
         });
     },
     bindSwitch: function() {

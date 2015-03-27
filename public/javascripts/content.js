@@ -79,6 +79,8 @@ var _content = {
                     if (data['code'] === 200) {
                         thiz.addClass('p-task');
                         thiz.parents('li').off();
+                    } else {
+                        _layout.messenger(res['code'], res['msg']);
                     }
                 });
             }
@@ -91,7 +93,11 @@ var _content = {
             self.empty();
             // get the article data from db
             reqContent.toDetailPost({data: {'articleID': dataId}}, function (data) {
-                _article.renderDetailPost(self, data['data'][0]);
+                if (data['code'] === 200) {
+                    _article.renderDetailPost(self, data['data'][0]);
+                } else {
+                    _layout.messenger(res['code'], res['msg']);
+                }
             });
         });
     },

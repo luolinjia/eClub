@@ -55,7 +55,6 @@ var _layout = {
 
         $('#btnLogin').click(function(){
 
-            // TODO validate Email and password
             if (oEmail.val() === '') {
                 $(_layout.renderTips(false, 'Email can\'t be null!')).insertAfter(oEmail.parent());
                 oEmail.css({'border-color': '#ef4036'});
@@ -77,11 +76,13 @@ var _layout = {
             }, function (res) {
                 console.log(res);
                 if (res['code'] === 510) {
-                    $(_layout.renderTips(false, res['msg'])).insertAfter(oEmail.parent());
-                    oEmail.css({'border-color': '#ef4036'});
+//                    $(_layout.renderTips(false, res['msg'])).insertAfter(oEmail.parent());
+//                    oEmail.css({'border-color': '#ef4036'});
+                    _layout.messenger(res['code'], res['msg']);
                 } else if (res['code'] === 511) {
-                    $(_layout.renderTips(false, res['msg'])).insertAfter(oPwd.parent());
-                    oPwd.css({'border-color': '#ef4036'});
+//                    $(_layout.renderTips(false, res['msg'])).insertAfter(oPwd.parent());
+//                    oPwd.css({'border-color': '#ef4036'});
+                    _layout.messenger(res['code'], res['msg']);
                 } else {
                     _layout.setLoginParams(res);
                 }
@@ -106,9 +107,10 @@ var _layout = {
         var oldPass = $(inputs[0]), newPass = $(inputs[1]), confirmPass = $(inputs[2]);
         o.click(function () {
             if (newPass.val() !== confirmPass.val()) {
-                console.log('Confirm password is Not correct!');
-                $(_layout.renderTips(false, 'Not correct!')).insertAfter(confirmPass.parent());
-                confirmPass.css({'border-color': '#ef4036'});
+//                console.log('Confirm password is Not correct!');
+//                $(_layout.renderTips(false, 'Not correct!')).insertAfter(confirmPass.parent());
+//                confirmPass.css({'border-color': '#ef4036'});
+                $.sticky('Confirm password is Not correct!');
                 return;
             }
             var pwds = {
@@ -126,8 +128,9 @@ var _layout = {
                         $('.lr-box').remove();
                     }, 2000);
                 } else if (res['code'] === 400) {
-                    $(_layout.renderTips(false, res['msg'])).insertAfter(oldPass.parent());
-                    oldPass.css({'border-color': '#ef4036'});
+//                    $(_layout.renderTips(false, res['msg'])).insertAfter(oldPass.parent());
+//                    oldPass.css({'border-color': '#ef4036'});
+                    _layout.messenger(res['code'], res['msg']);
                 }
             });
         });
@@ -219,6 +222,59 @@ var _layout = {
         }).mouseleave(function () {
             $('.footer-detail').slideUp('fast');
         });
+    },
+    messenger: function (code, msg) {
+        switch (code) {
+            case 200: {
+                $.sticky(msg);
+            } break;
+            case 202: {
+                $.sticky('Source Not Found!');
+            } break;
+            case 310: {
+                $.sticky('Please <b>login</b>!');
+            } break;
+            case 311: {
+                $.sticky(msg);
+            } break;
+            case 312: {
+                $.sticky(msg);
+            } break;
+            case 314: {
+                $.sticky(msg);
+            } break;
+            case 315: {
+                $.sticky(msg);
+            } break;
+            case 316: {
+                $.sticky(msg);
+            } break;
+            case 500: {
+                $.sticky(msg);
+            } break;
+            case 510: {
+                $.sticky(msg);
+            } break;
+            case 511: {
+                $.sticky(msg);
+            } break;
+            case 512: {
+                $.sticky(msg);
+            } break;
+            case 513: {
+                $.sticky(msg);
+            } break;
+            case 514: {
+                $.sticky(msg);
+            } break;
+            case 515: {
+                $.sticky(msg);
+            } break;
+            case 520: {
+                $.sticky(msg);
+            } break;
+        }
+
     }
 };
 
