@@ -118,7 +118,7 @@ var storePicture = function storePicture(dataString) {
             } else {
                 return "";
             }
-            imgData.newData = newName.substr(7, newName.length);
+            imgData.newData = newName.substr(7, newName.length-7);
             imgArray.push(imgData);
         }
 
@@ -188,6 +188,20 @@ var getObjectID = function getObjectID(id) {
 };
 
 
+var getWordMp3Path = function getWordMp3Path(data){
+    if(data == null || data == undefined) {
+        return undefined;
+    }
+    var startWord = data.substr(0,1).toUpperCase();
+    var wordMp3Path = 'public/audio/words/'+startWord+'/'+data+'.mp3'
+
+    if(fs.existsSync(wordMp3Path)) {
+        return wordMp3Path.substr(7,wordMp3Path.length-7);
+    } else {
+        return undefined;
+    }
+}
+
 
 
 exports.getSaying = getSaying;
@@ -203,3 +217,4 @@ exports.getMinuteDate = getMinuteDate;
 exports.getMilliSecondDate = getMilliSecondDate;
 exports.getSecondDate = getSecondDate;
 exports.getObjectID = getObjectID;
+exports.getWordMp3Path = getWordMp3Path;
