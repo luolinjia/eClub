@@ -66,7 +66,7 @@ var getDailySentence = function getDailySentence(date,lastflag) {
             return undefined;
         }
     }
-    var saying = {}
+    var saying = {};
     var path = mdDir+checkDate+".md";
     var content = fs.readFileSync(path, 'utf8');
     parser(content, function(err, result){

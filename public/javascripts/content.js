@@ -114,17 +114,24 @@ var _content = {
         var btnWord = $('#btnUserListWord');
         btnWord.parents('.view')
             .click(function() {
-                var self = $('#content');
-                self.empty();
-				reqVocabulary.getAll({}, function (data) {
-					_vb.renderVbCloud(self, data['data']['list']);
-				});
+				// version 1.0 (Not Vocabulary function)
+
+				$.sticky('Vocabulary is Not available!!!');
+
+//                var self = $('#content');
+//                self.empty();
+//				reqVocabulary.getAll({}, function (data) {
+//					_vb.renderVbCloud(self, data['data']['list']);
+//				});
             });
 		$('#btnUserAddWord').click(function (e) {
-			e.stopPropagation();
-			var self = $('#content');
-			self.empty();
-			_vb.renderAddWord(self);
+
+			$.sticky('Vocabulary is Not available!!!');
+
+//			e.stopPropagation();
+//			var self = $('#content');
+//			self.empty();
+//			_vb.renderAddWord(self);
 		});
 
 

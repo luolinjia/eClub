@@ -229,10 +229,10 @@ var _layout = {
                 $.sticky(msg);
             } break;
             case 202: {
-                $.sticky('Source Not Found!');
+                $.sticky(msg);
             } break;
             case 310: {
-                $.sticky('Please <b>login</b>!');
+                $.sticky(msg);
             } break;
             case 311: {
                 $.sticky(msg);
