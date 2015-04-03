@@ -90,7 +90,7 @@ var _article = {
 
         self.append(dom);
         header.data('likes', data['likes'] !== undefined ? data['likes'] : '0');
-        if (data['sourceUrl'] !== undefined) {_article.isShowSourceUrl(self, sourceDom);}
+        if (data['sourceUrl'] !== undefined && data['sourceUrl'] !== '') {_article.isShowSourceUrl(self, sourceDom);}
         _article.renderCommentsList($('ul', $('.p-comment')), data['comments']);
         _article.bindPostClicks(self);
         _article.bindComments();
@@ -265,8 +265,6 @@ var _article = {
                     success: function (data) {
                         if (data['code'] === 200) {
                             url = data['data']['url'];
-                        } else {
-                            _layout.messenger(data['code'], data['msg']);
                         }
                         var articleContent = $('#editor').wysiwyg('shell').getHTML();
                         var articleObj = {

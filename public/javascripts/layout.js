@@ -127,7 +127,7 @@ var _layout = {
                     setTimeout(function(){
                         $('.lr-box').remove();
                     }, 2000);
-                } else if (res['code'] === 400) {
+                } else if (res['code'] === 312) {
 //                    $(_layout.renderTips(false, res['msg'])).insertAfter(oldPass.parent());
 //                    oldPass.css({'border-color': '#ef4036'});
                     _layout.messenger(res['code'], res['msg']);
